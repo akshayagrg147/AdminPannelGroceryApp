@@ -1,3 +1,5 @@
+import 'package:adminpannelgrocery/repository/login_api.dart';
+import 'package:adminpannelgrocery/view_models/login_view_model_call.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,7 +21,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 class _MyHomePageState extends State<MyHomePage> {
-
+  var postsViewModel = LoginViewModalCall(postsRepository: LoginAPI());
   String _textprovider = "";
   final textfield_controller = TextEditingController();
 
@@ -112,6 +114,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 //send otp button
                 ElevatedButton(
                   onPressed: () {
+                    postsViewModel.validateIdPassword({
+                      "email":"akshay",
+                      "password":"kdkkdkd"
+                    });
                     Navigator.pushNamed(context, "otp");
                   },
                   style: ElevatedButton.styleFrom(

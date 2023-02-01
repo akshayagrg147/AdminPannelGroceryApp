@@ -12,7 +12,7 @@ class LoginViewModalCall {
   LoginRepository? postsRepository;
   LoginViewModalCall({this.postsRepository});
 
-  Future<LoginViewModel> fetchAllPosts(Map body) async {
+  Future<LoginViewModel> validateIdPassword(Map body) async {
     LoginResponseBody data = await postsRepository!.validateUserIdPassword(body);
     return  LoginViewModel(modal:data);
   }

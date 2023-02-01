@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+
+
 import 'package:form_field_validator/form_field_validator.dart';
 // function to start app building
 
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
          //   mainAxisAlignment: MainAxisAlignment.center,
            // children: <Widget>[
-            child:ListView(
+            child:Column(
               children: [
                 Image.asset(
                   'assets/images/carrot.jpg',
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: TextFormField(
                     controller: textfield_controller,
                     cursorColor: Colors.black,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black, width: 1.5),
                             borderRadius: BorderRadius.all(  Radius.circular(3),)
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     obscureText: true,
                     // controller: textfield_controller,
                     cursorColor: Colors.black,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black, width: 1.5),
                             borderRadius: BorderRadius.all(  Radius.circular(3),)

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 // function to start app building
 
 void main() => runApp(MyApp());
@@ -21,6 +20,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _textprovider = "";
   final textfield_controller = TextEditingController();
+
+  // regular expression to check if string
+  RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+
+  //A function that validate user entered password
+  bool validatePassword(String pass){
+    String _password = pass.trim();
+
+    if(pass_valid.hasMatch(_password)){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 10,
                 ),
 
-                //login
+//login
                 const SizedBox(
                   height: 20,
                   // width: 200.0,
@@ -64,12 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 10,
                 ),
 
-                // to enter the number
-
+//email validator
                 Padding(
                   padding: const EdgeInsets.all(28.0),
                   child: TextFormField(
-                    controller: textfield_controller,
+                   // controller: textfield_controller,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -79,36 +91,53 @@ class _MyHomePageState extends State<MyHomePage> {
                         labelText: 'email',
                         labelStyle: TextStyle(color: Colors.black, fontSize: 16.0)
                     ),
-                    keyboardType: TextInputType.number,
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: "Required **"),
-                      EmailValidator(errorText: "Wrong Email")
-                    ])
+                    keyboardType: TextInputType.text,
+                  //  decoration:buildInputDecoration(Icons.email,"Email"),
+                    validator: (value){
+                      print(value);
+                      if(value!.isEmpty){
+                    //    return "Please Enter Email";
+                      }else if(!RegExp(r'\S+@\S+\.\S+').hasMatch(value))
+                      {
+                        return "Please Enter a Valid Email";
+                      }
+                      return null;
+                    },
                   ),
                 ),
 
-
+//password validator
                 Padding(
                   padding: const EdgeInsets.all(28.0),
-                  child: TextFormField(
-                    obscureText: true,
-                    // controller: textfield_controller,
+                  child:TextFormField(
+                    controller: textfield_controller,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black, width: 1.5),
                             borderRadius: BorderRadius.all(  Radius.circular(3),)
                         ),
-                        labelText: 'Pass',
+                        labelText: 'Password',
                         labelStyle: TextStyle(color: Colors.black, fontSize: 16.0)
                     ),
-                    keyboardType: TextInputType.number,
-
-                    validator: MinLengthValidator(6, errorText: "should be  atleast 6 digit length"),
-                  ),
+                    validator: (value){
+                      if(value!.isEmpty){
+                      //  return "Please enter password";
+                      }else{
+                        //call function to check password
+                        bool result = validatePassword(value);
+                        if(result){
+                          // create account event
+                          return null;
+                        }else{
+                          return " Password should contain Capital, small letter & Number & Special";
+                        }
+                      }
+                    },
+                ),
                 ),
 
-                //send otp button
+//login button
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, "otp");
@@ -124,20 +153,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: const TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
-
-
-
                 const SizedBox(
                   height: 30,
                   width: 15,
                 ),
-
                 Text('$_textprovider')
-
               ],
             )
-
-
         //    ], //<Widget>[]
           ), //Column
         ), //Center

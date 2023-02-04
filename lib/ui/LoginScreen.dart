@@ -1,4 +1,6 @@
+import 'package:adminpannelgrocery/model/LoginResponseBody.dart';
 import 'package:adminpannelgrocery/repository/login_api.dart';
+import 'package:adminpannelgrocery/view_models/login_view_model.dart';
 import 'package:adminpannelgrocery/view_models/login_view_model_call.dart';
 import 'package:flutter/material.dart';
 
@@ -114,10 +116,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 //send otp button
                 ElevatedButton(
                   onPressed: () {
-                    postsViewModel.validateIdPassword({
-                      "email":"akshay",
-                      "password":"kdkkdkd"
-                    });
+
+FutureBuilder<LoginViewModel>(
+  future: postsViewModel.validateIdPassword({
+    "email":"akshay",
+    "password":"kdkkdkd"
+  })
+  ,
+  builder: (context,snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const CircularProgressIndicator();
+    }
+    else {
+      var responsebody = snapshot.data?.modal?.success;
+      print(responsebody);
+      return Text(responsebody);
+
+    }
+  },
+
+
+);
+
+
+
                     Navigator.pushNamed(context, "otp");
                   },
                   style: ElevatedButton.styleFrom(

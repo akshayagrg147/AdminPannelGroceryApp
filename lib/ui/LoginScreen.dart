@@ -112,37 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 //send otp button
                 ElevatedButton(
-                  onPressed: () {
-                    FutureBuilder<LoginViewModel>(
-                      future: postsViewModel.validateIdPassword({
-                        "email": emailcontroller.text,
-                        "password": passwordcontroller.text
-                      }),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          var responsebody = snapshot.data;
-                          print("messageresponse $responsebody");
-                          return Text(responsebody?.modal?.message ?? "null",
-                            style: const TextStyle(
-                                fontSize: 35,
-                                color: Colors.purple,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 8,
-                                wordSpacing: 20,
-                                backgroundColor: Colors.yellow,
-                                shadows: [
-                                  Shadow(color: Colors.blueAccent, offset: Offset(2,1), blurRadius:10)
-                                ]
-                            ), );
-                        }
-                      },
-                    );
+                  onPressed: () async {
+                 var result=  await postsViewModel.validateIdPassword({
+                      "email": emailcontroller.text,
+                      "password": passwordcontroller.text
+                    });
 
-                    Navigator.pushNamed(context, "otp");
+
+
+
+
+                   // Navigator.pushNamed(context, "otp");
                   },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

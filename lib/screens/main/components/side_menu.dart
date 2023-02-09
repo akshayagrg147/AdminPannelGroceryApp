@@ -1,6 +1,10 @@
 import 'package:adminpannelgrocery/dscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../../controllers/MenuController.dart';
+import '../../../navigationPackage/NavigationItem.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -9,6 +13,7 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Drawer(
       child: ListView(
         children: [
@@ -19,50 +24,56 @@ class SideMenu extends StatelessWidget {
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashbord.svg",
             press: () {
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context ){
-                return dscreen();
-              }),);
+              selectItem(context, NavigationItem.people);
             },
           ),
           DrawerListTile(
             title: "Transaction",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Task",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Documents",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Store",
             svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Notification",
             svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
           DrawerListTile(
             title: "Settings",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
+            press: () {selectItem(context, NavigationItem.people);},
           ),
         ],
       ),
     );
   }
+
+
+
+}
+
+void selectItem(BuildContext context, NavigationItem item) {
+  final provider = Provider.of<MenuController1>(context, listen: false);
+  provider.setNavigationItem(item);
 }
 
 class DrawerListTile extends StatelessWidget {

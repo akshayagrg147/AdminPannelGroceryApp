@@ -1,10 +1,12 @@
 
+import 'package:adminpannelgrocery/dscreen.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/MenuController.dart';
+import '../../navigationPackage/NavigationItem.dart';
 import 'components/side_menu.dart';
 
 class MainScreen extends StatelessWidget {
@@ -33,5 +35,27 @@ class MainScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  Widget build(BuildContext context) {
+    return buildPages();
+  }
+
+    buildPages() {
+    final provider = Provider.of<MenuController1>(context);
+    final navigationItem = provider.navigationItem;
+
+    switch (navigationItem) {
+      case NavigationItem.people:
+        return dscreen();
+
+    }
   }
 }

@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             create: (context) => MenuController1(),
           ),
         ],
-        child: MainScreen(),
+        child: MainPage(),
       ),
     );
   }

@@ -56,7 +56,7 @@ class ProfileCard extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            "/Users/shubh/Desktop/flutters/admin_dum/assets/images/profile_pic.png",
+            "assets/images/profile_pic.png",
             height: 38,
           ),
           if (!Responsive.isMobile(context))

@@ -3,14 +3,14 @@ import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:flutter/material.dart';
 
-class dscreen extends StatefulWidget {
-  const dscreen({Key? key}) : super(key: key);
+class UserScreen extends StatefulWidget {
+  const UserScreen({Key? key}) : super(key: key);
 
   @override
-  State<dscreen> createState() => _dscreenState();
+  State<UserScreen> createState() => UserScreenState();
 }
 
-class _dscreenState extends State<dscreen> {
+class UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

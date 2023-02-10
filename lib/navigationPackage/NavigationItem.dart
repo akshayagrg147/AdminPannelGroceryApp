@@ -1,9 +1,10 @@
 enum NavigationItem {
-  header,
-  people,
-  favourites,
-  workflow,
-  updates,
-  plugins,
-  notifications,
+  home,
+  product,
+  category,
+  order,
+  offer,
+  users,
+  logout,
+
 }

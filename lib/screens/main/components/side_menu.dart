@@ -1,4 +1,4 @@
-import 'package:adminpannelgrocery/dscreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/dscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -21,46 +21,42 @@ class SideMenu extends StatelessWidget {
             child: Image.asset("assets/images/logo.png"),
           ),
           DrawerListTile(
-            title: "Dashboard",
+            title: "Home",
             svgSrc: "assets/icons/menu_dashbord.svg",
             press: () {
-              selectItem(context, NavigationItem.people);
+              selectItem(context, NavigationItem.home);
             },
           ),
           DrawerListTile(
-            title: "Transaction",
+            title: "Products",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.product);},
           ),
           DrawerListTile(
-            title: "Task",
+            title: "Category",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.category);},
           ),
           DrawerListTile(
-            title: "Documents",
+            title: "Order",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.order);},
           ),
           DrawerListTile(
-            title: "Store",
+            title: "Offer",
             svgSrc: "assets/icons/menu_store.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.offer);},
           ),
           DrawerListTile(
-            title: "Notification",
+            title: "Users",
             svgSrc: "assets/icons/menu_notification.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.users);},
           ),
+
           DrawerListTile(
-            title: "Profile",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {selectItem(context, NavigationItem.people);},
-          ),
-          DrawerListTile(
-            title: "Settings",
+            title: "Log out",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {selectItem(context, NavigationItem.people);},
+            press: () {selectItem(context, NavigationItem.logout);},
           ),
         ],
       ),

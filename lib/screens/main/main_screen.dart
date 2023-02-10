@@ -1,5 +1,5 @@
 
-import 'package:adminpannelgrocery/dscreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/dscreen.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +53,8 @@ class _MainPageState extends State<MainPage> {
     final navigationItem = provider.navigationItem;
 
     switch (navigationItem) {
-      case NavigationItem.people:
-        return dscreen();
+      case NavigationItem.home:
+        return Home();
 
     }
   }

@@ -27,7 +27,7 @@ class _OfferscreenState extends State<Offerscreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),

@@ -27,7 +27,7 @@ class UserScreenState extends State<UserScreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),

@@ -27,10 +27,11 @@ class _CategoryscreenState extends State<Categoryscreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),
     ));
   }
 }
+

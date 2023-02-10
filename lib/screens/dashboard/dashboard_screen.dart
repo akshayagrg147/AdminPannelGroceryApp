@@ -8,7 +8,7 @@ import 'components/header.dart';
 import 'components/recent_files.dart';
 import 'components/storage_details.dart';
 
-class DashboardScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

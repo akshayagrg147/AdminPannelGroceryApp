@@ -1,5 +1,11 @@
 
-import 'package:adminpannelgrocery/screens/dashboard/NavScreen/dscreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CategoryScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/HomeScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/LogoutScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OfferScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OrderScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/ProductScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/UserScreen.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +35,7 @@ class MainScreen extends StatelessWidget {
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
-              child: DashboardScreen(),
+              child: HomeDscreen(),
             ),
           ],
         ),
@@ -54,7 +60,21 @@ class _MainPageState extends State<MainPage> {
 
     switch (navigationItem) {
       case NavigationItem.home:
-        return Home();
+        return HomeDscreen();
+      case NavigationItem.category:
+        return Categoryscreen();
+      case NavigationItem.logout:
+        return Logoutscreen();
+      case NavigationItem.offer:
+        return Offerscreen();
+      case NavigationItem.users:
+        return UserScreen();
+      case NavigationItem.product:
+        return ProductScreen();
+      case NavigationItem.order:
+        return OrderScreen();
+      case NavigationItem.offer:
+        return Offerscreen();
 
     }
   }

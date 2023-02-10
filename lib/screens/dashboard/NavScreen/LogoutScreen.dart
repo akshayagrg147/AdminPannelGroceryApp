@@ -27,7 +27,7 @@ class _LogoutscreenState extends State<Logoutscreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),

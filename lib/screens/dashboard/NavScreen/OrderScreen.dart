@@ -27,7 +27,7 @@ class OrderScreenState extends State<OrderScreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),

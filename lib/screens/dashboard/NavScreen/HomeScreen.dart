@@ -3,14 +3,14 @@ import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeDscreen extends StatefulWidget {
+  const HomeDscreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeDscreen> createState() => _HomeDscreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeDscreenState extends State<HomeDscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     Expanded(
    flex: 5,
-    child: DashboardScreen(),
+    child: HomeScreen(),
     ),
     ],
     ),

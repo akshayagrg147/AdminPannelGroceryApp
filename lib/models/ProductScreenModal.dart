@@ -99,4 +99,43 @@ List demoRecentFiles = [
       description: "Apples from limpopo"
 
   ),
+  ProductScreenModal(
+      id: "121",
+      images: "assets/icons/xd_file.svg",
+      Name: "XD File",
+      cashondelevery: "false",
+      productdeliveryin: "20",
+      freeshipping: "true",
+      quantity: "10",
+      regularprice: "20",
+      offer: "0",
+      description: "Apples from limpopo"
+
+  ),
+  ProductScreenModal(
+      id: "121",
+      images: "assets/icons/xd_file.svg",
+      Name: "XD File",
+      cashondelevery: "false",
+      productdeliveryin: "20",
+      freeshipping: "true",
+      quantity: "10",
+      regularprice: "20",
+      offer: "0",
+      description: "Apples from limpopo"
+
+  ),
+  ProductScreenModal(
+      id: "121",
+      images: "assets/icons/xd_file.svg",
+      Name: "XD File",
+      cashondelevery: "false",
+      productdeliveryin: "20",
+      freeshipping: "true",
+      quantity: "10",
+      regularprice: "20",
+      offer: "0",
+      description: "Apples from limpopo"
+
+  ),
 ];

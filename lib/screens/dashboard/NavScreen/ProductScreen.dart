@@ -1,4 +1,5 @@
 import 'package:adminpannelgrocery/responsive.dart';
+import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -38,7 +39,12 @@ class ProductScreenState extends State<ProductScreen> {
           padding:  EdgeInsets.all(defaultPadding),
           child: Column(
             children: [
+              Text(
+                "Add, edit, remove and list products here",
+                style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
 
+              ),
+              ProductHeader(),
               SizedBox(height: defaultPadding),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,21 +90,43 @@ class ProductList extends StatelessWidget {
             "Recent Files",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          SizedBox(
+
+         SizedBox(
             width: double.infinity,
             height: 400,
             child: DataTable2(
               columnSpacing: defaultPadding,
               minWidth: 600,
-              columns: [
+              columns: const [
                 DataColumn(
-                  label: Text("File Name"),
+                  label: Text("Id"),
                 ),
                 DataColumn(
-                  label: Text("Date"),
+                  label: Text("Images"),
                 ),
                 DataColumn(
-                  label: Text("Size"),
+                  label: Text("Name"),
+                ),
+                DataColumn(
+                  label: Text("Cash on delevery"),
+                ),
+                DataColumn(
+                  label: Text("Product Delivery In"),
+                ),
+                DataColumn(
+                  label: Text("Free Shipping"),
+                ),
+                DataColumn(
+                  label: Text("Quantity"),
+                ),
+                DataColumn(
+                  label: Text("RegularPrice"),
+                ),
+                DataColumn(
+                  label: Text("Offer"),
+                ),
+                DataColumn(
+                  label: Text("Description"),
                 ),
               ],
               rows: List.generate(
@@ -140,4 +168,27 @@ DataRow recentFileDataRow(ProductScreenModal fileInfo) {
     ],
   );
 }
+class ProductHeader extends StatefulWidget {
+  const ProductHeader({Key? key}) : super(key: key);
+
+  @override
+  State<ProductHeader> createState() => _ProductHeaderState();
+}
+
+class _ProductHeaderState extends State<ProductHeader> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Expanded(child: SearchField()),
+          ProfileCard()
+        ],
+      ),
+    );
+  }
+}
+
+
+
 

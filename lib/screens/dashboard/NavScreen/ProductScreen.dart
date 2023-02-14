@@ -180,9 +180,11 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        children: [
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          Sort(),
           Expanded(child: SearchField()),
-          ProfileCard()
+          AddCard()
         ],
       ),
     );

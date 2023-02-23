@@ -192,11 +192,17 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
         children: const [
-          Sort(),
-          Expanded(child: SearchField()),
-          AddCard1()
+          Spacer(flex: 4,),
+        Expanded(
+         child: Sort()),
+
+          Expanded(
+              child: SearchField()),
+    Expanded(
+
+    child:AddCard1())
         ],
       ),
     );
@@ -252,7 +258,7 @@ class AddCard1  extends StatelessWidget  {
     State1? set=State1.no;
     State1? cod=State1.no;
     var dialog = Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 100),
+        insetPadding: EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
       child:

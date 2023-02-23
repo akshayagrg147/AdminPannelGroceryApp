@@ -1,13 +1,10 @@
+import 'package:adminpannelgrocery/models/UserScreenModal.dart';
 import 'package:adminpannelgrocery/responsive.dart';
-import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../../constants.dart';
-import '../../../models/CategoryScreenModal.dart';
-import '../../../models/ProductScreenModal.dart';
+import '../components/header.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -31,10 +28,41 @@ class UserScreenState extends State<UserScreen> {
     Expanded(
     child: SideMenu(),
     ),
-    Expanded(
-   flex: 5,
-    child: ProductList(),
-    ),
+      Expanded(
+        flex: 5,
+        child: SingleChildScrollView(
+          primary: false,
+          padding:  EdgeInsets.all(defaultPadding),
+          child: Column(
+            children: [
+              const SizedBox(
+                  width: double.infinity,
+                  child:  Text("Users",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ))
+              ),
+              ProductHeader(),
+              SizedBox(height: defaultPadding),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      children: const [
+                        ProductList(),
+                      ],
+                    ),
+                  ),
+
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     ],
     ),
     ));
@@ -57,84 +85,76 @@ class ProductList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Files",
+            "Check all your users' details here",
             style: Theme.of(context).textTheme.subtitle1,
           ),
 
-          // SizedBox(
-          //   width: double.infinity,
-          //   height: 400,
-          //   child: DataTable2(
-          //     columnSpacing: defaultPadding,
-          //     minWidth: 600,
-          //     columns: const [
-          //       DataColumn(
-          //         label: Text("Id"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Images"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Name"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Cash on delevery"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Product Delivery In"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Free Shipping"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Quantity"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("RegularPrice"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Offer"),
-          //       ),
-          //       DataColumn(
-          //         label: Text("Description"),
-          //       ),
-          //     ],
-          //     rows: List.generate(
-          //       demoRecentFiles.length,
-          //           (index) => recentFileDataRow(demoRecentFiles[index]),
-          //     ),
-          //   ),
-          // ),
+          SizedBox(
+            width: double.infinity,
+            height: 400,
+            child: DataTable2(
+              columnSpacing: defaultPadding,
+              minWidth: 600,
+              columns: const [
+                DataColumn(
+                  label: Text("Id"),
+                ),
+                DataColumn(
+                  label: Text("Username"),
+                ),
+                DataColumn(
+                  label: Text("Gender"),
+                ),
+                DataColumn(
+                  label: Text("Email"),
+                ),
+                DataColumn(
+                  label: Text("Phone Number"),
+                ),
+              ],
+              rows: List.generate(
+                demoRecentFiles.length,
+                    (index) => recentFileDataRow(demoRecentFiles[index]),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-DataRow recentFileDataRow(ProductScreenModal fileInfo) {
+DataRow recentFileDataRow(UserScreenModal fileInfo) {
   return DataRow(
     cells: [
       DataCell(Text(fileInfo.id!)),
-      DataCell(
-        Row(
-          children: [
-            SvgPicture.asset(
-              fileInfo.images!,
-              height: 30,
-              width: 30,
-            ),
+      DataCell(Text(fileInfo.username!)),
+      DataCell(Text(fileInfo.gender!)),
+      DataCell(Text(fileInfo.email!)),
+      DataCell(Text(fileInfo.phonenumber!)),
 
-          ],
-        ),
-      ),
-      DataCell(Text(fileInfo.Name!)),
-      DataCell(Text(fileInfo.cashondelevery!)),
-      DataCell(Text(fileInfo.productdeliveryin!)),
-      DataCell(Text(fileInfo.freeshipping!)),
-      DataCell(Text(fileInfo.quantity!)),
-      DataCell(Text(fileInfo.regularprice!)),
-      DataCell(Text(fileInfo.offer!)),
-      DataCell(Text(fileInfo.description!)),
     ],
   );
 }
+class ProductHeader extends StatefulWidget {
+  const ProductHeader({Key? key}) : super(key: key);
+
+  @override
+  State<ProductHeader> createState() => _ProductHeaderState();
+}
+
+class _ProductHeaderState extends State<ProductHeader> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          Sort(),
+          Expanded(child: SearchField()),
+        ],
+      ),
+    );
+  }
+}
+

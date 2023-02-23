@@ -1,14 +1,10 @@
 import 'package:adminpannelgrocery/models/OrderScreenModal.dart';
 import 'package:adminpannelgrocery/responsive.dart';
-import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../../constants.dart';
 import '../components/header.dart';
-import 'AddProduct.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({Key? key}) : super(key: key);
@@ -50,7 +46,7 @@ class OrderScreenState extends State<OrderScreen> {
                               ))
                       ),
                       Text(
-                        "Add, edit, remove and list products here",
+                        "Add, edit, remove and list Order here",
                         style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
 
                       ),

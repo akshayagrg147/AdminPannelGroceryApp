@@ -1,16 +1,11 @@
-import 'dart:js';
-
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
-import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../constants.dart';
 import '../../../models/ProductScreenModal.dart';
-import '../components/recent_files.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -233,7 +228,7 @@ class AddCard1  extends StatelessWidget  {
                 const Padding(
                   padding:
                   EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                  child: Text("Add new Category"),
+                  child: Text("Add new Product"),
                 ),
 
               ),

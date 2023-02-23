@@ -1,10 +1,8 @@
 import 'package:adminpannelgrocery/responsive.dart';
-import 'package:adminpannelgrocery/screens/dashboard/dashboard_screen.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../constants.dart';
 import '../../../models/CategoryScreenModal.dart';
 import '../components/header.dart';
@@ -39,7 +37,7 @@ class CategoryscreenState extends State<Categoryscreen> {
                   child: Column(
                     children: [
                       Text(
-                        "Add, edit, remove and list products here",
+                        "Add, edit, remove and list Category here",
                         style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
 
                       ),

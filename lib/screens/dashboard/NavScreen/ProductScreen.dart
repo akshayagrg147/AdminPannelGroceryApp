@@ -187,17 +187,24 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-
-        children: const [
-          Spacer(flex: 4,),
-        Expanded(
-         child: Sort()),
-
+        children: [
           Expanded(
-              child: SearchField()),
-    Expanded(
+            flex:3,
+              child: Container(height: 20,color: Colors.redAccent,)),
+          Expanded(
+            flex:2,
+            child: Row(
 
-    child:AddCard1())
+              children: const [
+              Sort(),
+                SizedBox(width: 10,),
+
+                Expanded(child: SearchField()),
+                SizedBox(width: 10,),
+    Expanded(child: AddCard1())
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -213,7 +220,6 @@ class AddCard1  extends StatelessWidget  {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
         vertical: defaultPadding / 2,

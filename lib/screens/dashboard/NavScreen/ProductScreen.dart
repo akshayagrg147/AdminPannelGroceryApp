@@ -188,9 +188,9 @@ class _ProductHeaderState extends State<ProductHeader> {
     return Container(
       child: Row(
         children: [
-          Expanded(
+          const Spacer(
             flex:3,
-              child: Container(height: 20,color: Colors.redAccent,)),
+             ),
           Expanded(
             flex:2,
             child: Row(
@@ -605,7 +605,13 @@ class AddCard1  extends StatelessWidget  {
       ),
     );
     showDialog(
-        context: context, builder: (BuildContext context) => dialog);
+        context: context, builder: (BuildContext context){
+          return Align(alignment: Alignment.center,
+          child:  FractionallySizedBox(
+            widthFactor: 0.4,
+            child: dialog,
+          ),);
+    });
   }
 
 }

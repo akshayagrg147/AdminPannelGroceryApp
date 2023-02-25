@@ -161,10 +161,24 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          Sort(),
-          Expanded(child: SearchField()),
+        children: [
+          const Spacer(
+            flex:2,
+          ),
+          Expanded(
+            flex:2,
+            child: Row(
+
+              children: const [
+                Sort(),
+                SizedBox(width: 10,),
+
+                Expanded(child: SearchField()),
+                SizedBox(width: 10,),
+                Expanded(child: AddCard())
+              ],
+            ),
+          ),
         ],
       ),
     );

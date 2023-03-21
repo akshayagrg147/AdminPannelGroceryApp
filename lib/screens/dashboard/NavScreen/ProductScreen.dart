@@ -256,6 +256,8 @@ class AddCard1  extends StatelessWidget  {
   }
 
   void openAlert(BuildContext context) {
+
+    int? _value = 0;
     State1? set=State1.no;
     State1? cod=State1.no;
     var dialog = Dialog(
@@ -524,12 +526,14 @@ class AddCard1  extends StatelessWidget  {
                 style: Theme.of(context).textTheme.subtitle1,
                 textAlign: TextAlign.start,
               ),
+
           Column(
       children: [
+
       ListTile(
       title: const Text('Yes'),
       leading: Radio(
-        value: State1.yes,
+        value: State1.no,
         groupValue: set,
         onChanged:(value) => set,
       ),
@@ -537,7 +541,7 @@ class AddCard1  extends StatelessWidget  {
         ListTile(
         title: const Text('No'),
     leading: Radio(
-    value: State1.no,
+    value: State1.yes,
     groupValue: set,
         onChanged:(State1? st) {
           set=st;
@@ -559,24 +563,24 @@ class AddCard1  extends StatelessWidget  {
                   ListTile(
                     title: const Text('Yes'),
                     leading: Radio(
-                      value: State1.yes,
-                      groupValue: cod,
-                      onChanged:(value) => cod,
+                      value: 1,
+                      groupValue: _value,
+                      onChanged:(value) {
+                            setState((){
+                              _value = value;
+                            });
+                      },
                     ),
                   ),
                   ListTile(
                     title: const Text('No'),
                     leading: Radio(
-                      value: State1.no,
-                      groupValue: cod,
-                      onChanged:(State1? st) {
-                        cod=st;
+                      value: 2,
+                      groupValue: _value,
+                      onChanged:(value) {},
+                        ),
 
-                      },
                     ),
-                  ),
-
-
               ]),
           ElevatedButton(
               child: Text('Save!'),
@@ -614,6 +618,11 @@ class AddCard1  extends StatelessWidget  {
     });
   }
 
+
+
+}
+
+void setState(Null Function() param0) {
 }
 
 enum State1 { yes, no }

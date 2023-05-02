@@ -211,7 +211,7 @@ class _ProductHeaderState extends State<ProductHeader> {
   }
 
 }
-class AddCard1  extends StatelessWidget  {
+class AddCard1  extends StatelessWidget {
 
   const AddCard1({
     Key? key,
@@ -244,8 +244,7 @@ class AddCard1  extends StatelessWidget  {
                 ),
 
               ),
-              Icon(
-                Icons.add,
+              Icon(Icons.add,
               ),
             ],
           )
@@ -256,12 +255,11 @@ class AddCard1  extends StatelessWidget  {
   }
 
   void openAlert(BuildContext context) {
-
     int? _value = 0;
-    State1? set=State1.no;
-    State1? cod=State1.no;
+    State1? set = State1.no;
+    State1? cod = State1.no;
     var dialog = Dialog(
-        insetPadding: EdgeInsets.all(32.0),
+      insetPadding: EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
       child:
@@ -272,17 +270,18 @@ class AddCard1  extends StatelessWidget  {
 
             padding: EdgeInsets.all(15.0),
             children: [
-            const SizedBox(
-            width: double.infinity,
-            child:  Text("ADD PRODUCT",
-                style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
+              const SizedBox(
+                  width: double.infinity,
+                  child: Text("ADD PRODUCT",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
 
-            ))
-        )
-              ,
+                      ))
+              ),
+
               SizedBox(height: 20),
+
               TextField(
                 decoration: InputDecoration(
                   hintText: "Enter Product Name",
@@ -296,7 +295,8 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.all(defaultPadding * 0.75),
-                      margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: const BoxDecoration(
 
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -306,6 +306,7 @@ class AddCard1  extends StatelessWidget  {
                   ),
                 ),
               ),
+
               const SizedBox(height: 20),
               TextField(
                 keyboardType: TextInputType.number,
@@ -321,15 +322,18 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10)),
                       ),
-                      child:  const Icon(Icons.numbers),
+                      child: const Icon(Icons.numbers),
                     ),
                   ),
                 ),
               ),
+
               SizedBox(height: 20),
               TextField(
                 keyboardType: TextInputType.number,
@@ -346,17 +350,21 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
                         color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10)),
                       ),
-                      child:  const Icon(Icons.numbers),
+                      child: const Icon(Icons.numbers),
                     ),
                   ),
                 ),
               ),
+
               SizedBox(height: 20),
+
               TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -372,15 +380,19 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10)),
                       ),
-                      child:  const Icon(Icons.numbers),
+                      child: const Icon(Icons.numbers),
                     ),
                   ),
                 ),
               ),
+
+
               SizedBox(height: 20),
               const SizedBox(
                 width: double.infinity, // <-- TextField width
@@ -406,17 +418,18 @@ class AddCard1  extends StatelessWidget  {
               TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  hintText: "Enter Product Delivery Instruction",
+                    hintText: "Enter Product Delivery Instruction",
 
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  )
+                    fillColor: secondaryColor,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    )
                 ),
               ),
               SizedBox(height: 20),
+              //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
               TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
@@ -432,19 +445,24 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
                         color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10)),
                       ),
-                      child:  const Icon(Icons.numbers),
+                      child: const Icon(Icons.numbers),
                     ),
                   ),
                 ),
               ),
               Text(
                 "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subtitle1,
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: 20),
@@ -463,10 +481,12 @@ class AddCard1  extends StatelessWidget  {
                     onTap: () {},
                     child: Container(
                       padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
                         color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(10)),
                       ),
                       child: SvgPicture.asset("assets/icons/Search.svg"),
                     ),
@@ -475,14 +495,17 @@ class AddCard1  extends StatelessWidget  {
               ),
               Text(
                 "only one tag per product is allow product here",
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subtitle1,
                 textAlign: TextAlign.start,
               ),
               SizedBox(height: 20),
               Container(
-                width : 242.0,
+                width: 242.0,
                 height: 42.0,
-                decoration:   BoxDecoration(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24.0),
                   color: const Color(0xff2c2c2c),
                 ),
@@ -501,9 +524,9 @@ class AddCard1  extends StatelessWidget  {
               ),
               SizedBox(height: 20),
               Container(
-                width : 242.0,
+                width: 242.0,
                 height: 42.0,
-                decoration:   BoxDecoration(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24.0),
                   color: const Color(0xff2c2c2c),
                 ),
@@ -523,104 +546,110 @@ class AddCard1  extends StatelessWidget  {
               SizedBox(height: 20),
               Text(
                 "In Stock",
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subtitle1,
                 textAlign: TextAlign.start,
               ),
 
-          Column(
-      children: [
-
-      ListTile(
-      title: const Text('Yes'),
-      leading: Radio(
-        value: State1.no,
-        groupValue: set,
-        onChanged:(value) => set,
-      ),
-    ),
-        ListTile(
-        title: const Text('No'),
-    leading: Radio(
-    value: State1.yes,
-    groupValue: set,
-        onChanged:(State1? st) {
-          set=st;
-
-        }
-    ),
-    ),
-
-    ],
-    ),
-              SizedBox(height: 20),
-              Text(
-                "Free Shipping",
-                style: Theme.of(context).textTheme.subtitle1,
-                textAlign: TextAlign.start,
-              ),
               Column(
                 children: [
+
                   ListTile(
                     title: const Text('Yes'),
                     leading: Radio(
-                      value: 1,
-                      groupValue: _value,
-                      onChanged:(value) {
-                            setState((){
-                              _value = value;
-                            });
-                      },
+                      value: State1.no,
+                      groupValue: set,
+                      onChanged: (value) => set,
                     ),
                   ),
                   ListTile(
                     title: const Text('No'),
                     leading: Radio(
-                      value: 2,
-                      groupValue: _value,
-                      onChanged:(value) {},
-                        ),
+                        value: State1.yes,
+                        groupValue: set,
+                        onChanged: (State1? st) {
+                          set = st;
+                        }
+                    ),
+                  ),
+
+                ],
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Free Shipping",
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .subtitle1,
+                textAlign: TextAlign.start,
+              ),
+              Column(
+                  children: [
+                    ListTile(
+                      title: const Text('Yes'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: _value,
+                        onChanged: (value) {
+                          setState(() {
+                            _value = value;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('No'),
+                      leading: Radio(
+                        value: 2,
+                        groupValue: _value,
+                        onChanged: (value) {},
+                      ),
 
                     ),
-              ]),
-          ElevatedButton(
-              child: Text('Save!'),
-              style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.green),
-          padding: MaterialStateProperty.all(EdgeInsets.all(30)),
-          textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15))),
-          onPressed: () {
+                  ]),
+              ElevatedButton(
+                child: Text('Save!'),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    padding: MaterialStateProperty.all(EdgeInsets.all(30)),
+                    textStyle: MaterialStateProperty.all(
+                        TextStyle(fontSize: 15))),
+                onPressed: () {
 
-    }
-    ,),
+                }
+                ,),
               SizedBox(height: 20),
-        ElevatedButton(
-        child: Text('Cancel!'),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                padding: MaterialStateProperty.all(EdgeInsets.all(30)),
-                textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15))),
-        onPressed: () {
+              ElevatedButton(
+                  child: Text('Cancel!'),
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      padding: MaterialStateProperty.all(EdgeInsets.all(30)),
+                      textStyle: MaterialStateProperty.all(
+                          TextStyle(fontSize: 15))),
+                  onPressed: () {
 
-    }
-        )
+                  }
+              )
 
 
-    ] ),
+            ]),
       ),
     );
     showDialog(
-        context: context, builder: (BuildContext context){
-          return Align(alignment: Alignment.center,
-          child:  FractionallySizedBox(
-            widthFactor: 0.4,
-            child: dialog,
-          ),);
+        context: context, builder: (BuildContext context) {
+      return Align(alignment: Alignment.center,
+        child: FractionallySizedBox(
+          widthFactor: 0.4,
+          child: dialog,
+        ),);
     });
   }
-
-
-
 }
+
+
 
 void setState(Null Function() param0) {
 }

@@ -213,7 +213,7 @@ class AddCard1 extends StatelessWidget {
       margin: EdgeInsets.only(left: defaultPadding),
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
+        vertical: defaultPadding / 3,
       ),
       decoration: BoxDecoration(
         color: secondaryColor,
@@ -231,7 +231,7 @@ class AddCard1 extends StatelessWidget {
             Icon(Icons.add),
             Padding(
               padding:
-              EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
               child: Text("Add new Category"),
             ),
 

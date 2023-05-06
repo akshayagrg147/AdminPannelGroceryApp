@@ -229,7 +229,7 @@ class AddCard1  extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
+        vertical: defaultPadding / 3,
       ),
       decoration: BoxDecoration(
 
@@ -241,21 +241,22 @@ class AddCard1  extends StatelessWidget {
           onTap: () {
             openAlert(context);
           },
-          child: Column(
-            children: [
-              Container(
-                child:
-                const Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
 
-                  child:Text("Add new Product"),
-                ),
+        child: Row(
 
-              ),
+          children: const [
 
-             ],
-              ),
+            Icon(Icons.add),
+            Padding(
+              padding:
+              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
+              child: Text("Add new product"),
+            ),
+
+
+
+          ],
+        ),
 
           )
 

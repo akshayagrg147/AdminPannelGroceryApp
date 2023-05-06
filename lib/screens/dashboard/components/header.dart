@@ -82,7 +82,7 @@ class AddCard extends StatelessWidget {
       margin: EdgeInsets.only(left: defaultPadding),
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
+        vertical: defaultPadding / 3,
       ),
       decoration: BoxDecoration(
         color: secondaryColor,
@@ -97,7 +97,7 @@ class AddCard extends StatelessWidget {
           Icon(Icons.add),
             Padding(
               padding:
-              EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
               child: Text("Add new Category"),
             ),
 
@@ -105,10 +105,11 @@ class AddCard extends StatelessWidget {
 
         ],
       ),
-      
+
     );
   }
 }
+
 class Sort extends StatelessWidget {
   const Sort({
     Key? key,
@@ -126,16 +127,17 @@ class Sort extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
-      child: const Row(
+      child:  Row(
 
-        children:  [
-
-          Icon(Icons.filter_2),
+        children:[
+              Image.asset("assets/images/profile_pic.png",height: 34,),
+          //Icon(Icons.filter_2),
 
           Padding(
             padding:
             EdgeInsets.symmetric(horizontal: defaultPadding / 2),
             child: Text("Sort"),
+
           ),
 
 

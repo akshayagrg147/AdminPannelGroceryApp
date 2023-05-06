@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
+
 class RecentFiles extends StatelessWidget {
   const RecentFiles({
     Key? key,
@@ -14,6 +15,7 @@ class RecentFiles extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
+
         color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -52,6 +54,7 @@ class RecentFiles extends StatelessWidget {
     );
   }
 }
+
 
 DataRow recentFileDataRow(RecentFile fileInfo) {
   return DataRow(

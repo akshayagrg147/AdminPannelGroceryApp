@@ -69,8 +69,8 @@ class _MainPageState extends State<MainPage> {
         return Offerscreen();
       case NavigationItem.users:
         return UserScreen();
-      case NavigationItem.product:
-        return ProductScreen();
+       case NavigationItem.product:
+         return ProductScreen();
       case NavigationItem.order:
         return OrderScreen();
       case NavigationItem.offer:

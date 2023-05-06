@@ -19,11 +19,15 @@ class ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
+
       drawer: SideMenu(),
 
     body: SafeArea(
+
     child: Row(
+
     crossAxisAlignment: CrossAxisAlignment.start,
+
     children: [
     if (Responsive.isDesktop(context))
     Expanded(
@@ -42,14 +46,15 @@ class ProductScreenState extends State<ProductScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
+                        color: Colors.white,
 
                       ))
               ),
-              Text(
-                "Add, edit, remove and list products here",
-                style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
-
-              ),
+              // Text(
+              //   "Add, edit, remove and list products here",
+              //   style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
+              //
+              // ),
               ProductHeader(),
               SizedBox(height: defaultPadding),
               Row(
@@ -99,8 +104,10 @@ class ProductList extends StatelessWidget {
           ),
 
          SizedBox(
+
             width: double.infinity,
             height: 400,
+
             child: DataTable2(
               columnSpacing: defaultPadding,
               minWidth: 600,
@@ -186,22 +193,22 @@ class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
+      child: const Row(
         children: [
-          const Spacer(
+          Spacer(
             flex:3,
              ),
           Expanded(
             flex:2,
             child: Row(
 
-              children: const [
+              children: [
               Sort(),
-                SizedBox(width: 10,),
+                SizedBox(width: 20),
 
                 Expanded(child: SearchField()),
                 SizedBox(width: 10,),
-    Expanded(child: AddCard1())
+                Expanded(child: AddCard1())
               ],
             ),
           ),
@@ -225,6 +232,7 @@ class AddCard1  extends StatelessWidget {
         vertical: defaultPadding / 2,
       ),
       decoration: BoxDecoration(
+
         color: secondaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
@@ -240,17 +248,19 @@ class AddCard1  extends StatelessWidget {
                 const Padding(
                   padding:
                   EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                  child: Text("Add new Product"),
+
+                  child:Text("Add new Product"),
                 ),
 
               ),
-              Icon(Icons.add,
+
+             ],
               ),
-            ],
+
           )
 
 
-      ),
+
     );
   }
 
@@ -259,7 +269,7 @@ class AddCard1  extends StatelessWidget {
     State1? set = State1.no;
     State1? cod = State1.no;
     var dialog = Dialog(
-      insetPadding: EdgeInsets.all(32.0),
+      insetPadding: const EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
       child:
@@ -285,6 +295,7 @@ class AddCard1  extends StatelessWidget {
               TextField(
                 decoration: InputDecoration(
                   hintText: "Enter Product Name",
+                  //fillColor: Colors.white,
                   fillColor: secondaryColor,
                   filled: true,
                   border: const OutlineInputBorder(
@@ -298,99 +309,100 @@ class AddCard1  extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(
                           horizontal: defaultPadding / 2),
                       decoration: const BoxDecoration(
-
+                        //color: Colors.black,
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: const Icon(Icons.ac_unit_sharp),
+
                     ),
                   ),
                 ),
               ),
 
               const SizedBox(height: 20),
-              TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Enter Product Regular Price",
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10)),
-                      ),
-                      child: const Icon(Icons.numbers),
-                    ),
-                  ),
-                ),
-              ),
+              // TextField(
+              //   keyboardType: TextInputType.number,
+              //   decoration: InputDecoration(
+              //     hintText: "Enter Product Regular Price",
+              //     fillColor: secondaryColor,
+              //     filled: true,
+              //     border: OutlineInputBorder(
+              //       borderSide: BorderSide.none,
+              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
+              //     ),
+              //     prefixIcon: InkWell(
+              //       onTap: () {},
+              //       child: Container(
+              //         padding: EdgeInsets.all(defaultPadding * 0.75),
+              //         margin: EdgeInsets.symmetric(
+              //             horizontal: defaultPadding / 2),
+              //         decoration: BoxDecoration(
+              //           borderRadius: const BorderRadius.all(
+              //               Radius.circular(10)),
+              //         ),
+              //         child: const Icon(Icons.numbers),
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               SizedBox(height: 20),
-              TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Price per quantity",
-
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10)),
-                      ),
-                      child: const Icon(Icons.numbers),
-                    ),
-                  ),
-                ),
-              ),
+              // TextField(
+              //   keyboardType: TextInputType.number,
+              //   decoration: InputDecoration(
+              //     hintText: "Price per quantity",
+              //
+              //     fillColor: secondaryColor,
+              //     filled: true,
+              //     border: OutlineInputBorder(
+              //       borderSide: BorderSide.none,
+              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
+              //     ),
+              //     prefixIcon: InkWell(
+              //       onTap: () {},
+              //       child: Container(
+              //         padding: EdgeInsets.all(defaultPadding * 0.75),
+              //         margin: EdgeInsets.symmetric(
+              //             horizontal: defaultPadding / 2),
+              //         decoration: BoxDecoration(
+              //           color: primaryColor,
+              //           borderRadius: const BorderRadius.all(
+              //               Radius.circular(10)),
+              //         ),
+              //         child: const Icon(Icons.numbers),
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               SizedBox(height: 20),
 
-              TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Price per quantity",
-
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10)),
-                      ),
-                      child: const Icon(Icons.numbers),
-                    ),
-                  ),
-                ),
-              ),
+              // TextField(
+              //   keyboardType: TextInputType.number,
+              //   decoration: InputDecoration(
+              //     hintText: "Price per quantity",
+              //
+              //     fillColor: secondaryColor,
+              //     filled: true,
+              //     border: OutlineInputBorder(
+              //       borderSide: BorderSide.none,
+              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
+              //     ),
+              //     prefixIcon: InkWell(
+              //       onTap: () {},
+              //       child: Container(
+              //         padding: EdgeInsets.all(defaultPadding * 0.75),
+              //         margin: EdgeInsets.symmetric(
+              //             horizontal: defaultPadding / 2),
+              //         decoration: BoxDecoration(
+              //           borderRadius: const BorderRadius.all(
+              //               Radius.circular(10)),
+              //         ),
+              //         child: const Icon(Icons.numbers),
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
 
               SizedBox(height: 20),

@@ -15,9 +15,18 @@ class SideMenu extends StatelessWidget {
 
     return Drawer(
       child: ListView(
+        
         children: [
+          Container(
+
+
+              //child: Text("Grocery Dashboard"),
+
+          ),
           DrawerHeader(
+
             child: Image.asset("assets/images/logo.png"),
+
           ),
           DrawerListTile(
             title: "Home",
@@ -95,7 +104,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.red),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

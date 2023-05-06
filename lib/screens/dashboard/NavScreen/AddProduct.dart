@@ -18,16 +18,42 @@ class _AddNewProductState extends State<AddNewProduct> {
 
       child: Column(
         children: [
-      CustemTextField(image: "assets/icons/Search.svg",hint: "Enter Product Name",),
+       //CustemTextField(image: "assets/icons/dribble.svg",hint: "Enter Product Name"),
+          TextField(
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+             hintText: "Enter Product Name",
+
+              fillColor: secondaryColor,
+              filled: true,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              prefixIcon: InkWell(
+                onTap: () {},
+                child: Container(
+                  padding: EdgeInsets.all(defaultPadding * 0.75),
+                  margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    //color: primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: SvgPicture.asset("assets/icons/dribble.svg"),
+                ),
+              ),
+            ),
+          ),
           SizedBox(height: 20),
           CustemTextField(image: "assets/icons/Search.svg",hint: "Enter Product Regular Price"),
 
           SizedBox(height: 20),
-          CustemTextField(image: "assets/icons/Search.svg",hint: "Price per quantity",),
+          CustemTextField(image: "assets/icons/Search.svg",hint: "Price per quantity"),
 
 
           SizedBox(height: 20),
-          CustemTextField(image: "assets/icons/Search.svg",hint:"Price per quantity" ,),
+          CustemTextField(image: "assets/icons/Search.svg",hint:"Price per quantity"),
 
           // TextField(
           //   keyboardType: TextInputType.number,
@@ -79,7 +105,7 @@ class _AddNewProductState extends State<AddNewProduct> {
             ),
           ),
           SizedBox(height: 20),
-          CustemTextField(image: "assets/icons/Search.svg",hint: "Enter Product Delivery Instruction" ,),
+          CustemTextField(image: "assets/icons/Search.svg",hint: "Enter Product Delivery Instruction"),
           // TextField(
           //   keyboardType: TextInputType.text,
           //   decoration: InputDecoration(
@@ -247,10 +273,11 @@ class CustemTextField extends StatelessWidget {
           padding: EdgeInsets.all(defaultPadding * 0.75),
           margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
           decoration: BoxDecoration(
-            color: primaryColor,
+            color: Colors.white,
+            //color: primaryColor,
             borderRadius:  BorderRadius.all(Radius.circular(10)),
           ),
-          // child: SvgPicture.asset(image),
+           child: SvgPicture.asset(image),
         ),
       ),
     ),

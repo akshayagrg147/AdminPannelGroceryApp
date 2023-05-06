@@ -89,6 +89,7 @@ class AddCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
+
       child: Row(
 
         children: const [
@@ -104,6 +105,7 @@ class AddCard extends StatelessWidget {
 
         ],
       ),
+      
     );
   }
 }
@@ -124,11 +126,12 @@ class Sort extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
-      child: Row(
+      child: const Row(
 
-        children: const [
+        children:  [
 
           Icon(Icons.filter_2),
+
           Padding(
             padding:
             EdgeInsets.symmetric(horizontal: defaultPadding / 2),

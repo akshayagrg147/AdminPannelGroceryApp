@@ -341,8 +341,9 @@ class AddCard1  extends StatelessWidget  {
                       padding: EdgeInsets.all(defaultPadding * 0.75),
                       margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
                       decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                        // color: primaryColor,
+                         borderRadius: const BorderRadius.all(Radius.circular(10)),
                       ),
                       child:  const Icon(Icons.numbers),
                     ),

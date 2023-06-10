@@ -1,9 +1,14 @@
+import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
+import 'package:adminpannelgrocery/repositories/cubit/ProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/product_state.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import '../../../constants.dart';
 import '../../../models/ProductScreenModal.dart';
 
@@ -18,67 +23,59 @@ class ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-
-      drawer: SideMenu(),
-
-    body: SafeArea(
-
-    child: Row(
-
-    crossAxisAlignment: CrossAxisAlignment.start,
-
-    children: [
-    if (Responsive.isDesktop(context))
-    Expanded(
-    child: SideMenu(),
-    ),
-    Expanded(
-   flex: 5,
-        child: SingleChildScrollView(
-          primary: false,
-          padding:  EdgeInsets.all(defaultPadding),
-          child: Column(
+        drawer: const SideMenu(),
+        body: SafeArea(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                  width: double.infinity,
-                  child:  Text("Products",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+              if (Responsive.isDesktop(context))
+                const Expanded(
+                  child: SideMenu(),
+                ),
+              Expanded(
+                flex: 5,
+                child: SingleChildScrollView(
+                    primary: false,
+                    padding: const EdgeInsets.all(defaultPadding),
+                    child: MultiProvider(
+                        providers: [
+                          Provider<ProductCubit>(
+                            create: (_) => ProductCubit(),
+                          ),
+                        ],
+                        child: SafeArea(
+                          child: BlocConsumer<ProductCubit, ProductState>(
+                            listener: (context, state) {
+                              if (state is ProductErrorState) {
+                                SnackBar snackBar = SnackBar(
+                                  content: Text(state.error),
+                                  backgroundColor: Colors.red,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is ProductLoadingState) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (state is ProductLoadedState) {
+                                return buildPostListView(state.products);
+                              } else if (state is ProductErrorState) {
+                                return Center(
+                                  child: Text(state.error),
+                                );
+                              }
 
-                      ))
+                              return Container();
+                            },
+                          ),
+                        ))),
               ),
-              // Text(
-              //   "Add, edit, remove and list products here",
-              //   style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
-              //
-              // ),
-              ProductHeader(),
-              SizedBox(height: defaultPadding),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      children: [
-                        ProductList(),
-
-                      ],
-                    ),
-                  ),
-
-                ],
-              )
             ],
           ),
-        ),
-    ),
-    ],
-    ),
-    ));
+        ));
   }
 }
 
@@ -90,24 +87,21 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Recent Files",
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-
-         SizedBox(
-
+          SizedBox(
             width: double.infinity,
             height: 400,
-
             child: DataTable2(
               columnSpacing: defaultPadding,
               minWidth: 600,
@@ -145,7 +139,7 @@ class ProductList extends StatelessWidget {
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                    (index) => recentFileDataRow(demoRecentFiles[index]),
+                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),
@@ -153,6 +147,20 @@ class ProductList extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget buildPostListView(List<ItemData> posts) {
+  return ListView.builder(
+    itemCount: posts.length,
+    itemBuilder: (context, index) {
+      ItemData post = posts[index];
+
+      return ListTile(
+        title: Text(post.categoryType.toString()),
+        subtitle: Text(post.category.toString()),
+      );
+    },
+  );
 }
 
 DataRow recentFileDataRow(ProductScreenModal fileInfo) {
@@ -167,7 +175,6 @@ DataRow recentFileDataRow(ProductScreenModal fileInfo) {
               height: 30,
               width: 30,
             ),
-
           ],
         ),
       ),
@@ -182,8 +189,9 @@ DataRow recentFileDataRow(ProductScreenModal fileInfo) {
     ],
   );
 }
+
 class ProductHeader extends StatefulWidget {
-  const  ProductHeader({Key? key}) : super(key: key);
+  const ProductHeader({Key? key}) : super(key: key);
 
   @override
   State<ProductHeader> createState() => _ProductHeaderState();
@@ -192,34 +200,31 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Row(
-        children: [
-          Spacer(
-            flex:3,
-             ),
-          Expanded(
-            flex:2,
-            child: Row(
-
-              children: [
+    return const Row(
+      children: [
+        Spacer(
+          flex: 3,
+        ),
+        Expanded(
+          flex: 2,
+          child: Row(
+            children: [
               Sort(),
-                SizedBox(width: 20),
-
-                Expanded(child: SearchField()),
-                SizedBox(width: 10,),
-                Expanded(child: AddCard1())
-              ],
-            ),
+              SizedBox(width: 20),
+              Expanded(child: SearchField()),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(child: AddCard1())
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-
 }
-class AddCard1  extends StatelessWidget {
 
+class AddCard1 extends StatelessWidget {
   const AddCard1({
     Key? key,
   }) : super(key: key);
@@ -227,59 +232,44 @@ class AddCard1  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 3,
-      ),
-      decoration: BoxDecoration(
-
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: InkWell(
+        padding: const EdgeInsets.symmetric(
+          horizontal: defaultPadding,
+          vertical: defaultPadding / 3,
+        ),
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: InkWell(
           onTap: () {
             openAlert(context);
           },
-
-        child: Row(
-
-          children: const [
-
-            Icon(Icons.add),
-            Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
-              child: Text("Add new product"),
-            ),
-
-
-
-          ],
-        ),
-
-          )
-
-
-
-    );
+          child: const Row(
+            children: [
+              Icon(Icons.add),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: defaultPadding / 3),
+                child: Text("Add new product"),
+              ),
+            ],
+          ),
+        ));
   }
 
   void openAlert(BuildContext context) {
-    int? _value = 0;
+    int? value = 0;
     State1? set = State1.no;
-    State1? cod = State1.no;
+    TextEditingController productname = TextEditingController();
     var dialog = Dialog(
       insetPadding: const EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
-      child:
-      Expanded(
+      child: Expanded(
         flex: 5,
         child: ListView(
             shrinkWrap: true,
-
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             children: [
               const SizedBox(
                   width: double.infinity,
@@ -287,11 +277,9 @@ class AddCard1  extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
+                      ))),
 
-                      ))
-              ),
-
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               TextField(
                 decoration: InputDecoration(
@@ -314,7 +302,6 @@ class AddCard1  extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: const Icon(Icons.ac_unit_sharp),
-
                     ),
                   ),
                 ),
@@ -347,7 +334,7 @@ class AddCard1  extends StatelessWidget {
               //   ),
               // ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // TextField(
               //   keyboardType: TextInputType.number,
               //   decoration: InputDecoration(
@@ -376,7 +363,7 @@ class AddCard1  extends StatelessWidget {
               //   ),
               // ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // TextField(
               //   keyboardType: TextInputType.number,
@@ -405,65 +392,60 @@ class AddCard1  extends StatelessWidget {
               //   ),
               // ),
 
-
-              SizedBox(height: 20),
-              const SizedBox(
+              const SizedBox(height: 20),
+              SizedBox(
                 width: double.infinity, // <-- TextField width
                 height: 120,
                 child: TextField(
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  controller: productname,
+                  decoration: const InputDecoration(
                     hintText: "Enter Poduct Description",
-
                     fillColor: secondaryColor,
                     filled: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-
                   ),
-                  maxLines: 5, // <-- SEE HERE
+                  maxLines: 5,
+                  // <-- SEE HERE
                   minLines: 1,
                 ),
               ),
-              SizedBox(height: 20),
-              TextField(
+              const SizedBox(height: 20),
+              const TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     hintText: "Enter Product Delivery Instruction",
-
                     fillColor: secondaryColor,
                     filled: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    )
-                ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    )),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
               TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   hintText: "Enter Pin code",
-
                   fillColor: secondaryColor,
                   filled: true,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {},
                     child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.all(defaultPadding * 0.75),
+                      margin: const EdgeInsets.symmetric(
                           horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: primaryColor,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: const Icon(Icons.numbers),
                     ),
@@ -472,34 +454,29 @@ class AddCard1  extends StatelessWidget {
               ),
               Text(
                 "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   hintText: "Enter tags Here",
-
                   fillColor: secondaryColor,
                   filled: true,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {},
                     child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.all(defaultPadding * 0.75),
+                      margin: const EdgeInsets.symmetric(
                           horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: primaryColor,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: SvgPicture.asset("assets/icons/Search.svg"),
                     ),
@@ -508,13 +485,10 @@ class AddCard1  extends StatelessWidget {
               ),
               Text(
                 "only one tag per product is allow product here",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 width: 242.0,
                 height: 42.0,
@@ -535,7 +509,7 @@ class AddCard1  extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 width: 242.0,
                 height: 42.0,
@@ -556,19 +530,15 @@ class AddCard1  extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "In Stock",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ),
 
               Column(
                 children: [
-
                   ListTile(
                     title: const Text('Yes'),
                     leading: Radio(
@@ -584,91 +554,75 @@ class AddCard1  extends StatelessWidget {
                         groupValue: set,
                         onChanged: (State1? st) {
                           set = st;
-                        }
-                    ),
+                        }),
                   ),
-
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Free Shipping",
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ),
-              Column(
-                  children: [
-                    ListTile(
-                      title: const Text('Yes'),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: _value,
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value;
-                          });
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('No'),
-                      leading: Radio(
-                        value: 2,
-                        groupValue: _value,
-                        onChanged: (value) {},
-                      ),
-
-                    ),
-                  ]),
+              Column(children: [
+                ListTile(
+                  title: const Text('Yes'),
+                  leading: Radio(
+                    value: 1,
+                    groupValue: value,
+                    onChanged: (value) {
+                      setState(() {
+                        value = value;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: const Text('No'),
+                  leading: Radio(
+                    value: 2,
+                    groupValue: value,
+                    onChanged: (value) {},
+                  ),
+                ),
+              ]),
               ElevatedButton(
-                child: Text('Save!'),
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.green),
-                    padding: MaterialStateProperty.all(EdgeInsets.all(30)),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(30)),
                     textStyle: MaterialStateProperty.all(
-                        TextStyle(fontSize: 15))),
-                onPressed: () {
-
-                }
-                ,),
-              SizedBox(height: 20),
+                        const TextStyle(fontSize: 15))),
+                onPressed: () {},
+                child: const Text('Save!'),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
-                  child: Text('Cancel!'),
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
-                      padding: MaterialStateProperty.all(EdgeInsets.all(30)),
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(30)),
                       textStyle: MaterialStateProperty.all(
-                          TextStyle(fontSize: 15))),
-                  onPressed: () {
-
-                  }
-              )
-
-
+                          const TextStyle(fontSize: 15))),
+                  onPressed: () {},
+                  child: const Text('Cancel!'))
             ]),
       ),
     );
     showDialog(
-        context: context, builder: (BuildContext context) {
-      return Align(alignment: Alignment.center,
-        child: FractionallySizedBox(
-          widthFactor: 0.4,
-          child: dialog,
-        ),);
-    });
+        context: context,
+        builder: (BuildContext context) {
+          return Align(
+            alignment: Alignment.center,
+            child: FractionallySizedBox(
+              widthFactor: 0.4,
+              child: dialog,
+            ),
+          );
+        });
   }
 }
 
-
-
-void setState(Null Function() param0) {
-}
+void setState(Null Function() param0) {}
 
 enum State1 { yes, no }
-
-
-
-

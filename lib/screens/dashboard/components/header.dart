@@ -1,4 +1,3 @@
-
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,18 +17,23 @@ class Header extends StatelessWidget {
       children: [
         if (!Responsive.isDesktop(context))
           IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: context.read<MenuController1>().controlMenu,
+            icon: const Icon(Icons.menu),
+            onPressed: (){
+              ScaffoldState? scaffoldState = Scaffold.of(context);
+              if (!scaffoldState.isDrawerOpen) {
+                scaffoldState.openDrawer();
+              }
+            }
           ),
         if (!Responsive.isMobile(context))
           Text(
             "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
-        ProfileCard()
+        const Expanded(child: SearchField()),
+        const ProfileCard()
       ],
     );
   }
@@ -43,8 +47,8 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
-      padding: EdgeInsets.symmetric(
+      margin: const EdgeInsets.only(left: defaultPadding),
+      padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
         vertical: defaultPadding / 2,
       ),
@@ -60,17 +64,18 @@ class ProfileCard extends StatelessWidget {
             height: 38,
           ),
           if (!Responsive.isMobile(context))
-            Padding(
+            const Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               child: Text("Angelina Jolie"),
             ),
-          Icon(Icons.keyboard_arrow_down),
+          const Icon(Icons.keyboard_arrow_down),
         ],
       ),
     );
   }
 }
+
 class AddCard extends StatelessWidget {
   const AddCard({
     Key? key,
@@ -79,7 +84,7 @@ class AddCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
+      margin: const EdgeInsets.only(left: defaultPadding),
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
         vertical: defaultPadding / 3,
@@ -89,23 +94,15 @@ class AddCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
-
-      child: Row(
-
-        children: const [
-
+      child: const Row(
+        children: [
           Icon(Icons.add),
-            Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
-              child: Text("Add new Category"),
-            ),
-
-
-
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding / 3),
+            child: Text("Add new Category"),
+          ),
         ],
       ),
-
     );
   }
 }
@@ -127,21 +124,18 @@ class Sort extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
-      child:  Row(
-
-        children:[
-              Image.asset("assets/images/profile_pic.png",height: 34,),
+      child: Row(
+        children: [
+          Image.asset(
+            "assets/images/profile_pic.png",
+            height: 34,
+          ),
           //Icon(Icons.filter_2),
 
-          Padding(
-            padding:
-            EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
             child: Text("Sort"),
-
           ),
-
-
-
         ],
       ),
     );
@@ -160,18 +154,18 @@ class SearchField extends StatelessWidget {
         hintText: "Search",
         fillColor: secondaryColor,
         filled: true,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         suffixIcon: InkWell(
           onTap: () {},
           child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.all(defaultPadding * 0.75),
+            margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+            decoration: const BoxDecoration(
               color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: SvgPicture.asset("assets/icons/Search.svg"),
           ),
@@ -180,4 +174,3 @@ class SearchField extends StatelessWidget {
     );
   }
 }
-

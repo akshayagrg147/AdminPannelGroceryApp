@@ -12,21 +12,15 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: ListView(
-        
         children: [
           Container(
-
-
               //child: Text("Grocery Dashboard"),
 
-          ),
+              ),
           DrawerHeader(
-
             child: Image.asset("assets/images/logo.png"),
-
           ),
           DrawerListTile(
             title: "Home",
@@ -38,41 +32,49 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Products",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {selectItem(context, NavigationItem.product);},
+            press: () {
+              selectItem(context, NavigationItem.product);
+            },
           ),
           DrawerListTile(
             title: "Category",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {selectItem(context, NavigationItem.category);},
+            press: () {
+              selectItem(context, NavigationItem.category);
+            },
           ),
           DrawerListTile(
             title: "Order",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {selectItem(context, NavigationItem.order);},
+            press: () {
+              selectItem(context, NavigationItem.order);
+            },
           ),
           DrawerListTile(
             title: "Offer",
             svgSrc: "assets/icons/menu_store.svg",
-            press: () {selectItem(context, NavigationItem.offer);},
+            press: () {
+              selectItem(context, NavigationItem.offer);
+            },
           ),
           DrawerListTile(
             title: "Users",
             svgSrc: "assets/icons/menu_notification.svg",
-            press: () {selectItem(context, NavigationItem.users);},
+            press: () {
+              selectItem(context, NavigationItem.users);
+            },
           ),
-
           DrawerListTile(
             title: "Log out",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {selectItem(context, NavigationItem.logout);},
+            press: () {
+              selectItem(context, NavigationItem.logout);
+            },
           ),
         ],
       ),
     );
   }
-
-
-
 }
 
 void selectItem(BuildContext context, NavigationItem item) {
@@ -104,7 +106,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }

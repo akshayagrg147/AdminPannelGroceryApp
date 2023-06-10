@@ -13,14 +13,11 @@ class OrderScreen extends StatefulWidget {
   State<OrderScreen> createState() => OrderScreenState();
 }
 
-
 class OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         drawer: SideMenu(),
-
         body: SafeArea(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,22 +30,20 @@ class OrderScreenState extends State<OrderScreen> {
                 flex: 5,
                 child: SingleChildScrollView(
                   primary: false,
-                  padding:  EdgeInsets.all(defaultPadding),
+                  padding: EdgeInsets.all(defaultPadding),
                   child: Column(
                     children: [
                       const SizedBox(
                           width: double.infinity,
-                          child:  Text("Orders",
+                          child: Text("Orders",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
-
-                              ))
-                      ),
+                              ))),
                       Text(
                         "Add, edit, remove and list Order here",
-                        style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
-
+                        style: Theme.of(context).textTheme.subtitle1,
+                        textDirection: TextDirection.ltr,
                       ),
                       ProductHeader(),
                       SizedBox(height: defaultPadding),
@@ -63,7 +58,6 @@ class OrderScreenState extends State<OrderScreen> {
                               ],
                             ),
                           ),
-
                         ],
                       )
                     ],
@@ -75,6 +69,7 @@ class OrderScreenState extends State<OrderScreen> {
         ));
   }
 }
+
 class ProductList extends StatelessWidget {
   const ProductList({
     Key? key,
@@ -83,10 +78,10 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +90,6 @@ class ProductList extends StatelessWidget {
             "Recent Files",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-
           SizedBox(
             width: double.infinity,
             height: 400,
@@ -121,11 +115,10 @@ class ProductList extends StatelessWidget {
                 DataColumn(
                   label: Text("Locality"),
                 ),
-
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                    (index) => recentFileDataRow(demoRecentFiles[index]),
+                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),
@@ -139,16 +132,15 @@ DataRow recentFileDataRow(OrderScreenModal fileInfo) {
   return DataRow(
     cells: [
       DataCell(Text(fileInfo.id!)),
-
       DataCell(Text(fileInfo.created_at!)),
       DataCell(Text(fileInfo.AddressType!)),
       DataCell(Text(fileInfo.flat_Number!)),
       DataCell(Text(fileInfo.Street!)),
       DataCell(Text(fileInfo.Locality!)),
-
     ],
   );
 }
+
 class ProductHeader extends StatefulWidget {
   const ProductHeader({Key? key}) : super(key: key);
 
@@ -159,30 +151,28 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          const Spacer(
-            flex:2,
+    return const Row(
+      children: [
+        Spacer(
+          flex: 2,
+        ),
+        Expanded(
+          flex: 2,
+          child: Row(
+            children: [
+              Sort(),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(child: SearchField()),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(child: AddCard())
+            ],
           ),
-          Expanded(
-            flex:2,
-            child: Row(
-
-              children: const [
-                Sort(),
-                SizedBox(width: 10,),
-
-                Expanded(child: SearchField()),
-                SizedBox(width: 10,),
-                Expanded(child: AddCard())
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
-
-

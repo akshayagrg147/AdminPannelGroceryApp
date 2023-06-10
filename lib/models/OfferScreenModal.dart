@@ -1,9 +1,15 @@
 class OfferScreenModal {
   final String? id, title, image, description, condition, discounts, actions;
 
-  OfferScreenModal({this.id, this.title, this.image, this.description, this.condition, this.discounts, this.actions});
+  OfferScreenModal(
+      {this.id,
+      this.title,
+      this.image,
+      this.description,
+      this.condition,
+      this.discounts,
+      this.actions});
 }
-
 
 List demoRecentFiles = [
   OfferScreenModal(
@@ -13,9 +19,7 @@ List demoRecentFiles = [
       description: "Subscribe for a month and get 15% off",
       condition: "Only for new users",
       discounts: "15%",
-      actions: "false"
-  ),
-
+      actions: "false"),
   OfferScreenModal(
       id: "121",
       title: "monthly subscription offer",
@@ -23,9 +27,7 @@ List demoRecentFiles = [
       description: "Subscribe for a month and get 15% off",
       condition: "Only for new users",
       discounts: "15%",
-      actions: "false"
-  ),
-
+      actions: "false"),
   OfferScreenModal(
       id: "121",
       title: "monthly subscription offer",
@@ -33,7 +35,5 @@ List demoRecentFiles = [
       description: "Subscribe for a month and get 15% off",
       condition: "Only for new users",
       discounts: "15%",
-      actions: "false"
-  ),
-
+      actions: "false"),
 ];

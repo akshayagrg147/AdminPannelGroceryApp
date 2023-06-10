@@ -18,32 +18,30 @@ class CategoryscreenState extends State<Categoryscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         drawer: SideMenu(),
-
         body: SafeArea(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (Responsive.isDesktop(context))
-                Expanded(
+                const Expanded(
                   child: SideMenu(),
                 ),
               Expanded(
                 flex: 5,
                 child: SingleChildScrollView(
                   primary: false,
-                  padding:  EdgeInsets.all(defaultPadding),
+                  padding: EdgeInsets.all(defaultPadding),
                   child: Column(
                     children: [
                       Text(
                         "Add, edit, remove and list Category here",
-                        style: Theme.of(context).textTheme.subtitle1,textDirection: TextDirection.ltr,
-
+                        style: Theme.of(context).textTheme.subtitle1,
+                        textDirection: TextDirection.ltr,
                       ),
                       ProductHeader(),
                       SizedBox(height: defaultPadding),
-                      Row(
+                      const Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
@@ -51,11 +49,9 @@ class CategoryscreenState extends State<Categoryscreen> {
                             child: Column(
                               children: [
                                 ProductList(),
-
                               ],
                             ),
                           ),
-
                         ],
                       )
                     ],
@@ -67,6 +63,7 @@ class CategoryscreenState extends State<Categoryscreen> {
         ));
   }
 }
+
 class ProductList extends StatelessWidget {
   const ProductList({
     Key? key,
@@ -76,9 +73,9 @@ class ProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +84,6 @@ class ProductList extends StatelessWidget {
             "Recent Files",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-
           SizedBox(
             width: double.infinity,
             height: 400,
@@ -128,7 +124,7 @@ class ProductList extends StatelessWidget {
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                    (index) => recentFileDataRow(demoRecentFiles[index]),
+                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),
@@ -150,7 +146,6 @@ DataRow recentFileDataRow(CategoryScreenModal fileInfo) {
               height: 30,
               width: 30,
             ),
-
           ],
         ),
       ),
@@ -165,6 +160,7 @@ DataRow recentFileDataRow(CategoryScreenModal fileInfo) {
     ],
   );
 }
+
 class ProductHeader extends StatefulWidget {
   const ProductHeader({Key? key}) : super(key: key);
 
@@ -175,23 +171,25 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      child: Row(
+      child: const Row(
         children: [
-          const Spacer(
-            flex:2,
+          Spacer(
+            flex: 2,
           ),
           Expanded(
-            flex:2,
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
+              children: [
                 Sort(),
-                SizedBox(width: 10,),
-
+                SizedBox(
+                  width: 10,
+                ),
                 Expanded(child: SearchField()),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Expanded(child: AddCard1())
               ],
             ),
@@ -199,9 +197,9 @@ class _ProductHeaderState extends State<ProductHeader> {
         ],
       ),
     );
-
   }
 }
+
 class AddCard1 extends StatelessWidget {
   const AddCard1({
     Key? key,
@@ -224,49 +222,39 @@ class AddCard1 extends StatelessWidget {
         onTap: () {
           openAlert(context);
         },
-        child: Row(
-
-          children: const [
-
+        child: const Row(
+          children: [
             Icon(Icons.add),
             Padding(
-              padding:
-              EdgeInsets.symmetric(horizontal: defaultPadding / 3),
+              padding: EdgeInsets.symmetric(horizontal: defaultPadding / 3),
               child: Text("Add new Category"),
             ),
-
-
-
           ],
         ),
       ),
     );
   }
+
   void openAlert(BuildContext context) {
-    State1? set=State1.no;
-    State1? cod=State1.no;
+    State1? set = State1.no;
+    State1? cod = State1.no;
     var dialog = Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 100),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
-      child:
-      Expanded(
+      child: Expanded(
         flex: 5,
         child: ListView(
             shrinkWrap: true,
-
             padding: EdgeInsets.all(15.0),
             children: [
               const SizedBox(
                   width: double.infinity,
-                  child:  Text("ADD CATEGORY",
+                  child: Text("ADD CATEGORY",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-
-                      ))
-              )
-              ,
+                      ))),
               SizedBox(height: 20),
               TextField(
                 decoration: InputDecoration(
@@ -281,9 +269,9 @@ class AddCard1 extends StatelessWidget {
                     onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.all(defaultPadding * 0.75),
-                      margin: const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
                       decoration: const BoxDecoration(
-
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: const Icon(Icons.ac_unit_sharp),
@@ -291,27 +279,27 @@ class AddCard1 extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   hintText: "Enter tags Here",
-
                   fillColor: secondaryColor,
                   filled: true,
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   suffixIcon: InkWell(
                     onTap: () {},
                     child: Container(
-                      padding: EdgeInsets.all(defaultPadding * 0.75),
-                      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(defaultPadding * 0.75),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding / 2),
+                      decoration: const BoxDecoration(
                         color: Colors.white,
-                       // color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        // color: primaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       child: SvgPicture.asset("assets/icons/Search.svg"),
                     ),
@@ -323,11 +311,11 @@ class AddCard1 extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                width : 242.0,
+                width: 242.0,
                 height: 42.0,
-                decoration:   BoxDecoration(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24.0),
                   color: const Color(0xff2c2c2c),
                 ),
@@ -344,8 +332,7 @@ class AddCard1 extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-
+              const SizedBox(height: 20),
               Text(
                 "Show on Home Page",
                 style: Theme.of(context).textTheme.subtitle1,
@@ -358,7 +345,7 @@ class AddCard1 extends StatelessWidget {
                     leading: Radio(
                       value: State1.yes,
                       groupValue: set,
-                      onChanged:(value) => set,
+                      onChanged: (value) => set,
                     ),
                   ),
                   ListTile(
@@ -366,45 +353,35 @@ class AddCard1 extends StatelessWidget {
                     leading: Radio(
                         value: State1.no,
                         groupValue: set,
-                        onChanged:(State1? st) {
-                          set=st;
-
-                        }
-                    ),
+                        onChanged: (State1? st) {
+                          set = st;
+                        }),
                   ),
-
                 ],
               ),
-
               ElevatedButton(
-                child: Text('Save!'),
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.green),
                     padding: MaterialStateProperty.all(EdgeInsets.all(30)),
-                    textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15))),
-                onPressed: () {
-
-                }
-                ,),
-              SizedBox(height: 20),
+                    textStyle:
+                        MaterialStateProperty.all(TextStyle(fontSize: 15))),
+                onPressed: () {},
+                child: const Text('Save!'),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
-                  child: Text('Cancel!'),
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
                       padding: MaterialStateProperty.all(EdgeInsets.all(30)),
-                      textStyle: MaterialStateProperty.all(TextStyle(fontSize: 15))),
-                  onPressed: () {
-
-                  }
-              )
-
-
-            ] ),
+                      textStyle:
+                          MaterialStateProperty.all(TextStyle(fontSize: 15))),
+                  onPressed: () {},
+                  child: const Text('Cancel!'))
+            ]),
       ),
     );
-    showDialog(
-        context: context, builder: (BuildContext context) => dialog);
+    showDialog(context: context, builder: (BuildContext context) => dialog);
   }
 }
-enum State1 { yes, no }
 
+enum State1 { yes, no }

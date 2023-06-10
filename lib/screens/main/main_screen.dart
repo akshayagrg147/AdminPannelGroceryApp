@@ -1,4 +1,3 @@
-
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CategoryScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/HomeScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/LogoutScreen.dart';
@@ -27,12 +26,12 @@ class MainScreen extends StatelessWidget {
           children: [
             // We want this side menu only for large screen
             if (Responsive.isDesktop(context))
-              Expanded(
+              const Expanded(
                 // default flex = 1
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),
               ),
-            Expanded(
+            const Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
               child: HomeDscreen(),
@@ -43,6 +42,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
+
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
@@ -54,28 +54,25 @@ class _MainPageState extends State<MainPage> {
     return buildPages();
   }
 
-    buildPages() {
+  buildPages() {
     final provider = Provider.of<MenuController1>(context);
     final navigationItem = provider.navigationItem;
 
     switch (navigationItem) {
       case NavigationItem.home:
-        return HomeDscreen();
+        return const HomeDscreen();
       case NavigationItem.category:
-        return Categoryscreen();
+        return const Categoryscreen();
       case NavigationItem.logout:
-        return Logoutscreen();
+        return const Logoutscreen();
       case NavigationItem.offer:
-        return Offerscreen();
+        return const Offerscreen();
       case NavigationItem.users:
-        return UserScreen();
-       case NavigationItem.product:
-         return ProductScreen();
+        return const UserScreen();
+      case NavigationItem.product:
+        return const ProductScreen();
       case NavigationItem.order:
-        return OrderScreen();
-      case NavigationItem.offer:
-        return Offerscreen();
-
+        return const OrderScreen();
     }
   }
 }

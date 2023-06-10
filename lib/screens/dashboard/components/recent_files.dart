@@ -15,7 +15,6 @@ class RecentFiles extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
-
         color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -45,7 +44,7 @@ class RecentFiles extends StatelessWidget {
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                    (index) => recentFileDataRow(demoRecentFiles[index]),
+                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),
@@ -54,7 +53,6 @@ class RecentFiles extends StatelessWidget {
     );
   }
 }
-
 
 DataRow recentFileDataRow(RecentFile fileInfo) {
   return DataRow(

@@ -17,57 +17,54 @@ class UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      drawer: SideMenu(),
-
-    body: SafeArea(
-    child: Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    if (Responsive.isDesktop(context))
-    Expanded(
-    child: SideMenu(),
-    ),
-      Expanded(
-        flex: 5,
-        child: SingleChildScrollView(
-          primary: false,
-          padding:  EdgeInsets.all(defaultPadding),
-          child: Column(
+        drawer: SideMenu(),
+        body: SafeArea(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                  width: double.infinity,
-                  child:  Text("Users",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ))
-              ),
-              ProductHeader(),
-              SizedBox(height: defaultPadding),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      children: const [
-                        ProductList(),
-                      ],
-                    ),
+              if (Responsive.isDesktop(context))
+                const Expanded(
+                  child: SideMenu(),
+                ),
+              const Expanded(
+                flex: 5,
+                child: SingleChildScrollView(
+                  primary: false,
+                  padding: EdgeInsets.all(defaultPadding),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          width: double.infinity,
+                          child: Text("Users",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ))),
+                      ProductHeader(),
+                      SizedBox(height: defaultPadding),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: Column(
+                              children: [
+                                ProductList(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-
-                ],
-              )
+                ),
+              ),
             ],
           ),
-        ),
-      ),
-    ],
-    ),
-    ));
+        ));
   }
 }
+
 class ProductList extends StatelessWidget {
   const ProductList({
     Key? key,
@@ -76,10 +73,10 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
         color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +85,6 @@ class ProductList extends StatelessWidget {
             "Check all your users' details here",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-
           SizedBox(
             width: double.infinity,
             height: 400,
@@ -114,7 +110,7 @@ class ProductList extends StatelessWidget {
               ],
               rows: List.generate(
                 demoRecentFiles.length,
-                    (index) => recentFileDataRow(demoRecentFiles[index]),
+                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),
@@ -132,10 +128,10 @@ DataRow recentFileDataRow(UserScreenModal fileInfo) {
       DataCell(Text(fileInfo.gender!)),
       DataCell(Text(fileInfo.email!)),
       DataCell(Text(fileInfo.phonenumber!)),
-
     ],
   );
 }
+
 class ProductHeader extends StatefulWidget {
   const ProductHeader({Key? key}) : super(key: key);
 
@@ -146,30 +142,27 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          const Spacer(
-            flex:3,
+    return const Row(
+      children: [
+        Spacer(
+          flex: 3,
+        ),
+        Expanded(
+          flex: 2,
+          child: Row(
+            children: [
+              Sort(),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(child: SearchField()),
+              SizedBox(
+                width: 10,
+              ),
+            ],
           ),
-          Expanded(
-            flex:2,
-            child: Row(
-
-              children: const [
-                Sort(),
-                SizedBox(width: 10,),
-
-                Expanded(child: SearchField()),
-                SizedBox(width: 10,),
-
-              ],
-            ),
-          ),
-        ],
-      ),
-
+        ),
+      ],
     );
   }
 }
-

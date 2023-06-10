@@ -13,10 +13,8 @@ class StarageDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-
-      ),
-      child: Column(
+      decoration: BoxDecoration(),
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -28,7 +26,6 @@ class StarageDetails extends StatelessWidget {
           ),
           SizedBox(height: defaultPadding),
           Chart(),
-
         ],
       ),
     );

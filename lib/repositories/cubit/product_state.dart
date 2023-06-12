@@ -3,18 +3,18 @@ import '../Modal/AddedItemResponse.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 
-abstract class ProductState{
+abstract class ProductState<T>{
 }
-class ProductLoadingState extends ProductState{
+class ProductLoadingState<T>  extends ProductState<T> {
 
 }
-class ProductLoadedState extends ProductState{
-  final List<ItemData> products;
+class ProductLoadedState<T> extends ProductState<T> {
+  final T products;
   ProductLoadedState(this.products);
 
 
 }
-class ProductErrorState extends ProductState{
+class ProductErrorState<T>  extends ProductState<T> {
   final String error;
 ProductErrorState(this.error);
 

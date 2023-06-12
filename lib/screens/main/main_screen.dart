@@ -70,7 +70,7 @@ class _MainPageState extends State<MainPage> {
       case NavigationItem.users:
         return const UserScreen();
       case NavigationItem.product:
-        return const ProductScreen();
+        return  ProductScreen();
       case NavigationItem.order:
         return const OrderScreen();
     }

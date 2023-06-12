@@ -1,10 +1,12 @@
 
 
 
+import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/repositories/cubit/product_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../models/productScreenModal.dart';
 import '../Modal/AddedItemResponse.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/AllProducts.dart';
@@ -21,10 +23,24 @@ class ProductCubit extends Cubit<ProductState> {
   ProductRepository postRepository = ProductRepository();
 
 
+void addProduct(ProductScreenModal object) async {
+  try {
 
+    AddProductResponse posts = await postRepository.addProduct();
+    emit(ProductLoadedState(posts));
+  }
+  on DioError catch(ex) {
+    if(ex.type == DioErrorType.other) {
+      emit( ProductErrorState("Can't fetch posts, please check your internet connection!") );
+    }
+    else {
+      emit( ProductErrorState(ex.type.toString()) );
+    }
+  }
+}
   void fetchPosts() async {
     try {
-      List<ItemData> posts = await postRepository.fetchPosts();
+      AllProducts posts = await postRepository.fetchPosts();
       emit(ProductLoadedState(posts));
     }
     on DioError catch(ex) {

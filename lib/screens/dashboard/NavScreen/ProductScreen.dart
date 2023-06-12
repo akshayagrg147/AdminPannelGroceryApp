@@ -9,10 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import '../../../common/common_widget.dart';
 import '../../../constants.dart';
-import '../../../models/ProductScreenModal.dart';
+import '../../../models/productScreenModal.dart';
 
 class ProductScreen extends StatefulWidget {
+
+
   const ProductScreen({Key? key}) : super(key: key);
 
   @override
@@ -61,7 +64,8 @@ class ProductScreenState extends State<ProductScreen> {
                                   child: CircularProgressIndicator(),
                                 );
                               } else if (state is ProductLoadedState) {
-                                return buildPostListView(state.products);
+                                var obj = state.products as AllProducts;
+                                return buildPostListView(obj.itemData!);
                               } else if (state is ProductErrorState) {
                                 return Center(
                                   child: Text(state.error),
@@ -137,10 +141,11 @@ class ProductList extends StatelessWidget {
                   label: Text("Description"),
                 ),
               ],
-              rows: List.generate(
-                demoRecentFiles.length,
-                (index) => recentFileDataRow(demoRecentFiles[index]),
-              ),
+              rows: [],
+              // rows: List.generate(
+              //   demoRecentFiles.length,
+              //       (index) => recentFileDataRow(demoRecentFiles[index]),
+              // ),
             ),
           ),
         ],
@@ -163,32 +168,32 @@ Widget buildPostListView(List<ItemData> posts) {
   );
 }
 
-DataRow recentFileDataRow(ProductScreenModal fileInfo) {
-  return DataRow(
-    cells: [
-      DataCell(Text(fileInfo.id!)),
-      DataCell(
-        Row(
-          children: [
-            SvgPicture.asset(
-              fileInfo.images!,
-              height: 30,
-              width: 30,
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text(fileInfo.Name!)),
-      DataCell(Text(fileInfo.cashondelevery!)),
-      DataCell(Text(fileInfo.productdeliveryin!)),
-      DataCell(Text(fileInfo.freeshipping!)),
-      DataCell(Text(fileInfo.quantity!)),
-      DataCell(Text(fileInfo.regularprice!)),
-      DataCell(Text(fileInfo.offer!)),
-      DataCell(Text(fileInfo.description!)),
-    ],
-  );
-}
+// DataRow recentFileDataRow(ProductScreenModal fileInfo) {
+//   return DataRow(
+//     cells: [
+//       DataCell(Text(fileInfo.id!)),
+//       DataCell(
+//         Row(
+//           children: [
+//             SvgPicture.asset(
+//               fileInfo.images!,
+//               height: 30,
+//               width: 30,
+//             ),
+//           ],
+//         ),
+//       ),
+//       DataCell(Text(fileInfo.Name!)),
+//       DataCell(Text(fileInfo.cashondelevery!)),
+//       DataCell(Text(fileInfo.productdeliveryin!)),
+//       DataCell(Text(fileInfo.freeshipping!)),
+//       DataCell(Text(fileInfo.quantity!)),
+//       DataCell(Text(fileInfo.regularprice!)),
+//       DataCell(Text(fileInfo.offer!)),
+//       DataCell(Text(fileInfo.description!)),
+//     ],
+//   );
+// }
 
 class ProductHeader extends StatefulWidget {
   const ProductHeader({Key? key}) : super(key: key);
@@ -215,7 +220,6 @@ class _ProductHeaderState extends State<ProductHeader> {
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: AddCard1())
             ],
           ),
         ),
@@ -225,9 +229,9 @@ class _ProductHeaderState extends State<ProductHeader> {
 }
 
 class AddCard1 extends StatelessWidget {
-  const AddCard1({
-    Key? key,
-  }) : super(key: key);
+
+
+  const AddCard1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -258,9 +262,18 @@ class AddCard1 extends StatelessWidget {
   }
 
   void openAlert(BuildContext context) {
-    int? value = 0;
-    State1? set = State1.no;
+    int? freeShpping = 0;
+    State1? stock = State1.no;
     TextEditingController productname = TextEditingController();
+    TextEditingController productDescriptionController =
+        TextEditingController();
+    TextEditingController deliveryInstructionController =
+        TextEditingController();
+    TextEditingController pincodeController = TextEditingController();
+    TextEditingController quantityController = TextEditingController();
+    TextEditingController regularPriceController = TextEditingController();
+    TextEditingController mrpController = TextEditingController();
+
     var dialog = Dialog(
       insetPadding: const EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -280,214 +293,84 @@ class AddCard1 extends StatelessWidget {
                       ))),
 
               const SizedBox(height: 20),
-
-              TextField(
-                decoration: InputDecoration(
-                  hintText: "Enter Product Name",
-                  //fillColor: Colors.white,
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  prefixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(defaultPadding * 0.75),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: const BoxDecoration(
-                        //color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: const Icon(Icons.ac_unit_sharp),
-                    ),
-                  ),
-                ),
+              commonTextFieldWidget(
+                controller: productname,
+                hintText: "Bottle",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Product Name",
+                onChanged: (val) {},
               ),
 
               const SizedBox(height: 20),
-              // TextField(
-              //   keyboardType: TextInputType.number,
-              //   decoration: InputDecoration(
-              //     hintText: "Enter Product Regular Price",
-              //     fillColor: secondaryColor,
-              //     filled: true,
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide.none,
-              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
-              //     ),
-              //     prefixIcon: InkWell(
-              //       onTap: () {},
-              //       child: Container(
-              //         padding: EdgeInsets.all(defaultPadding * 0.75),
-              //         margin: EdgeInsets.symmetric(
-              //             horizontal: defaultPadding / 2),
-              //         decoration: BoxDecoration(
-              //           borderRadius: const BorderRadius.all(
-              //               Radius.circular(10)),
-              //         ),
-              //         child: const Icon(Icons.numbers),
-              //       ),
-              //     ),
-              //   ),
-              // ),
 
-              const SizedBox(height: 20),
-              // TextField(
-              //   keyboardType: TextInputType.number,
-              //   decoration: InputDecoration(
-              //     hintText: "Price per quantity",
-              //
-              //     fillColor: secondaryColor,
-              //     filled: true,
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide.none,
-              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
-              //     ),
-              //     prefixIcon: InkWell(
-              //       onTap: () {},
-              //       child: Container(
-              //         padding: EdgeInsets.all(defaultPadding * 0.75),
-              //         margin: EdgeInsets.symmetric(
-              //             horizontal: defaultPadding / 2),
-              //         decoration: BoxDecoration(
-              //           color: primaryColor,
-              //           borderRadius: const BorderRadius.all(
-              //               Radius.circular(10)),
-              //         ),
-              //         child: const Icon(Icons.numbers),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              const SizedBox(height: 20),
-
-              // TextField(
-              //   keyboardType: TextInputType.number,
-              //   decoration: InputDecoration(
-              //     hintText: "Price per quantity",
-              //
-              //     fillColor: secondaryColor,
-              //     filled: true,
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide.none,
-              //       borderRadius: const BorderRadius.all(Radius.circular(10)),
-              //     ),
-              //     prefixIcon: InkWell(
-              //       onTap: () {},
-              //       child: Container(
-              //         padding: EdgeInsets.all(defaultPadding * 0.75),
-              //         margin: EdgeInsets.symmetric(
-              //             horizontal: defaultPadding / 2),
-              //         decoration: BoxDecoration(
-              //           borderRadius: const BorderRadius.all(
-              //               Radius.circular(10)),
-              //         ),
-              //         child: const Icon(Icons.numbers),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
-              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity, // <-- TextField width
                 height: 120,
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  controller: productname,
-                  decoration: const InputDecoration(
-                    hintText: "Enter Poduct Description",
-                    fillColor: secondaryColor,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                  maxLines: 5,
-                  // <-- SEE HERE
-                  minLines: 1,
+                child: commonTextFieldWidget(
+                  controller: productDescriptionController,
+                  hintText: "desc",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Poduct Description",
+                  onChanged: (val) {},
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    hintText: "Enter Product Delivery Instruction",
-                    fillColor: secondaryColor,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    )),
+              commonTextFieldWidget(
+                controller: deliveryInstructionController,
+                hintText: "desc",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Product Delivery Instruction",
+                onChanged: (val) {},
               ),
+
               const SizedBox(height: 20),
               //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
-              TextField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: "Enter Pin code",
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(defaultPadding * 0.75),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: const Icon(Icons.numbers),
-                    ),
-                  ),
-                ),
+              commonTextFieldWidget(
+                controller: pincodeController,
+                hintText: "123456",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Pin code",
+                onChanged: (val) {},
               ),
+
               Text(
                 "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
                 style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 20),
-              TextField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: "Enter tags Here",
-                  fillColor: secondaryColor,
-                  filled: true,
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  suffixIcon: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(defaultPadding * 0.75),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding / 2),
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: SvgPicture.asset("assets/icons/Search.svg"),
-                    ),
-                  ),
-                ),
+              commonTextFieldWidget(
+                controller: quantityController,
+                hintText: "123456",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Quantity",
+                onChanged: (val) {},
               ),
-              Text(
-                "only one tag per product is allow product here",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
+
+              commonTextFieldWidget(
+                controller: quantityController,
+                hintText: "123456",
+                secondaryColor: secondaryColor,
+                labelText: "Enter regular Price",
+                onChanged: (val) {},
               ),
+              commonTextFieldWidget(
+                controller: regularPriceController,
+                hintText: "123456",
+                secondaryColor: secondaryColor,
+                labelText: "Enter regular Price",
+                onChanged: (val) {},
+              ),
+
+              const SizedBox(height: 20),
+              commonTextFieldWidget(
+                controller: mrpController,
+                hintText: "300",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Mrp Price",
+                onChanged: (val) {},
+              ),
+
               const SizedBox(height: 20),
               Container(
                 width: 242.0,
@@ -543,17 +426,17 @@ class AddCard1 extends StatelessWidget {
                     title: const Text('Yes'),
                     leading: Radio(
                       value: State1.no,
-                      groupValue: set,
-                      onChanged: (value) => set,
+                      groupValue: stock,
+                      onChanged: (value) => stock,
                     ),
                   ),
                   ListTile(
                     title: const Text('No'),
                     leading: Radio(
                         value: State1.yes,
-                        groupValue: set,
+                        groupValue: stock,
                         onChanged: (State1? st) {
-                          set = st;
+                          stock = st;
                         }),
                   ),
                 ],
@@ -569,7 +452,7 @@ class AddCard1 extends StatelessWidget {
                   title: const Text('Yes'),
                   leading: Radio(
                     value: 1,
-                    groupValue: value,
+                    groupValue: freeShpping,
                     onChanged: (value) {
                       setState(() {
                         value = value;
@@ -581,7 +464,7 @@ class AddCard1 extends StatelessWidget {
                   title: const Text('No'),
                   leading: Radio(
                     value: 2,
-                    groupValue: value,
+                    groupValue: freeShpping,
                     onChanged: (value) {},
                   ),
                 ),
@@ -593,7 +476,19 @@ class AddCard1 extends StatelessWidget {
                         MaterialStateProperty.all(const EdgeInsets.all(30)),
                     textStyle: MaterialStateProperty.all(
                         const TextStyle(fontSize: 15))),
-                onPressed: () {},
+                onPressed: () {
+                  context.read<ProductCubit>().addProduct(ProductScreenModal(
+                      productName: productname.text.toString(),
+                      price: regularPriceController.text.toString(),
+                      quantity: "1",
+                      actualPrice: "1",
+                      productId: "1",
+                      productDescription: productDescriptionController.text,
+                      dashboardDisplay: false,
+                      itemCategoryId: "1",
+                      categoryType: 1));
+
+                },
                 child: const Text('Save!'),
               ),
               const SizedBox(height: 20),

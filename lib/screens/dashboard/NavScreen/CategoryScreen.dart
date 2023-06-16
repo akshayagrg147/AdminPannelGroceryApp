@@ -172,9 +172,9 @@ class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const Row(
+      child:  Row(
         children: [
-          Spacer(
+          const Spacer(
             flex: 2,
           ),
           Expanded(
@@ -182,15 +182,15 @@ class _ProductHeaderState extends State<ProductHeader> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Sort(),
-                SizedBox(
+                const Sort(),
+                const SizedBox(
                   width: 10,
                 ),
-                Expanded(child: SearchField()),
-                SizedBox(
+                SearchField(),
+                const SizedBox(
                   width: 10,
                 ),
-                Expanded(child: AddCard1())
+             AddCard1()
               ],
             ),
           ),

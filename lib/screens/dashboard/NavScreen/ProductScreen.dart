@@ -27,19 +27,22 @@ class ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: const SideMenu(),
-        body: SafeArea(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+
+          child: Column(
+            
             children: [
-              if (Responsive.isDesktop(context))
-                const Expanded(
-                  child: SideMenu(),
-                ),
-              Expanded(
-                flex: 5,
-                child: SingleChildScrollView(
-                    primary: false,
-                    padding: const EdgeInsets.all(defaultPadding),
+              const SizedBox(height: 26.0),
+              ProductHeader(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (Responsive.isDesktop(context))
+                    const Expanded(
+                      child: SideMenu(),
+                    ),
+                  Expanded(
+                    flex: 5,
                     child: MultiProvider(
                         providers: [
                           Provider<ProductCubit>(
@@ -65,7 +68,17 @@ class ProductScreenState extends State<ProductScreen> {
                                 );
                               } else if (state is ProductLoadedState) {
                                 var obj = state.products as AllProducts;
-                                return buildPostListView(obj.itemData!);
+                                return ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: obj.itemData?.length,
+                                  shrinkWrap: true,
+
+                                  itemBuilder: (context, index) {
+                                    ItemData post = obj.itemData![index];
+                                    return PostData(post:post);
+                                  },
+                                );
+                             //   return Text("${obj.message}");
                               } else if (state is ProductErrorState) {
                                 return Center(
                                   child: Text(state.error),
@@ -75,13 +88,96 @@ class ProductScreenState extends State<ProductScreen> {
                               return Container();
                             },
                           ),
-                        ))),
+                        )),
+                  ),
+                ],
               ),
             ],
           ),
         ));
   }
 }
+
+class PostData extends StatelessWidget {
+  final ItemData post;
+  const PostData({required this.post, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Image.network(
+            post.productImage1.toString(),
+            width: 200,
+            height: 200,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx,obj,stack){
+              return  Image.asset(
+                'assets/images/logo.png',
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              );;
+            },
+          ),
+
+          SizedBox(width: 10),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context,constraints) {
+                print(constraints.maxWidth);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      post.productName.toString(),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      post.price.toString(),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      post.quantity.toString(),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      post.productDescription.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+
+                  ],
+                );
+              }
+            ),
+          ),
+        ],
+      ),
+    );;
+  }
+}
+
+
+
 
 class ProductList extends StatelessWidget {
   const ProductList({
@@ -154,19 +250,7 @@ class ProductList extends StatelessWidget {
   }
 }
 
-Widget buildPostListView(List<ItemData> posts) {
-  return ListView.builder(
-    itemCount: posts.length,
-    itemBuilder: (context, index) {
-      ItemData post = posts[index];
 
-      return ListTile(
-        title: Text(post.categoryType.toString()),
-        subtitle: Text(post.category.toString()),
-      );
-    },
-  );
-}
 
 // DataRow recentFileDataRow(ProductScreenModal fileInfo) {
 //   return DataRow(
@@ -205,10 +289,10 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return  Row(
       children: [
         Spacer(
-          flex: 3,
+          flex: 1,
         ),
         Expanded(
           flex: 2,
@@ -216,49 +300,20 @@ class _ProductHeaderState extends State<ProductHeader> {
             children: [
               Sort(),
               SizedBox(width: 20),
-              Expanded(child: SearchField()),
+            // SearchField(),
               SizedBox(
                 width: 10,
               ),
+
+              AddCard(onTap: (tap){
+                if(tap)
+                  openAlert(context);
+              })
             ],
           ),
         ),
       ],
     );
-  }
-}
-
-class AddCard1 extends StatelessWidget {
-
-
-  const AddCard1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: defaultPadding,
-          vertical: defaultPadding / 3,
-        ),
-        decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: Colors.white10),
-        ),
-        child: InkWell(
-          onTap: () {
-            openAlert(context);
-          },
-          child: const Row(
-            children: [
-              Icon(Icons.add),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultPadding / 3),
-                child: Text("Add new product"),
-              ),
-            ],
-          ),
-        ));
   }
 
   void openAlert(BuildContext context) {
@@ -266,9 +321,9 @@ class AddCard1 extends StatelessWidget {
     State1? stock = State1.no;
     TextEditingController productname = TextEditingController();
     TextEditingController productDescriptionController =
-        TextEditingController();
+    TextEditingController();
     TextEditingController deliveryInstructionController =
-        TextEditingController();
+    TextEditingController();
     TextEditingController pincodeController = TextEditingController();
     TextEditingController quantityController = TextEditingController();
     TextEditingController regularPriceController = TextEditingController();
@@ -278,231 +333,227 @@ class AddCard1 extends StatelessWidget {
       insetPadding: const EdgeInsets.all(32.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       //this right here
-      child: Expanded(
-        flex: 5,
-        child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(15.0),
-            children: [
-              const SizedBox(
-                  width: double.infinity,
-                  child: Text("ADD PRODUCT",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ))),
-
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                controller: productname,
-                hintText: "Bottle",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Product Name",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity, // <-- TextField width
-                height: 120,
-                child: commonTextFieldWidget(
-                  controller: productDescriptionController,
-                  hintText: "desc",
-                  secondaryColor: secondaryColor,
-                  labelText: "Enter Poduct Description",
-                  onChanged: (val) {},
-                ),
-              ),
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                controller: deliveryInstructionController,
-                hintText: "desc",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Product Delivery Instruction",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
-              commonTextFieldWidget(
-                controller: pincodeController,
-                hintText: "123456",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Pin code",
-                onChanged: (val) {},
-              ),
-
-              Text(
-                "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                controller: quantityController,
-                hintText: "123456",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Quantity",
-                onChanged: (val) {},
-              ),
-
-              commonTextFieldWidget(
-                controller: quantityController,
-                hintText: "123456",
-                secondaryColor: secondaryColor,
-                labelText: "Enter regular Price",
-                onChanged: (val) {},
-              ),
-              commonTextFieldWidget(
-                controller: regularPriceController,
-                hintText: "123456",
-                secondaryColor: secondaryColor,
-                labelText: "Enter regular Price",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                controller: mrpController,
-                hintText: "300",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Mrp Price",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              Container(
-                width: 242.0,
-                height: 42.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24.0),
-                  color: const Color(0xff2c2c2c),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Upload Image1',
+      child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(15.0),
+          children: [
+            const SizedBox(
+                width: double.infinity,
+                child: Text("ADD PRODUCT",
                     style: TextStyle(
-                      fontFamily: 'Arial',
                       fontSize: 18,
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 242.0,
-                height: 42.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24.0),
-                  color: const Color(0xff2c2c2c),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Upload Image2',
-                    style: TextStyle(
-                      fontFamily: 'Arial',
-                      fontSize: 18,
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                "In Stock",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
+                      fontWeight: FontWeight.w500,
+                    ))),
 
-              Column(
-                children: [
-                  ListTile(
-                    title: const Text('Yes'),
-                    leading: Radio(
-                      value: State1.no,
-                      groupValue: stock,
-                      onChanged: (value) => stock,
-                    ),
-                  ),
-                  ListTile(
-                    title: const Text('No'),
-                    leading: Radio(
-                        value: State1.yes,
-                        groupValue: stock,
-                        onChanged: (State1? st) {
-                          stock = st;
-                        }),
-                  ),
-                ],
+            const SizedBox(height: 20),
+            commonTextFieldWidget(
+              type: TextInputType.text,
+              controller: productname,
+              hintText: "Bottle",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Product Name",
+              onChanged: (val) {},
+            ),
+
+            const SizedBox(height: 20),
+
+
+            commonTextFieldWidget(
+              type: TextInputType.text,
+              controller: productDescriptionController,
+              hintText: "desc",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Poduct Description",
+              onChanged: (val) {},
+            ),
+            const SizedBox(height: 20),
+            commonTextFieldWidget(
+              type: TextInputType.text,
+              controller: deliveryInstructionController,
+              hintText: "desc",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Product Delivery Instruction",
+              onChanged: (val) {},
+            ),
+
+            const SizedBox(height: 20),
+            //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
+            commonTextFieldWidget(
+              type: TextInputType.number,
+              controller: pincodeController,
+              hintText: "123456",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Pin code",
+              onChanged: (val) {},
+            ),
+
+            Text(
+              "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 20),
+            commonTextFieldWidget(
+              type: TextInputType.number,
+              controller: quantityController,
+              hintText: "e.g. 16",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Quantity",
+              onChanged: (val) {},
+            ),
+
+            commonTextFieldWidget(
+              type: TextInputType.number,
+              controller: quantityController,
+              hintText: "Rs.250",
+              secondaryColor: secondaryColor,
+              labelText: "Enter regular Price",
+              onChanged: (val) {},
+            ),
+            commonTextFieldWidget(
+              type: TextInputType.number,
+              controller: regularPriceController,
+              hintText: "Rs.250",
+              secondaryColor: secondaryColor,
+              labelText: "Enter regular Price",
+              onChanged: (val) {},
+            ),
+
+            const SizedBox(height: 20),
+            commonTextFieldWidget(
+              type: TextInputType.number,
+              controller: mrpController,
+              hintText: "Rs.300",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Mrp Price",
+              onChanged: (val) {},
+            ),
+
+            const SizedBox(height: 20),
+            Container(
+              width: 242.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24.0),
+                color: const Color(0xff2c2c2c),
               ),
-              const SizedBox(height: 20),
-              Text(
-                "Free Shipping",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
+              child: const Center(
+                child: Text(
+                  'Upload Image1',
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                    fontSize: 18,
+                    color: Colors.white,
+                    height: 1,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              Column(children: [
+            ),
+            const SizedBox(height: 20),
+            Container(
+              width: 242.0,
+              height: 42.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24.0),
+                color: const Color(0xff2c2c2c),
+              ),
+              child: const Center(
+                child: Text(
+                  'Upload Image2',
+                  style: TextStyle(
+                    fontFamily: 'Arial',
+                    fontSize: 18,
+                    color: Colors.white,
+                    height: 1,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "In Stock",
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.start,
+            ),
+
+            Column(
+              children: [
                 ListTile(
                   title: const Text('Yes'),
                   leading: Radio(
-                    value: 1,
-                    groupValue: freeShpping,
-                    onChanged: (value) {
-                      setState(() {
-                        value = value;
-                      });
-                    },
+                    value: State1.no,
+                    groupValue: stock,
+                    onChanged: (value) => stock,
                   ),
                 ),
                 ListTile(
                   title: const Text('No'),
                   leading: Radio(
-                    value: 2,
-                    groupValue: freeShpping,
-                    onChanged: (value) {},
-                  ),
+                      value: State1.yes,
+                      groupValue: stock,
+                      onChanged: (value) => stock),
                 ),
-              ]),
-              ElevatedButton(
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Free Shipping",
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.start,
+            ),
+            Column(children: [
+              ListTile(
+                title: const Text('Yes'),
+                leading: Radio(
+                  value: 1,
+                  groupValue: freeShpping,
+                  onChanged: (value) =>freeShpping,
+                ),
+              ),
+              ListTile(
+                title: const Text('No'),
+                leading: Radio(
+                  value: 2,
+                  groupValue: freeShpping,
+                  onChanged: (value) =>freeShpping,
+                ),
+              ),
+            ]),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                  padding:
+                  MaterialStateProperty.all(const EdgeInsets.all(30)),
+                  textStyle: MaterialStateProperty.all(
+                      const TextStyle(fontSize: 15))),
+              onPressed: () {
+                context.read<ProductCubit>().addProduct(ProductScreenModal(
+                    productName: productname.text.toString(),
+                    price: regularPriceController.text.toString(),
+                    quantity: quantityController.text,
+                    actualPrice: mrpController.text,
+                    productId: "1",
+                    productDescription: productDescriptionController.text,
+                    dashboardDisplay: false,
+                    itemCategoryId: "1",
+                    categoryType: 1));
+
+              },
+              child: const Text('Save!'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
                     padding:
-                        MaterialStateProperty.all(const EdgeInsets.all(30)),
+                    MaterialStateProperty.all(const EdgeInsets.all(30)),
                     textStyle: MaterialStateProperty.all(
                         const TextStyle(fontSize: 15))),
-                onPressed: () {
-                  context.read<ProductCubit>().addProduct(ProductScreenModal(
-                      productName: productname.text.toString(),
-                      price: regularPriceController.text.toString(),
-                      quantity: "1",
-                      actualPrice: "1",
-                      productId: "1",
-                      productDescription: productDescriptionController.text,
-                      dashboardDisplay: false,
-                      itemCategoryId: "1",
-                      categoryType: 1));
-
-                },
-                child: const Text('Save!'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                      padding:
-                          MaterialStateProperty.all(const EdgeInsets.all(30)),
-                      textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 15))),
-                  onPressed: () {},
-                  child: const Text('Cancel!'))
-            ]),
-      ),
+                onPressed: () {},
+                child: const Text('Cancel!'))
+          ]),
     );
     showDialog(
         context: context,
@@ -510,13 +561,15 @@ class AddCard1 extends StatelessWidget {
           return Align(
             alignment: Alignment.center,
             child: FractionallySizedBox(
-              widthFactor: 0.4,
+              widthFactor: 0.8,
               child: dialog,
             ),
           );
         });
   }
 }
+
+
 
 void setState(Null Function() param0) {}
 

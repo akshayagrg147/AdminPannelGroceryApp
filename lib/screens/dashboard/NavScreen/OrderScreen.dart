@@ -151,9 +151,9 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return  Row(
       children: [
-        Spacer(
+        const Spacer(
           flex: 2,
         ),
         Expanded(
@@ -168,7 +168,9 @@ class _ProductHeaderState extends State<ProductHeader> {
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: AddCard())
+              Expanded(child: AddCard(onTap: (val){
+
+              },))
             ],
           ),
         ),

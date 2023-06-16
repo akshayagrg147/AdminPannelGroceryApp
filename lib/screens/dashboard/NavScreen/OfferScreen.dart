@@ -164,7 +164,7 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [Sort(), Expanded(child: SearchField()), AddCard1()],
     );

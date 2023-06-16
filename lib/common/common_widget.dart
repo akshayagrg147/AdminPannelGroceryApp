@@ -13,12 +13,14 @@ class commonTextFieldWidget extends StatelessWidget {
   final double padding;
   final double margin;
   final Decoration decoration;
+  final TextInputType type;
 
   commonTextFieldWidget({
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.secondaryColor,
+    required this.type,
     this.defaultPadding=16.0,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
@@ -42,7 +44,7 @@ class commonTextFieldWidget extends StatelessWidget {
         child: TextField(
           controller: controller,
           obscureText: obscureText,
-          keyboardType: keyboardType,
+          keyboardType: type,
           textInputAction: textInputAction,
           onChanged: onChanged,
           decoration: InputDecoration(

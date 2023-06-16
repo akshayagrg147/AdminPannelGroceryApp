@@ -26,7 +26,7 @@ class ProductCubit extends Cubit<ProductState> {
 void addProduct(ProductScreenModal object) async {
   try {
 
-    AddProductResponse posts = await postRepository.addProduct();
+    AddProductResponse posts = await postRepository.addProduct(object);
     emit(ProductLoadedState(posts));
   }
   on DioError catch(ex) {
@@ -40,6 +40,7 @@ void addProduct(ProductScreenModal object) async {
 }
   void fetchPosts() async {
     try {
+
       AllProducts posts = await postRepository.fetchPosts();
       emit(ProductLoadedState(posts));
     }

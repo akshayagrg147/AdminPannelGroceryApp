@@ -46,16 +46,16 @@ class _AddNewProductState extends State<AddNewProduct> {
         // ),
         const SizedBox(height: 20),
         const CustemTextField(
-            image: "assets/icons/Search.svg",
+
             hint: "Enter Product Regular Price"),
 
         const SizedBox(height: 20),
         const CustemTextField(
-            image: "assets/icons/Search.svg", hint: "Price per quantity"),
+             hint: "Price per quantity"),
 
         const SizedBox(height: 20),
         const CustemTextField(
-            image: "assets/icons/Search.svg", hint: "Price per quantity"),
+             hint: "Price per quantity"),
 
         // TextField(
         //   keyboardType: TextInputType.number,
@@ -105,7 +105,7 @@ class _AddNewProductState extends State<AddNewProduct> {
         ),
         const SizedBox(height: 20),
         const CustemTextField(
-            image: "assets/icons/Search.svg",
+
             hint: "Enter Product Delivery Instruction"),
         // TextField(
         //   keyboardType: TextInputType.text,
@@ -134,7 +134,7 @@ class _AddNewProductState extends State<AddNewProduct> {
         // ),
         const SizedBox(height: 20),
         const CustemTextField(
-          image: "assets/icons/logo.svg",
+
           hint: "Enter Pin code",
         ),
         // TextField(
@@ -169,7 +169,7 @@ class _AddNewProductState extends State<AddNewProduct> {
         ),
         const SizedBox(height: 20),
         const CustemTextField(
-          image: "assets/icons/Search.svg",
+
           hint: "Enter tags Here",
         ),
 
@@ -253,7 +253,7 @@ class _AddNewProductState extends State<AddNewProduct> {
 class CustemTextField extends StatelessWidget {
   const CustemTextField({
     required this.hint,
-    required this.image,
+     this.image="assets/icons/dribble.svg",
     super.key,
   });
 

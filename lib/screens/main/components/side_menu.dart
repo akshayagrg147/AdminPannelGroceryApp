@@ -24,49 +24,49 @@ class SideMenu extends StatelessWidget {
           ),
           DrawerListTile(
             title: "Home",
-            svgSrc: "assets/icons/menu_dashbord.svg",
+
             press: () {
               selectItem(context, NavigationItem.home);
             },
           ),
           DrawerListTile(
             title: "Products",
-            svgSrc: "assets/icons/menu_tran.svg",
+
             press: () {
               selectItem(context, NavigationItem.product);
             },
           ),
           DrawerListTile(
             title: "Category",
-            svgSrc: "assets/icons/menu_task.svg",
+
             press: () {
               selectItem(context, NavigationItem.category);
             },
           ),
           DrawerListTile(
             title: "Order",
-            svgSrc: "assets/icons/menu_doc.svg",
+
             press: () {
               selectItem(context, NavigationItem.order);
             },
           ),
           DrawerListTile(
             title: "Offer",
-            svgSrc: "assets/icons/menu_store.svg",
+
             press: () {
               selectItem(context, NavigationItem.offer);
             },
           ),
           DrawerListTile(
             title: "Users",
-            svgSrc: "assets/icons/menu_notification.svg",
+
             press: () {
               selectItem(context, NavigationItem.users);
             },
           ),
           DrawerListTile(
             title: "Log out",
-            svgSrc: "assets/icons/menu_setting.svg",
+
             press: () {
               selectItem(context, NavigationItem.logout);
             },
@@ -87,11 +87,11 @@ class DrawerListTile extends StatelessWidget {
     Key? key,
     // For selecting those three line once press "Command+D"
     required this.title,
-    required this.svgSrc,
+
     required this.press,
   }) : super(key: key);
 
-  final String title, svgSrc;
+  final String title;
   final VoidCallback press;
 
   @override
@@ -99,11 +99,7 @@ class DrawerListTile extends StatelessWidget {
     return ListTile(
       onTap: press,
       horizontalTitleGap: 0.0,
-      leading: SvgPicture.asset(
-        svgSrc,
-        color: Colors.red,
-        height: 16,
-      ),
+
       title: Text(
         title,
         style: const TextStyle(color: Colors.white),

@@ -26,11 +26,11 @@ class commonTextFieldWidget extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
      required this.onChanged,
-    this.padding = 16.0,
+    this.padding = 1.0,
     this.margin = 16.0,
     this.decoration = const BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
     ),
   });
 

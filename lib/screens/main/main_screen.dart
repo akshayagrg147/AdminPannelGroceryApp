@@ -18,6 +18,16 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Main Screen'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            // Open the drawer
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ),
       key: context.read<MenuController1>().scaffoldKey,
       drawer: SideMenu(),
       body: SafeArea(

@@ -1,8 +1,11 @@
 import 'package:adminpannelgrocery/models/MyFiles.dart';
+import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants.dart';
+import '../NavScreen/NavigationBloc.dart';
 import 'file_info_card.dart';
 
 class MyFiles extends StatelessWidget {
@@ -64,6 +67,7 @@ class FileInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationBloc = BlocProvider.of<NavigationBloc>(context);
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -74,7 +78,9 @@ class FileInfoCardGridView extends StatelessWidget {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index]),
+      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index],performClick: (){
+        navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+      },),
     );
   }
 }

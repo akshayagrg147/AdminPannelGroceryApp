@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
+import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
 
@@ -16,13 +17,28 @@ class ProductRepository {
 
   Future<AddProductResponse> addProduct(ProductScreenModal object) async {
     try {
-      Response response = await api.sendRequest.post("/Admin/AddProduct",data: object);
-      if (response.statusCode == 200) {
+      final response = await _dio?.post("/Admin/AddProduct",data: object);
+      if (response?.statusCode == 200) {
         AddProductResponse postMaps =
-            AddProductResponse.fromJson(response.data);
+            AddProductResponse.fromJson(response?.data);
         return postMaps;
       } else {
-        print(response.statusCode);
+        print(response?.statusCode);
+      }
+    } catch (ex) {
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse> deleteProduct(String projectId) async {
+    try {
+      final response = await _dio?.get("/Admin/AddProduct", queryParameters: {"projectId": projectId});
+      if (response?.statusCode == 200) {
+        AddProductResponse postMaps =
+        AddProductResponse.fromJson(response?.data);
+        return postMaps;
+      } else {
+        print(response?.statusCode);
       }
     } catch (ex) {
       rethrow;
@@ -48,5 +64,24 @@ class ProductRepository {
       rethrow;
     }
     return AllProducts();
+  }
+  Future<UserResponse> userResponse() async {
+    try {
+      final response = await _dio?.get("/Admin/AllUsers");
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        UserResponse products = UserResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return UserResponse();
   }
 }

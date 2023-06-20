@@ -1,21 +1,27 @@
+import 'dart:developer';
+
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
-import 'package:adminpannelgrocery/repositories/cubit/ProductCubit.dart';
-import 'package:adminpannelgrocery/repositories/cubit/product_state.dart';
+import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
+import 'package:adminpannelgrocery/state/all_product_state.dart';
+import 'package:adminpannelgrocery/state/delete_product_state.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import '../../../common/common_widget.dart';
+import '../../../commonWidget/common_text_field_widget.dart';
+import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
+import '../../../models/AddProductResponse.dart';
 import '../../../models/productScreenModal.dart';
+import '../../../state/add_product_state.dart';
 
 class ProductScreen extends StatefulWidget {
-
-
   const ProductScreen({Key? key}) : super(key: key);
 
   @override
@@ -23,17 +29,29 @@ class ProductScreen extends StatefulWidget {
 }
 
 class ProductScreenState extends State<ProductScreen> {
+  late AllProductCubit Cubit;
+  late AddProductCubit CubitAddNewProuct;
+  late DeleteProductCubit CubitdeleteNewProuct;
+
+
+  @override
+  void initState() {
+    super.initState();
+    Cubit = BlocProvider.of<AllProductCubit>(context);
+    CubitAddNewProuct = BlocProvider.of<AddProductCubit>(context);
+    CubitdeleteNewProuct= BlocProvider.of<DeleteProductCubit>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         drawer: const SideMenu(),
         body: SingleChildScrollView(
-
           child: Column(
-            
             children: [
-              const SizedBox(height: 26.0),
-              ProductHeader(),
+
+              ProductHeader(CubitAddNewProuct),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -43,52 +61,46 @@ class ProductScreenState extends State<ProductScreen> {
                     ),
                   Expanded(
                     flex: 5,
-                    child: MultiProvider(
-                        providers: [
-                          Provider<ProductCubit>(
-                            create: (_) => ProductCubit(),
-                          ),
-                        ],
-                        child: SafeArea(
-                          child: BlocConsumer<ProductCubit, ProductState>(
-                            listener: (context, state) {
-                              if (state is ProductErrorState) {
-                                SnackBar snackBar = SnackBar(
-                                  content: Text(state.error),
-                                  backgroundColor: Colors.red,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is ProductLoadingState) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (state is ProductLoadedState) {
-                                var obj = state.products as AllProducts;
-                                return ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: obj.itemData?.length,
-                                  shrinkWrap: true,
+                    child: SafeArea(
+                      child: BlocConsumer<AllProductCubit, AllProductState>(
+                        listener: (context, state) {
+                          if (state is AllProductErrorState) {
+                            SnackBar snackBar = SnackBar(
+                              content: Text(state.error),
+                              backgroundColor: Colors.red,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is AllProductLoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is AllProductLoadedState) {
+                            log(state.products.runtimeType.toString());
+                            var obj = state.products;
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: obj.itemData?.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                ItemData item = obj.itemData![index];
+                                return ProductItem(itemData: item,cubit: CubitdeleteNewProuct,);
+                              },
+                            );
+                            //   return Text("${obj.message}");
+                          } else if (state is AllProductErrorState) {
+                            return Center(
+                              child: Text(state.error),
+                            );
+                          }
 
-                                  itemBuilder: (context, index) {
-                                    ItemData post = obj.itemData![index];
-                                    return PostData(post:post);
-                                  },
-                                );
-                             //   return Text("${obj.message}");
-                              } else if (state is ProductErrorState) {
-                                return Center(
-                                  child: Text(state.error),
-                                );
-                              }
-
-                              return Container();
-                            },
-                          ),
-                        )),
+                          return Container();
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -98,9 +110,10 @@ class ProductScreenState extends State<ProductScreen> {
   }
 }
 
-class PostData extends StatelessWidget {
-  final ItemData post;
-  const PostData({required this.post, Key? key}) : super(key: key);
+class ProductItem extends StatelessWidget {
+  final ItemData itemData;
+final DeleteProductCubit cubit;
+  const ProductItem({required this.itemData,required this.cubit, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,74 +123,111 @@ class PostData extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.network(
-            post.productImage1.toString(),
+            itemData.productImage1.toString(),
             width: 200,
             height: 200,
             fit: BoxFit.cover,
-            errorBuilder: (ctx,obj,stack){
-              return  Image.asset(
+            errorBuilder: (ctx, obj, stack) {
+              return Image.asset(
                 'assets/images/logo.png',
                 width: 200,
                 height: 200,
                 fit: BoxFit.cover,
-              );;
+              );
+              ;
             },
           ),
-
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
-            child: LayoutBuilder(
-              builder: (context,constraints) {
-                print(constraints.maxWidth);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      post.productName.toString(),
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              print(constraints.maxWidth);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    itemData.productName.toString(),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      post.price.toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    itemData.price.toString(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      post.quantity.toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    itemData.quantity.toString(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 16.0),
-                    Text(
-                      post.productDescription.toString(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    itemData.productDescription.toString(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-
-
-                  ],
-                );
-              }
-            ),
+                  ),
+                ],
+              );
+            }),
           ),
+          BlocConsumer<DeleteProductCubit, DeleteProductState>(
+            listener: (context, state) {
+              if (state is DeleteProductErrorState) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(snackBar);
+              }
+            },
+    builder: (context, state) {
+    if (state is DeleteProductLoadingState) {
+    return Container();
+    } else if (state is DeleteProductLoadedState) {
+    log(state.products.runtimeType.toString());
+    var obj = state.products;
+    SnackBar snackBar = const SnackBar(
+      content: Text('success'),
+      backgroundColor: Colors.green,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    //   return Text("${obj.message}");
+    } else if (state is DeleteProductErrorState) {
+    return Center(
+    child: Text(state.error),
+    );
+    }
+
+    return IconButton(
+    icon: const Icon(Icons.delete),
+    onPressed: () {
+    cubit.deleteProduct(itemData.productId.toString());
+
+
+    // Perform delete operation
+    },
+    );
+    },
+    ),
+
+
         ],
       ),
-    );;
+    );
+    ;
   }
 }
-
-
-
 
 class ProductList extends StatelessWidget {
   const ProductList({
@@ -250,8 +300,6 @@ class ProductList extends StatelessWidget {
   }
 }
 
-
-
 // DataRow recentFileDataRow(ProductScreenModal fileInfo) {
 //   return DataRow(
 //     cells: [
@@ -279,55 +327,62 @@ class ProductList extends StatelessWidget {
 //   );
 // }
 
-class ProductHeader extends StatefulWidget {
-  const ProductHeader({Key? key}) : super(key: key);
+class ProductHeader extends StatelessWidget {
+  final AddProductCubit addNewProductCubit;
 
-  @override
-  State<ProductHeader> createState() => _ProductHeaderState();
-}
+  const ProductHeader(this.addNewProductCubit, {Key? key}) : super(key: key);
 
-class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       children: [
-        Spacer(
-          flex: 1,
-        ),
+
         Expanded(
           flex: 2,
           child: Row(
             children: [
-              Sort(),
-              SizedBox(width: 20),
-            // SearchField(),
-              SizedBox(
-                width: 10,
-              ),
-
-              AddCard(onTap: (tap){
-                if(tap)
-                  openAlert(context);
+              if (!Responsive.isDesktop(context))
+                IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: (){
+                      ScaffoldState? scaffoldState = Scaffold.of(context);
+                      if (!scaffoldState.isDrawerOpen) {
+                        scaffoldState.openDrawer();
+                      }
+                    }
+                ),
+              if (!Responsive.isMobile(context))
+                Text(
+                  "Dashboard",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              if (!Responsive.isMobile(context))
+                Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+              Expanded(child: SearchField()),
+              AddCard(onTap: (tap) {
+                if (tap) {
+                  openAlert(context, addNewProductCubit);
+                }
               })
             ],
-          ),
+          )
         ),
       ],
     );
   }
 
-  void openAlert(BuildContext context) {
-    int? freeShpping = 0;
-    State1? stock = State1.no;
+  void openAlert(BuildContext context, AddProductCubit cubit) {
+    int? dashboardDisplay = 0;
     TextEditingController productname = TextEditingController();
     TextEditingController productDescriptionController =
-    TextEditingController();
+        TextEditingController();
     TextEditingController deliveryInstructionController =
-    TextEditingController();
+        TextEditingController();
     TextEditingController pincodeController = TextEditingController();
     TextEditingController quantityController = TextEditingController();
     TextEditingController regularPriceController = TextEditingController();
     TextEditingController mrpController = TextEditingController();
+    bool selectedSpinnerItem = false;
 
     var dialog = Dialog(
       insetPadding: const EdgeInsets.all(32.0),
@@ -356,7 +411,6 @@ class _ProductHeaderState extends State<ProductHeader> {
             ),
 
             const SizedBox(height: 20),
-
 
             commonTextFieldWidget(
               type: TextInputType.text,
@@ -402,14 +456,6 @@ class _ProductHeaderState extends State<ProductHeader> {
               onChanged: (val) {},
             ),
 
-            commonTextFieldWidget(
-              type: TextInputType.number,
-              controller: quantityController,
-              hintText: "Rs.250",
-              secondaryColor: secondaryColor,
-              labelText: "Enter regular Price",
-              onChanged: (val) {},
-            ),
             commonTextFieldWidget(
               type: TextInputType.number,
               controller: regularPriceController,
@@ -472,83 +518,126 @@ class _ProductHeaderState extends State<ProductHeader> {
               ),
             ),
             const SizedBox(height: 20),
+
             Text(
-              "In Stock",
+              "Dashboard Display",
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.start,
-            ),
-
-            Column(
-              children: [
-                ListTile(
-                  title: const Text('Yes'),
-                  leading: Radio(
-                    value: State1.no,
-                    groupValue: stock,
-                    onChanged: (value) => stock,
-                  ),
-                ),
-                ListTile(
-                  title: const Text('No'),
-                  leading: Radio(
-                      value: State1.yes,
-                      groupValue: stock,
-                      onChanged: (value) => stock),
-                ),
-              ],
             ),
             const SizedBox(height: 20),
-            Text(
-              "Free Shipping",
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.start,
-            ),
             Column(children: [
               ListTile(
                 title: const Text('Yes'),
                 leading: Radio(
                   value: 1,
-                  groupValue: freeShpping,
-                  onChanged: (value) =>freeShpping,
+                  groupValue: dashboardDisplay,
+                  onChanged: (value) {
+                    setState(() {
+                      dashboardDisplay = value;
+                    });
+                  },
                 ),
               ),
               ListTile(
                 title: const Text('No'),
                 leading: Radio(
                   value: 2,
-                  groupValue: freeShpping,
-                  onChanged: (value) =>freeShpping,
+                  groupValue: dashboardDisplay,
+                  onChanged: (value) {
+                    setState(() {
+                      dashboardDisplay = value;
+                    });
+                  },
                 ),
               ),
             ]),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
-                  padding:
-                  MaterialStateProperty.all(const EdgeInsets.all(30)),
-                  textStyle: MaterialStateProperty.all(
-                      const TextStyle(fontSize: 15))),
-              onPressed: () {
-                context.read<ProductCubit>().addProduct(ProductScreenModal(
-                    productName: productname.text.toString(),
-                    price: regularPriceController.text.toString(),
-                    quantity: quantityController.text,
-                    actualPrice: mrpController.text,
-                    productId: "1",
-                    productDescription: productDescriptionController.text,
-                    dashboardDisplay: false,
-                    itemCategoryId: "1",
-                    categoryType: 1));
+            SpinnerWidget(
+              items: [
+                'Exclusive',
+                'Best Selling',
+                'Home Products',
+                'ItemCategory'
+              ],
+              onChanged: (value) {
+                if (value.contains('ItemCategory')) {
+                  setState(() {
+                    selectedSpinnerItem = true;
+                  });
+                } else {
+                  setState(() {
+                    selectedSpinnerItem = false;
+                  });
+                }
+              },
+              selectedValue: 'Exclusive',
+            ),
+            if (selectedSpinnerItem) SizedBox(height: 20),
+            SpinnerWidget(
+              items: [
+                '1001',
+                '1002',
+                '1003',
+                '1004'
+              ],
+              onChanged: (value) {
 
               },
-              child: const Text('Save!'),
+              selectedValue: '1001',
             ),
+            BlocConsumer<AddProductCubit, AddProductState>(
+                listener: (context, state) {
+              if (state is AddProductErrorState) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (state is AddProductLoadedState) {
+                SnackBar snackBar = const SnackBar(
+                  content: Text('success'),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            }, builder: (context, state) {
+              if (state is AddProductLoadedState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is AddProductLoadedState) {
+                var response = state.products;
+                if (response.statusCode == 200) {
+                  Navigator.of(context).pop();
+                }
+              }
+              return ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    padding:
+                        MaterialStateProperty.all(const EdgeInsets.all(15)),
+                    textStyle: MaterialStateProperty.all(
+                        const TextStyle(fontSize: 15))),
+                onPressed: () {
+                  cubit.addProduct(ProductScreenModal(
+                      productName: productname.text.toString(),
+                      price: regularPriceController.text.toString(),
+                      quantity: quantityController.text,
+                      actualPrice: mrpController.text,
+                      productId: "1",
+                      productDescription: productDescriptionController.text,
+                      dashboardDisplay: false,
+                      itemCategoryId: "1",
+                      categoryType: 1));
+                },
+                child: const Text('Save!'),
+              );
+            }),
             const SizedBox(height: 20),
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.red),
                     padding:
-                    MaterialStateProperty.all(const EdgeInsets.all(30)),
+                        MaterialStateProperty.all(const EdgeInsets.all(15)),
                     textStyle: MaterialStateProperty.all(
                         const TextStyle(fontSize: 15))),
                 onPressed: () {},
@@ -568,8 +657,6 @@ class _ProductHeaderState extends State<ProductHeader> {
         });
   }
 }
-
-
 
 void setState(Null Function() param0) {}
 

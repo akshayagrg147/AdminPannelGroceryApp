@@ -14,6 +14,8 @@ import '../../../constants.dart';
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart' hide ItemData;
 import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 
+import '../components/user_item.dart';
+
 class AllUserScreen extends StatefulWidget {
 
 
@@ -75,11 +77,8 @@ class ProductScreenState extends State<AllUserScreen> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: obj.userData?.length,
                               shrinkWrap: true,
-
                               itemBuilder: (context, index) {
-
-                                UserData user = obj.userData![index];
-                                return UsersData(user:user);
+                                return UserItem(obj.userData);
                               },
                             ),
                           );

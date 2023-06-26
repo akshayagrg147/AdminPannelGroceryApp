@@ -1,4 +1,5 @@
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/AllUserScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OrderScreen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +17,10 @@ class NavigationBloc extends Cubit<NavigationEvent>{
           MaterialPageRoute(builder: (context) => const AllUserScreen()),
         );
         break;
-      case NavigationEvent.navigateToScreen2:
+      case NavigationEvent.navigateToOrder:
         Navigator.push(
           _context,
-          MaterialPageRoute(builder: (context) => const AllUserScreen()),
+          MaterialPageRoute(builder: (context) => const OrderScreen()),
         );
         break;
     // Handle more navigation events and navigate to corresponding screens
@@ -30,6 +31,6 @@ class NavigationBloc extends Cubit<NavigationEvent>{
 }
 enum NavigationEvent {
   navigateToAllUser,
-  navigateToScreen2,
+  navigateToOrder,
   // Add more navigation events as needed
 }

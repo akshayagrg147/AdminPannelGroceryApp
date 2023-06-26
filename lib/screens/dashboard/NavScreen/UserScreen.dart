@@ -155,7 +155,7 @@ class _ProductHeaderState extends State<ProductHeader> {
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: SearchField()),
+              Expanded(child: SearchField(textChanged: (value) {  },)),
               SizedBox(
                 width: 10,
               ),

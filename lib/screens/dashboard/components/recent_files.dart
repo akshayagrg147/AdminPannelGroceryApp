@@ -1,12 +1,14 @@
+import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:adminpannelgrocery/models/RecentFile.dart';
+import 'package:adminpannelgrocery/models/RecentOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
 
-class RecentFiles extends StatelessWidget {
-  const RecentFiles({
+class RecentOrders extends StatelessWidget {
+  final List<RecentOrders1>? recentOrders;
+   RecentOrders(this.recentOrders, {
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +24,7 @@ class RecentFiles extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Files",
+            "Recent Order",
             style: Theme.of(context).textTheme.subtitle1,
           ),
           SizedBox(
@@ -33,18 +35,18 @@ class RecentFiles extends StatelessWidget {
               minWidth: 600,
               columns: const [
                 DataColumn(
-                  label: Text("File Name"),
+                  label: Text("Order Id"),
                 ),
                 DataColumn(
                   label: Text("Date"),
                 ),
                 DataColumn(
-                  label: Text("Size"),
+                  label: Text("Quantity"),
                 ),
               ],
               rows: List.generate(
-                demoRecentFiles.length,
-                (index) => recentFileDataRow(demoRecentFiles[index]),
+                recentOrders?.length??0,
+                (index) => recentFileDataRow(recentOrders![index]),
               ),
             ),
           ),
@@ -54,7 +56,7 @@ class RecentFiles extends StatelessWidget {
   }
 }
 
-DataRow recentFileDataRow(RecentFile fileInfo) {
+DataRow recentFileDataRow(RecentOrders1 order) {
   return DataRow(
     cells: [
       DataCell(
@@ -67,13 +69,13 @@ DataRow recentFileDataRow(RecentFile fileInfo) {
             // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(fileInfo.title!),
+              child: Text(order.orderId!),
             ),
           ],
         ),
       ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
+      DataCell(Text(order.createdDate!)),
+      DataCell(Text(order.paymentmode!)),
     ],
   );
 }

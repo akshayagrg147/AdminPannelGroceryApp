@@ -4,15 +4,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
 import '../../../models/MyFiles.dart';
+import '../../../repositories/Modal/RecentOrderCountResponse.dart';
 
-class FileInfoCard extends StatelessWidget {
-  const FileInfoCard({
+class CardView extends StatelessWidget {
+  const CardView({
     Key? key,
     required this.info,
     required this.performClick
   }) : super(key: key);
 
-  final CloudStorageInfo info;
+  final CountResponse info;
   final String? Function() performClick;
 
   @override
@@ -39,7 +40,8 @@ class FileInfoCard extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: info.color!.withOpacity(0.1),
+
+                    color: primaryColor.withOpacity(0.1),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
 
@@ -47,19 +49,19 @@ class FileInfoCard extends StatelessWidget {
               ],
             ),
             Text(
-              info.title!,
+              info.name!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            ProgressLine(
-              color: info.color,
-              percentage: info.percentage,
-            ),
+            // ProgressLine(
+            //   color: info.color,
+            //   percentage: info.percentage,
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${info.numOfFiles}",
+                  "${info.count}",
                   style: Theme.of(context)
                       .textTheme
                       .caption!

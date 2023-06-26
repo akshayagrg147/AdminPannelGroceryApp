@@ -1,8 +1,10 @@
 import 'package:adminpannelgrocery/constants.dart';
 import 'package:adminpannelgrocery/controllers/MenuController.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/AllOrderCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/RecentOrderCountCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/NavigationBloc.dart';
 import 'package:adminpannelgrocery/screens/main/main_screen.dart';
@@ -16,8 +18,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final AllProductCubit productCubit = AllProductCubit();
-  final AddProductCubit addProductCubit = AddProductCubit();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserResponseCubit>(
             create: (context) => UserResponseCubit()),
         BlocProvider<DeleteProductCubit>(
-            create: (context) => DeleteProductCubit())
+            create: (context) => DeleteProductCubit()),
+        BlocProvider<AllOrderCubit>(
+            create: (context) => AllOrderCubit()),
+        BlocProvider<RecentOrderCubit>(
+            create: (context) => RecentOrderCubit())
 
       ],
       child: MaterialApp(

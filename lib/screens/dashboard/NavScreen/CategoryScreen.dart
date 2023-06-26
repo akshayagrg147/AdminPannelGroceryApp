@@ -186,7 +186,7 @@ class _ProductHeaderState extends State<ProductHeader> {
                 const SizedBox(
                   width: 10,
                 ),
-                SearchField(),
+                SearchField(textChanged: (value ) {  },),
                 const SizedBox(
                   width: 10,
                 ),

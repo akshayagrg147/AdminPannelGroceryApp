@@ -3,7 +3,10 @@
 
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
+import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
+import 'package:adminpannelgrocery/state/all_orders_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
+import 'package:adminpannelgrocery/state/recent_order_count_state.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,29 +21,28 @@ import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 
-class AllProductCubit extends Cubit<AllProductState> {
-  AllProductCubit() : super( AllProductLoadingState() ) {
-    fetchProducts();
+class RecentOrderCubit extends Cubit<RecentOrderCountState> {
+  RecentOrderCubit() : super( RecentOrderCountLoadingState() ) {
+    fetchAllOrderCount();
   }
 
   ProductRepository postRepository = ProductRepository();
 
 
-  void fetchProducts() async {
+  void fetchAllOrderCount() async {
     try {
-      AllProducts posts = await postRepository.fetchPosts();
-      emit(AllProductLoadedState(posts));
+      RecentOrderCountResponse orders = await postRepository.fetchRecentOrderCount();
+      emit(RecentOrderCountLoadedState(orders));
     }
     on DioError catch(ex) {
       if(ex.type == DioErrorType.other) {
-        emit( AllProductErrorState("Can't fetch posts, please check your internet connection!") );
+        emit( RecentOrderCountErrorState("Can't fetch posts, please check your internet connection!") );
       }
       else {
-        emit( AllProductErrorState(ex.type.toString()) );
+        emit( RecentOrderCountErrorState(ex.type.toString()) );
       }
     }
   }
-
 
 
 

@@ -1,4 +1,5 @@
 import 'package:adminpannelgrocery/models/MyFiles.dart';
+import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:flutter/material.dart';
@@ -6,23 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants.dart';
 import '../NavScreen/NavigationBloc.dart';
-import 'file_info_card.dart';
+import 'card_view.dart';
 
-class MyFiles extends StatelessWidget {
-  const MyFiles({
+class CardViewCount extends StatelessWidget {
+
+  final List<CountResponse>? responseCount;
+   CardViewCount(this.responseCount, {
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('print my fields ${responseCount}');
     final Size _size = MediaQuery.of(context).size;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "My Files",
+              "Summary",
               style: Theme.of(context).textTheme.subtitle1,
             ),
             // ElevatedButton.icon(
@@ -41,12 +46,12 @@ class MyFiles extends StatelessWidget {
         ),
         SizedBox(height: defaultPadding),
         Responsive(
-          mobile: FileInfoCardGridView(
+          mobile: FileInfoCardGridView(responseCount,
             crossAxisCount: _size.width < 650 ? 2 : 4,
             childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
           ),
-          tablet: FileInfoCardGridView(),
-          desktop: FileInfoCardGridView(
+          tablet: FileInfoCardGridView(responseCount),
+          desktop: FileInfoCardGridView(responseCount,
             childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
           ),
         ),
@@ -56,7 +61,9 @@ class MyFiles extends StatelessWidget {
 }
 
 class FileInfoCardGridView extends StatelessWidget {
-  const FileInfoCardGridView({
+
+  final List<CountResponse>? countResponse;
+   FileInfoCardGridView(this.countResponse, {
     Key? key,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
@@ -71,15 +78,20 @@ class FileInfoCardGridView extends StatelessWidget {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: demoMyFiles.length,
+      itemCount: countResponse?.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         crossAxisSpacing: defaultPadding,
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index],performClick: (){
-        navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+      itemBuilder: (context, index) =>
+          CardView(info: countResponse![index],performClick: (){
+        if(index==1) {
+          navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+        } else{
+          navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
+        }
       },),
     );
   }

@@ -3,6 +3,7 @@
 
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
+import 'package:adminpannelgrocery/state/all_orders_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
 
 import 'package:dio/dio.dart';
@@ -18,29 +19,28 @@ import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 
-class AllProductCubit extends Cubit<AllProductState> {
-  AllProductCubit() : super( AllProductLoadingState() ) {
-    fetchProducts();
+class AllOrderCubit extends Cubit<AllOrderState> {
+  AllOrderCubit() : super( AllOrderLoadingState() ) {
+    fetchAllOrders();
   }
 
   ProductRepository postRepository = ProductRepository();
 
 
-  void fetchProducts() async {
+  void fetchAllOrders() async {
     try {
-      AllProducts posts = await postRepository.fetchPosts();
-      emit(AllProductLoadedState(posts));
+      AllOrders orders = await postRepository.fetchOrders();
+      emit(AllOrderLoadedState(orders));
     }
     on DioError catch(ex) {
       if(ex.type == DioErrorType.other) {
-        emit( AllProductErrorState("Can't fetch posts, please check your internet connection!") );
+        emit( AllOrderErrorState("Can't fetch posts, please check your internet connection!") );
       }
       else {
-        emit( AllProductErrorState(ex.type.toString()) );
+        emit( AllOrderErrorState(ex.type.toString()) );
       }
     }
   }
-
 
 
 

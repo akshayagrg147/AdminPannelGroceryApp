@@ -166,7 +166,7 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [Sort(), Expanded(child: SearchField()), AddCard1()],
+      children: [Sort(), Expanded(child: SearchField(textChanged: (value ) {  },)), AddCard1()],
     );
   }
 }

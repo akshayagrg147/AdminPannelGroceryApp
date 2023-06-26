@@ -33,7 +33,7 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-         Expanded(child: SearchField()),
+         Expanded(child: SearchField(textChanged: (value ) {  },)),
         const ProfileCard()
       ],
     );
@@ -148,9 +148,10 @@ class Sort extends StatelessWidget {
 }
 
 class SearchField extends StatelessWidget {
+  final String? Function(String?)? textChanged;
   TextEditingController productname = TextEditingController();
    SearchField({
-    Key? key,
+    Key? key,required this.textChanged
   }) : super(key: key);
 
   @override
@@ -161,7 +162,9 @@ class SearchField extends StatelessWidget {
       hintText: "Bottle",
       secondaryColor: secondaryColor,
       labelText: "Search",
-      onChanged: (val) {},
+      onChanged: (val) {
+        textChanged!(val);
+        },
     );
   }
 }
@@ -191,7 +194,7 @@ class HeaderModify extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
+        Expanded(child: SearchField(textChanged: (value ) {  },)),
 
       ],
     );

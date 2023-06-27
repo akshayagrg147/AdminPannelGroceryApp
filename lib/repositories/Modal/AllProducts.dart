@@ -4,7 +4,7 @@ class AllProducts {
   int? statusCode;
   String? message;
 
-  AllProducts({this.itemData, this.statusCode, this.message});
+  AllProducts({required this.itemData,required this.statusCode, required this.message});
 
   AllProducts.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {

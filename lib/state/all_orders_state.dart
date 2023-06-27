@@ -11,10 +11,17 @@ class AllOrderLoadingState extends AllOrderState {
 
 }
 class AllOrderLoadedState extends AllOrderState {
-  final AllOrders orders;
-  AllOrderLoadedState(this.orders);
+  List<OrderData>? itemData;
+  AllOrderLoadedState(this.itemData);
 
 
+}
+
+class AllLoadingMoreState extends AllOrderState {
+  final List<OrderData> oldPosts;
+  final bool isFirstFetch;
+
+  AllLoadingMoreState(this.oldPosts, {this.isFirstFetch=false});
 }
 class AllOrderErrorState extends AllOrderState {
   final String error;

@@ -63,7 +63,7 @@ class UserItem extends StatelessWidget {
 }
 
 DataRow UserItemRow(UserData data) {
-  Function(ItemData) fnData;
+
   SizedBox(height: 16.0);
   return DataRow(
       cells: [

@@ -1,5 +1,5 @@
 class AllOrders {
-  List<ItemData>? itemData;
+  List<OrderData>? itemData;
   int? statusCode;
   String? message;
 
@@ -7,9 +7,9 @@ class AllOrders {
 
   AllOrders.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {
-      itemData = <ItemData>[];
+      itemData = <OrderData>[];
       json['itemData'].forEach((v) {
-        itemData!.add(new ItemData.fromJson(v));
+        itemData!.add(new OrderData.fromJson(v));
       });
     }
     statusCode = json['statusCode'];
@@ -27,7 +27,7 @@ class AllOrders {
   }
 }
 
-class ItemData {
+class OrderData {
   List<OrderList>? orderList;
   String? totalOrderValue;
   String? paymentmode;
@@ -36,7 +36,7 @@ class ItemData {
   String? createdDate;
   String? orderId;
 
-  ItemData(
+  OrderData(
       {this.orderList,
         this.totalOrderValue,
         this.paymentmode,
@@ -45,7 +45,7 @@ class ItemData {
         this.createdDate,
         this.orderId});
 
-  ItemData.fromJson(Map<String, dynamic> json) {
+  OrderData.fromJson(Map<String, dynamic> json) {
     if (json['orderList'] != null) {
       orderList = <OrderList>[];
       json['orderList'].forEach((v) {

@@ -147,23 +147,30 @@ class Sort extends StatelessWidget {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   final String? Function(String?)? textChanged;
-  TextEditingController productname = TextEditingController();
-   SearchField({
+
+   const SearchField({
     Key? key,required this.textChanged
   }) : super(key: key);
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  TextEditingController productname = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return  commonTextFieldWidget(
       type: TextInputType.text,
       controller: productname,
-      hintText: "Bottle",
+      hintText: "Milk",
       secondaryColor: secondaryColor,
       labelText: "Search",
       onChanged: (val) {
-        textChanged!(val);
+        widget.textChanged!(val);
         },
     );
   }

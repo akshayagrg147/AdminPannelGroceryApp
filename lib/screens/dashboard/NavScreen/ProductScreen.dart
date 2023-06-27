@@ -35,6 +35,7 @@ class ProductScreenState extends State<ProductScreen> {
   late DeleteProductCubit CubitdeleteNewProuct;
   List<ItemData>? listProducts = [];
 
+
   @override
   void initState() {
     super.initState();
@@ -45,13 +46,30 @@ class ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         drawer: const SideMenu(),
         body: SingleChildScrollView(
           child: Column(
             children: [
 // if(listProducts?.isNotEmpty ?? true)
-              ProductHeader(CubitAddNewProuct, listProducts),
+              ProductHeader(CubitAddNewProuct ,onValueUpdate: (val){
+                if(val.isNotEmpty){
+                  print('value get after search ${val}');
+                  List<ItemData>? items = listProducts
+                      ?.where((item) => item.productName!.contains(val))
+                      .toList();
+                  print('value get after search ${items?.length}');
+                  if(val.isEmpty){
+                    Cubit.passFilterData(listProducts ?? <ItemData>[]);
+                  }
+                  else {
+                    Cubit.passFilterData(items ?? <ItemData>[]);
+                  }
+
+                }
+
+              },),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -74,15 +92,17 @@ class ProductScreenState extends State<ProductScreen> {
                           }
                         },
                         builder: (context, state) {
+                          print(state);
                           if (state is AllProductLoadingState) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
                           } else if (state is AllProductLoadedState) {
+                            print('value increment  ${state.products.itemData?.length}');
                             log(state.products.runtimeType.toString());
                             var obj = state.products;
-                            listProducts = obj.itemData;
-                            return ProductItems(
+                              listProducts = obj.itemData;
+                              return ProductItems(
                                 listProducts, CubitdeleteNewProuct, (val) {
                               openAlert(context, CubitAddNewProuct, true, val);
                             });
@@ -225,9 +245,9 @@ class ProductItem extends StatelessWidget {
 
 class ProductHeader extends StatelessWidget {
   AddProductCubit addNewProductCubit;
-  List<ItemData>? listProducts;
+  final Function(String) onValueUpdate;
 
-  ProductHeader(this.addNewProductCubit, this.listProducts, {Key? key})
+  ProductHeader(this.addNewProductCubit, {Key? key, required this.onValueUpdate})
       : super(key: key);
 
   @override
@@ -251,13 +271,11 @@ class ProductHeader extends StatelessWidget {
                   Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                 Expanded(child: SearchField(textChanged: (value) {
                   print('ProductScreen  ${value}  ');
-                  var items = listProducts
-                      ?.where((item) => item.productName!.contains(value ?? ''))
-                      .toList();
-                  print('ProductScreen  ${items?.length}  ');
-                  setState(() {
-                    listProducts = items;
-                  });
+                //  setState((){
+                                       // listProducts = items;
+                    onValueUpdate(value!);
+
+//                  });
                 })),
                 AddCard(onTap: (tap) {
                   if (tap) {

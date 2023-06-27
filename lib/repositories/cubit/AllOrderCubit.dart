@@ -20,29 +20,34 @@ import '../api/ProductRepository.dart';
 
 
 class AllOrderCubit extends Cubit<AllOrderState> {
-  AllOrderCubit() : super( AllOrderLoadingState() ) {
-    fetchAllOrders();
-  }
+  int page = 1;
+  final ProductRepository repository;
+  AllOrderCubit(this.repository) : super( AllOrderLoadingState() );
 
-  ProductRepository postRepository = ProductRepository();
+  void loadOrders() {
+    if (state is AllLoadingMoreState) return;
+    final currentState = state;
+    List<OrderData> oldOrders = [];
 
+    if (currentState is AllOrderLoadedState) {
+      oldOrders = List.from(currentState.itemData ?? []);
+    }
 
-  void fetchAllOrders() async {
-    try {
-      AllOrders orders = await postRepository.fetchOrders();
+    emit(AllLoadingMoreState(oldOrders, isFirstFetch: page == 1));
+
+    repository.fetchOrders(page, 30).then((newOrders) {
+      page++;
+
+      final List<OrderData> orders = List.from(oldOrders);
+      orders.addAll(newOrders.itemData!);
+
       emit(AllOrderLoadedState(orders));
-    }
-    on DioError catch(ex) {
-      if(ex.type == DioErrorType.other) {
-        emit( AllOrderErrorState("Can't fetch posts, please check your internet connection!") );
-      }
-      else {
-        emit( AllOrderErrorState(ex.type.toString()) );
-      }
-    }
+    });
   }
-
-
 
 
 }
+
+
+
+

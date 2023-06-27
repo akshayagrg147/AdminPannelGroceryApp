@@ -39,6 +39,7 @@ class ProductItems extends StatelessWidget {
             width: double.infinity,
             height:  1200,
             child: DataTable2(
+              dividerThickness: 2.0,
               columnSpacing: defaultPadding,
               minWidth: 600,
               columns: const [
@@ -70,9 +71,9 @@ class ProductItems extends StatelessWidget {
 
 DataRow productItemRow(ItemData data, DeleteProductCubit cubit,  Function(ItemData) editClick) {
   Function(ItemData) fnData;
-  SizedBox(height: 16.0);
   return DataRow(
       cells: [
+
         DataCell(
           Row(
             children: [
@@ -86,7 +87,7 @@ DataRow productItemRow(ItemData data, DeleteProductCubit cubit,  Function(ItemDa
                 child: Image.network(
                   data.productImage1.toString(),
                   width: 100,
-                  height: 100,
+                  height: 40,
                   fit: BoxFit.cover,
                   errorBuilder: (ctx, obj, stack) {
                     return Image.asset(

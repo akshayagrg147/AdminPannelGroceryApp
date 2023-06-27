@@ -65,12 +65,12 @@ class ProductRepository {
       print(ex.toString());
       rethrow;
     }
-    return AllProducts();
+    return AllProducts(itemData: <ItemData>[],statusCode: 200,message: "true");
   }
-  Future<AllOrders> fetchOrders() async {
+  Future<AllOrders> fetchOrders(int page,int limit) async {
     try {
-      final response = await _dio?.post("/Admin/AllOrders");
-      print("sucess error");
+      final response = await _dio?.get("/Admin/AllOrdersByPages", queryParameters: {"skip": page,"limit": limit});
+      print("sucess order");
       print(response?.statusMessage);
 
       if (response?.statusCode == 200) {

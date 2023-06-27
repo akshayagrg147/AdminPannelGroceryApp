@@ -23,23 +23,38 @@ class OrderScreen extends StatefulWidget {
 
 class OrderScreenState extends State<OrderScreen> {
   late AllOrderCubit Cubit;
+  final scrollController = ScrollController();
+  List<OrderData>?  listProducts=[];
 
-  List<ItemData>?  listProducts=[];
+  void setupScrollController(context) {
+    scrollController.addListener(() {
+      print('scroll listenre');
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          print('scroll listenre');
+          BlocProvider.of<AllOrderCubit>(context).loadOrders();
+        }
+      }
+
+    });
+  }
 
 
   @override
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
-
+    setupScrollController(context);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
 
         drawer: const SideMenu(),
         body: SingleChildScrollView(
+          // controller: scrollController,
           child: Column(
             children: [
 // if(listProducts?.isNotEmpty ?? true)
@@ -65,14 +80,23 @@ class OrderScreenState extends State<OrderScreen> {
                           }
                         },
                         builder: (context, state) {
-                          if (state is AllOrderLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is AllOrderLoadedState) {
-                            var obj = state.orders;
-                            listProducts=obj.itemData;
-                            return OrderItems(obj.itemData);
+                          List<OrderData> orders = [];
+                          bool isLoading = false;
+                          if (state is AllLoadingMoreState && state.isFirstFetch) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                         else if (state is AllOrderLoadingState) {
+                            // return const Center(
+                            //   child: CircularProgressIndicator(),
+                         //   );
+                          } else if (state is AllLoadingMoreState) {
+                            orders = state.oldPosts;
+                            isLoading = true;
+                            //   return Text("${obj.message}");
+                          }
+                          else if (state is AllOrderLoadedState) {
+                            listProducts=state.itemData;
+                            return OrderItems(state.itemData, scrollController: scrollController,);
                             //   return Text("${obj.message}");
                           } else if (state is AllOrderErrorState) {
                             return Center(

@@ -1,4 +1,4 @@
-import 'package:adminpannelgrocery/models/MyFiles.dart';
+
 import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
@@ -87,9 +87,13 @@ class FileInfoCardGridView extends StatelessWidget {
       ),
       itemBuilder: (context, index) =>
           CardView(info: countResponse![index],performClick: (){
-        if(index==1) {
+        if(index==0) {
+          navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
+        }
+        else if(index==1) {
           navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
-        } else{
+        }
+        else{
           navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
         }
       },),

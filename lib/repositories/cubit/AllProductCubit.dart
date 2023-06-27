@@ -26,6 +26,7 @@ class AllProductCubit extends Cubit<AllProductState> {
   ProductRepository postRepository = ProductRepository();
 
 
+
   void fetchProducts() async {
     try {
       AllProducts posts = await postRepository.fetchPosts();
@@ -40,6 +41,11 @@ class AllProductCubit extends Cubit<AllProductState> {
       }
     }
   }
+
+  void passFilterData(List<ItemData>? list) {
+    emit(AllProductLoadedState(AllProducts(itemData: list,statusCode: 200,message: "")));
+  }
+
 
 
 

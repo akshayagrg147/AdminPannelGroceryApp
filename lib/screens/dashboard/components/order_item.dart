@@ -7,10 +7,12 @@ import '../../../constants.dart';
 import '../../../models/AllOrders.dart';
 
 class OrderItems extends StatelessWidget {
-  final List<ItemData>? itemData;
+  final List<OrderData>? itemData;
+  final ScrollController scrollController;
 
   const OrderItems( this.itemData,{
     Key? key,
+    required this.scrollController
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class OrderItems extends StatelessWidget {
         color: secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,6 +37,7 @@ class OrderItems extends StatelessWidget {
             child: DataTable2(
               columnSpacing: defaultPadding,
               minWidth: 600,
+              scrollController: scrollController,
               columns: const [
                 DataColumn(
                   label: Text("Product Image")                ),
@@ -61,8 +65,8 @@ class OrderItems extends StatelessWidget {
   }
 }
 
-DataRow productItemRow(ItemData data) {
-  Function(ItemData) fnData;
+DataRow productItemRow(OrderData data) {
+  Function(OrderData) fnData;
   SizedBox(height: 16.0);
   return DataRow(
       cells: [

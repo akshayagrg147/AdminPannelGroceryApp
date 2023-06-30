@@ -4,9 +4,11 @@ import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
+import 'package:adminpannelgrocery/state/all_category_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -19,6 +21,7 @@ import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/AddProductResponse.dart';
 import '../../../models/productScreenModal.dart';
+import '../../../state/add_category_state.dart';
 import '../../../state/add_product_state.dart';
 import '../components/product_item.dart';
 
@@ -35,7 +38,6 @@ class ProductScreenState extends State<ProductScreen> {
   late DeleteProductCubit CubitdeleteNewProuct;
   List<ItemData>? listProducts = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -46,37 +48,33 @@ class ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        drawer: const SideMenu(),
+
         body: SingleChildScrollView(
           child: Column(
             children: [
 // if(listProducts?.isNotEmpty ?? true)
-              ProductHeader(CubitAddNewProuct ,onValueUpdate: (val){
-                if(val.isNotEmpty){
-                  print('value get after search ${val}');
-                  List<ItemData>? items = listProducts
-                      ?.where((item) => item.productName!.contains(val))
-                      .toList();
-                  print('value get after search ${items?.length}');
-                  if(val.isEmpty){
-                    Cubit.passFilterData(listProducts ?? <ItemData>[]);
+              ProductHeader(
+                CubitAddNewProuct,
+                onValueUpdate: (val) {
+                  if (val.isNotEmpty) {
+                    print('value get after search ${val}');
+                    List<ItemData>? items = listProducts
+                        ?.where((item) => item.productName!.contains(val))
+                        .toList();
+                    print('value get after search ${items?.length}');
+                    if (val.isEmpty) {
+                      Cubit.passFilterData(listProducts ?? <ItemData>[]);
+                    } else {
+                      Cubit.passFilterData(items ?? <ItemData>[]);
+                    }
                   }
-                  else {
-                    Cubit.passFilterData(items ?? <ItemData>[]);
-                  }
-
-                }
-
-              },),
+                },
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (Responsive.isDesktop(context))
-                    const Expanded(
-                      child: SideMenu(),
-                    ),
+
                   Expanded(
                     flex: 5,
                     child: SafeArea(
@@ -98,11 +96,12 @@ class ProductScreenState extends State<ProductScreen> {
                               child: CircularProgressIndicator(),
                             );
                           } else if (state is AllProductLoadedState) {
-                            print('value increment  ${state.products.itemData?.length}');
+                            print(
+                                'value increment  ${state.products.itemData?.length}');
                             log(state.products.runtimeType.toString());
                             var obj = state.products;
-                              listProducts = obj.itemData;
-                              return ProductItems(
+                            listProducts = obj.itemData;
+                            return ProductItems(
                                 listProducts, CubitdeleteNewProuct, (val) {
                               openAlert(context, CubitAddNewProuct, true, val);
                             });
@@ -247,7 +246,8 @@ class ProductHeader extends StatelessWidget {
   AddProductCubit addNewProductCubit;
   final Function(String) onValueUpdate;
 
-  ProductHeader(this.addNewProductCubit, {Key? key, required this.onValueUpdate})
+  ProductHeader(this.addNewProductCubit,
+      {Key? key, required this.onValueUpdate})
       : super(key: key);
 
   @override
@@ -271,9 +271,9 @@ class ProductHeader extends StatelessWidget {
                   Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                 Expanded(child: SearchField(textChanged: (value) {
                   print('ProductScreen  ${value}  ');
-                //  setState((){
-                                       // listProducts = items;
-                    onValueUpdate(value!);
+                  //  setState((){
+                  // listProducts = items;
+                  onValueUpdate(value!);
 
 //                  });
                 })),
@@ -291,7 +291,7 @@ class ProductHeader extends StatelessWidget {
 
 void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
     ItemData data) {
-  int? dashboardDisplay = 0;
+  int? dashboardDisplay = 2;
   TextEditingController productname = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController deliveryInstructionController = TextEditingController();
@@ -299,7 +299,9 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
   TextEditingController quantityController = TextEditingController();
   TextEditingController regularPriceController = TextEditingController();
   TextEditingController mrpController = TextEditingController();
-  bool selectedSpinnerItem = false;
+
+  String selectedValue = "";
+  List<String?>? categoryList;
   if (editButton) {
     productname.text = data.productName ?? '';
     productDescriptionController.text = data.productDescription ?? '';
@@ -313,253 +315,271 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
     insetPadding: const EdgeInsets.all(32.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
     //this right here
-    child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(15.0),
-        children: [
-          const SizedBox(
-              width: double.infinity,
-              child: Text("ADD PRODUCT",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ))),
+    child: StatefulBuilder(
+      builder: (context, setState) {
+        return ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(15.0),
+            children: [
+              const SizedBox(
+                  width: double.infinity,
+                  child: Text("ADD PRODUCT",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ))),
 
-          const SizedBox(height: 20),
-          commonTextFieldWidget(
-            type: TextInputType.text,
-            controller: productname,
-            hintText: "Bottle",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Product Name",
-            onChanged: (val) {},
-          ),
+              const SizedBox(height: 20),
+              commonTextFieldWidget(
+                type: TextInputType.text,
+                controller: productname,
+                hintText: "Bottle",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Product Name",
+                onChanged: (val) {},
+              ),
 
-          const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-          commonTextFieldWidget(
-            type: TextInputType.text,
-            controller: productDescriptionController,
-            hintText: "desc",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Poduct Description",
-            onChanged: (val) {},
-          ),
-          const SizedBox(height: 20),
-          commonTextFieldWidget(
-            type: TextInputType.text,
-            controller: deliveryInstructionController,
-            hintText: "desc",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Product Delivery Instruction",
-            onChanged: (val) {},
-          ),
+              commonTextFieldWidget(
+                type: TextInputType.text,
+                controller: productDescriptionController,
+                hintText: "desc",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Poduct Description",
+                onChanged: (val) {},
+              ),
+              const SizedBox(height: 20),
+              commonTextFieldWidget(
+                type: TextInputType.text,
+                controller: deliveryInstructionController,
+                hintText: "desc",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Product Delivery Instruction",
+                onChanged: (val) {},
+              ),
 
-          const SizedBox(height: 20),
-          //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
-          commonTextFieldWidget(
-            type: TextInputType.number,
-            controller: pincodeController,
-            hintText: "123456",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Pin code",
-            onChanged: (val) {},
-          ),
+              const SizedBox(height: 20),
+              //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
+              commonTextFieldWidget(
+                type: TextInputType.number,
+                controller: pincodeController,
+                hintText: "123456",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Pin code",
+                onChanged: (val) {},
+              ),
 
-          Text(
-            "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 20),
-          commonTextFieldWidget(
-            type: TextInputType.number,
-            controller: quantityController,
-            hintText: "e.g. 16",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Quantity",
-            onChanged: (val) {},
-          ),
+              Text(
+                "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 20),
+              commonTextFieldWidget(
+                type: TextInputType.number,
+                controller: quantityController,
+                hintText: "e.g. 16",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Quantity",
+                onChanged: (val) {},
+              ),
 
-          commonTextFieldWidget(
-            type: TextInputType.number,
-            controller: regularPriceController,
-            hintText: "Rs.250",
-            secondaryColor: secondaryColor,
-            labelText: "Enter regular Price",
-            onChanged: (val) {},
-          ),
+              commonTextFieldWidget(
+                type: TextInputType.number,
+                controller: regularPriceController,
+                hintText: "Rs.250",
+                secondaryColor: secondaryColor,
+                labelText: "Enter regular Price",
+                onChanged: (val) {},
+              ),
 
-          const SizedBox(height: 20),
-          commonTextFieldWidget(
-            type: TextInputType.number,
-            controller: mrpController,
-            hintText: "Rs.300",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Mrp Price",
-            onChanged: (val) {},
-          ),
+              const SizedBox(height: 20),
+              commonTextFieldWidget(
+                type: TextInputType.number,
+                controller: mrpController,
+                hintText: "Rs.300",
+                secondaryColor: secondaryColor,
+                labelText: "Enter Mrp Price",
+                onChanged: (val) {},
+              ),
 
-          const SizedBox(height: 20),
-          Container(
-            width: 242.0,
-            height: 42.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.0),
-              color: const Color(0xff2c2c2c),
-            ),
-            child: const Center(
-              child: Text(
-                'Upload Image1',
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontSize: 18,
-                  color: Colors.white,
-                  height: 1,
+              const SizedBox(height: 20),
+              Container(
+                width: 242.0,
+                height: 42.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: const Color(0xff2c2c2c),
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: 242.0,
-            height: 42.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.0),
-              color: const Color(0xff2c2c2c),
-            ),
-            child: const Center(
-              child: Text(
-                'Upload Image2',
-                style: TextStyle(
-                  fontFamily: 'Arial',
-                  fontSize: 18,
-                  color: Colors.white,
-                  height: 1,
+                child: const Center(
+                  child: Text(
+                    'Upload Image1',
+                    style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontSize: 18,
+                      color: Colors.white,
+                      height: 1,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              Container(
+                width: 242.0,
+                height: 42.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: const Color(0xff2c2c2c),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Upload Image2',
+                    style: TextStyle(
+                      fontFamily: 'Arial',
+                      fontSize: 18,
+                      color: Colors.white,
+                      height: 1,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
 
-          Text(
-            "Dashboard Display",
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.start,
-          ),
-          const SizedBox(height: 20),
-          Column(children: [
-            ListTile(
-              title: const Text('Yes'),
-              leading: Radio(
-                value: 1,
-                groupValue: dashboardDisplay,
-                onChanged: (value) {
-                  setState(() {
-                    dashboardDisplay = value;
-                  });
-                },
+              Text(
+                "Dashboard Display",
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.start,
               ),
-            ),
-            ListTile(
-              title: const Text('No'),
-              leading: Radio(
-                value: 2,
-                groupValue: dashboardDisplay,
-                onChanged: (value) {
-                  setState(() {
-                    dashboardDisplay = value;
-                  });
-                },
+              const SizedBox(height: 20),
+              Column(children: [
+                ListTile(
+                  title: const Text('Yes'),
+                  leading: Radio(
+                    value: 1,
+                    groupValue: dashboardDisplay,
+                    onChanged: (value) {
+                      setState(() {
+                        dashboardDisplay = value;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: const Text('No'),
+                  leading: Radio(
+                    value: 2,
+                    groupValue: dashboardDisplay,
+                    onChanged: (value) {
+                      setState(() {
+                        dashboardDisplay = value;
+                      });
+                    },
+                  ),
+                ),
+
+              ]),
+              Text(
+                "Select Category",
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.start,
               ),
-            ),
-          ]),
-          SpinnerWidget(
-            items: [
-              'Exclusive',
-              'Best Selling',
-              'Home Products',
-              'ItemCategory'
-            ],
-            onChanged: (value) {
-              if (value.contains('ItemCategory')) {
-                setState(() {
-                  selectedSpinnerItem = true;
-                });
-              } else {
-                setState(() {
-                  selectedSpinnerItem = false;
-                });
-              }
-            },
-            selectedValue: 'Exclusive',
-          ),
-          if (selectedSpinnerItem) SizedBox(height: 20),
-          SpinnerWidget(
-            items: ['1001', '1002', '1003', '1004'],
-            onChanged: (value) {},
-            selectedValue: '1001',
-          ),
-          BlocConsumer<AddProductCubit, AddProductState>(
-              listener: (context, state) {
-            if (state is AddProductErrorState) {
-              SnackBar snackBar = SnackBar(
-                content: Text(state.error),
-                backgroundColor: Colors.red,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else if (state is AddProductLoadedState) {
-              SnackBar snackBar = const SnackBar(
-                content: Text('success'),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          }, builder: (context, state) {
-            if (state is AddProductLoadedState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is AddProductLoadedState) {
-              var response = state.products;
-              if (response.statusCode == 200) {
-                Navigator.of(context).pop();
-              }
-            }
-            return ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
-                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                  textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 15))),
-              onPressed: () {
-                cubit.addProduct(ProductScreenModal(
-                    productName: productname.text.toString(),
-                    price: regularPriceController.text.toString(),
-                    quantity: quantityController.text,
-                    actualPrice: mrpController.text,
-                    productId: "1",
-                    productDescription: productDescriptionController.text,
-                    dashboardDisplay: false,
-                    itemCategoryId: "1",
-                    categoryType: 1));
+              BlocConsumer<ProductCategoryCubit, AllCategoryState>(builder: (context, state) {
+
+                if (state is AllCategoryLoadingState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return SpinnerWidget(
+                  items: categoryList!.cast<String>(),
+                  onChanged: (value) {
+                    BlocProvider.of<ProductCategoryCubit>(context).selectCatgory(value);
+                  },
+                  selectedValue: selectedValue,
+                );
               },
-              child: const Text('Save!'),
-            );
-          }),
-          const SizedBox(height: 20),
-          ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                  textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 15))),
-              onPressed: () {},
-              child: const Text('Cancel!'))
-        ]),
+                listener: (context, state) {
+                if(state is AllCategoryLoadedState) {
+                  categoryList = state.category.category
+                      ?.map((category) => category.category)
+                      .toList();
+                  categoryList
+                      ?.removeWhere((item) => item == null || item.isEmpty);
+                  selectedValue = categoryList?.first ?? '';
+                }
+               else if (state is SelectedCategoryValue) {
+                  selectedValue = state.value;
+                }
+              },),
+
+SizedBox(height: 20,),
+
+              BlocConsumer<AddProductCubit, AddProductState>(
+                  listener: (context, state) {
+                    if (state is AddProductErrorState) {
+                      SnackBar snackBar = SnackBar(
+                        content: Text(state.error),
+                        backgroundColor: Colors.red,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else if (state is AddProductLoadedState) {
+                      SnackBar snackBar = const SnackBar(
+                        content: Text('success'),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }, builder: (context, state) {
+                if (state is AddProductLoadingState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is AddProductLoadedState) {
+                  var response = state.products;
+                  if (response.statusCode == 200) {
+                    Navigator.of(context).pop();
+                  }
+                }
+                return ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      padding:
+                      MaterialStateProperty.all(const EdgeInsets.all(15)),
+                      textStyle: MaterialStateProperty.all(
+                          const TextStyle(fontSize: 15))),
+                  onPressed: () {
+                    cubit.addProduct(ProductScreenModal(
+                        productName: productname.text.toString(),
+                        price: regularPriceController.text.toString(),
+                        quantity: quantityController.text,
+                        actualPrice: mrpController.text,
+                        productId: "1",
+                        productDescription: productDescriptionController.text,
+                        dashboardDisplay: false,
+                        itemCategoryId: "1",
+                        categoryType: 1));
+                  },
+                  child: const Text('Save!'),
+                );
+              }),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      padding:
+                      MaterialStateProperty.all(const EdgeInsets.all(15)),
+                      textStyle: MaterialStateProperty.all(
+                          const TextStyle(fontSize: 15))),
+                  onPressed: () {},
+                  child: const Text('Cancel!'))
+            ]);
+      },
+    ),
   );
+
   showDialog(
       context: context,
       builder: (BuildContext context) {

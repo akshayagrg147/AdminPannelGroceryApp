@@ -93,8 +93,11 @@ class FileInfoCardGridView extends StatelessWidget {
         else if(index==1) {
           navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
         }
-        else{
+        else if(index==2) {
           navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
+        }
+        else{
+          navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
         }
       },),
     );

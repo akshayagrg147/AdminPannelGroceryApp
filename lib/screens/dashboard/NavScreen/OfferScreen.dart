@@ -20,15 +20,12 @@ class _OfferscreenState extends State<Offerscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: SideMenu(),
+
         body: SafeArea(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (Responsive.isDesktop(context))
-                const Expanded(
-                  child: SideMenu(),
-                ),
+
               Expanded(
                 flex: 5,
                 child: SingleChildScrollView(

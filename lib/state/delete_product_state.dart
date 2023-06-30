@@ -9,6 +9,9 @@ abstract class DeleteProductState{
 class DeleteProductLoadingState  extends DeleteProductState {
 
 }
+class DeleteProductInitialState  extends DeleteProductState {
+
+}
 class DeleteProductLoadedState extends DeleteProductState {
   final AddProductResponse products;
   DeleteProductLoadedState(this.products);

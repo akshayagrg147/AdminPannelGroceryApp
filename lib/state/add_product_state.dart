@@ -9,6 +9,9 @@ abstract class AddProductState{
 class AddProductLoadingState  extends AddProductState {
 
 }
+class AddProductInitialState  extends AddProductState {
+
+}
 class AddProductLoadedState extends AddProductState {
   final AddProductResponse products;
   AddProductLoadedState(this.products);

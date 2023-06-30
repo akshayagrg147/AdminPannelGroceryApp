@@ -5,10 +5,23 @@ import 'package:provider/provider.dart';
 import '../../../controllers/MenuController.dart';
 import '../../../navigationPackage/NavigationItem.dart';
 
-class SideMenu extends StatelessWidget {
+class SideMenu extends StatefulWidget {
   const SideMenu({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+  late final MenuController1 provider;
+
+  @override
+  void initState() {
+    provider = Provider.of<MenuController1>(context, listen: false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,51 +37,51 @@ class SideMenu extends StatelessWidget {
           ),
           DrawerListTile(
             title: "Home",
-
             press: () {
-              selectItem(context, NavigationItem.home);
+              Navigator.pop(context);
+             provider.setNavigationItem(NavigationItem.home);
             },
           ),
           DrawerListTile(
             title: "Products",
-
             press: () {
-              selectItem(context, NavigationItem.product);
+              Navigator.pop(context);
+             provider.setNavigationItem(NavigationItem.product);
             },
           ),
           DrawerListTile(
             title: "Category",
-
             press: () {
-              selectItem(context, NavigationItem.category);
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.category,provider);
             },
           ),
           DrawerListTile(
             title: "Order",
-
             press: () {
-              selectItem(context, NavigationItem.order);
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.order, provider);
             },
           ),
           DrawerListTile(
             title: "Offer",
-
             press: () {
-              selectItem(context, NavigationItem.offer);
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.offer,provider);
             },
           ),
           DrawerListTile(
             title: "Users",
-
             press: () {
-              selectItem(context, NavigationItem.users);
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.users, provider);
             },
           ),
           DrawerListTile(
             title: "Log out",
-
             press: () {
-              selectItem(context, NavigationItem.logout);
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.logout,provider);
             },
           ),
         ],
@@ -77,8 +90,8 @@ class SideMenu extends StatelessWidget {
   }
 }
 
-void selectItem(BuildContext context, NavigationItem item) {
-  final provider = Provider.of<MenuController1>(context, listen: false);
+void selectItem(
+    BuildContext context, NavigationItem item, MenuController1 provider) {
   provider.setNavigationItem(item);
 }
 
@@ -87,7 +100,6 @@ class DrawerListTile extends StatelessWidget {
     Key? key,
     // For selecting those three line once press "Command+D"
     required this.title,
-
     required this.press,
   }) : super(key: key);
 
@@ -99,7 +111,6 @@ class DrawerListTile extends StatelessWidget {
     return ListTile(
       onTap: press,
       horizontalTitleGap: 0.0,
-
       title: Text(
         title,
         style: const TextStyle(color: Colors.white),

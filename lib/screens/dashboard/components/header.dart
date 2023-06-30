@@ -86,6 +86,7 @@ class AddCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 200,
       margin: const EdgeInsets.only(left: defaultPadding),
       padding: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
@@ -99,6 +100,7 @@ class AddCard extends StatelessWidget {
       child:  InkWell(
         onTap: (){onTap(true);},
         child: const Row(
+
           children: [
             Icon(Icons.add),
             Padding(

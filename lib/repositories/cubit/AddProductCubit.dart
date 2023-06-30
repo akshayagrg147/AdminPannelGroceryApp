@@ -41,7 +41,7 @@ void addProduct(ProductScreenModal object) async {
 }
 
 class AddProductCubit extends Cubit<AddProductState> {
-  AddProductCubit() : super( AddProductLoadingState() );
+  AddProductCubit() : super( AddProductInitialState() );
 
   ProductRepository postRepository = ProductRepository();
 

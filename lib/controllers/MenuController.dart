@@ -3,19 +3,13 @@ import 'package:flutter/material.dart';
 import '../navigationPackage/NavigationItem.dart';
 
 class MenuController1 extends ChangeNotifier {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  NavigationItem _navigationItem = NavigationItem.home;
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
+  NavigationItem navigationItem = NavigationItem.home;
+  // NavigationItem get navigationItem => _navigationItem;
 
-  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
-
-  NavigationItem get navigationItem => _navigationItem;
-
-
-
-
-  void setNavigationItem(NavigationItem navigationItem) {
-    _navigationItem = navigationItem;
-
+  void setNavigationItem(NavigationItem navigationItemLocal) {
+    navigationItem = navigationItemLocal;
     notifyListeners();
   }
 }

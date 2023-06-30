@@ -17,15 +17,12 @@ class UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: SideMenu(),
+
         body: SafeArea(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (Responsive.isDesktop(context))
-                const Expanded(
-                  child: SideMenu(),
-                ),
+
               const Expanded(
                 flex: 5,
                 child: SingleChildScrollView(

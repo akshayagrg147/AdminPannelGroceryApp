@@ -52,7 +52,7 @@ class OrderScreenState extends State<OrderScreen> {
 
     return Scaffold(
 
-        drawer: const SideMenu(),
+
         body: SingleChildScrollView(
           // controller: scrollController,
           child: Column(
@@ -61,10 +61,7 @@ class OrderScreenState extends State<OrderScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (Responsive.isDesktop(context))
-                    const Expanded(
-                      child: SideMenu(),
-                    ),
+
                   Expanded(
                     flex: 5,
                     child: SafeArea(

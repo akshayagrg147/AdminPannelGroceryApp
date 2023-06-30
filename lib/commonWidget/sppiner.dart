@@ -15,20 +15,35 @@ class SpinnerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.grey[200],
+      ),
       child: DropdownButton<String>(
         value: selectedValue,
         onChanged: (newValue) {
           onChanged(newValue!);
         },
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.black, fontSize: 16),
+        underline: SizedBox(), // Remove the default underline
+        isExpanded: true,
+        dropdownColor: Colors.white,
         items: items.map<DropdownMenuItem<String>>(
               (String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text(value),
+              ),
             );
           },
         ).toList(),
+        icon: Icon(Icons.arrow_drop_down),
       ),
     );
   }

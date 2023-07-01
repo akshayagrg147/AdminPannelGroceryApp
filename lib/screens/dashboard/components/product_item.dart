@@ -41,7 +41,7 @@ class ProductItems extends StatelessWidget {
             child: DataTable2(
               dividerThickness: 2.0,
               columnSpacing: defaultPadding,
-              minWidth: 600,
+              minWidth: 900,
               columns: const [
                 DataColumn(
                   label: Text("Product Image")                ),

@@ -34,7 +34,7 @@ class UserItem extends StatelessWidget {
             height:  1200,
             child: DataTable2(
               columnSpacing: defaultPadding,
-              minWidth: 600,
+              minWidth: 900,
               columns: const [
                 DataColumn(
                   label: Text("Product Image")                ),

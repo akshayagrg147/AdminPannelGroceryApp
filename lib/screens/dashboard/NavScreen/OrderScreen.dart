@@ -53,63 +53,60 @@ class OrderScreenState extends State<OrderScreen> {
     return Scaffold(
 
 
-        body: SingleChildScrollView(
-          // controller: scrollController,
-          child: Column(
-            children: [
+        body: Column(
+          children: [
 // if(listProducts?.isNotEmpty ?? true)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-                  Expanded(
-                    flex: 5,
-                    child: SafeArea(
-                      child: BlocConsumer<AllOrderCubit, AllOrderState>(
-                        listener: (context, state) {
-                          if (state is AllOrderErrorState) {
-                            SnackBar snackBar = SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.red,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                        builder: (context, state) {
-                          List<OrderData> orders = [];
-                          bool isLoading = false;
-                          if (state is AllLoadingMoreState && state.isFirstFetch) {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                         else if (state is AllOrderLoadingState) {
-                            // return const Center(
-                            //   child: CircularProgressIndicator(),
-                         //   );
-                          } else if (state is AllLoadingMoreState) {
-                            orders = state.oldPosts;
-                            isLoading = true;
-                            //   return Text("${obj.message}");
-                          }
-                          else if (state is AllOrderLoadedState) {
-                            listProducts=state.itemData;
-                            return OrderItems(state.itemData, scrollController: scrollController,);
-                            //   return Text("${obj.message}");
-                          } else if (state is AllOrderErrorState) {
-                            return Center(
-                              child: Text(state.error),
-                            );
-                          }
+                Expanded(
+                  flex: 5,
+                  child: SafeArea(
+                    child: BlocConsumer<AllOrderCubit, AllOrderState>(
+                      listener: (context, state) {
+                        if (state is AllOrderErrorState) {
+                          SnackBar snackBar = SnackBar(
+                            content: Text(state.error),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(snackBar);
+                        }
+                      },
+                      builder: (context, state) {
+                        List<OrderData> orders = [];
+                        bool isLoading = false;
+                        if (state is AllLoadingMoreState && state.isFirstFetch) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                       else if (state is AllOrderLoadingState) {
+                          // return const Center(
+                          //   child: CircularProgressIndicator(),
+                       //   );
+                        } else if (state is AllLoadingMoreState) {
+                          orders = state.oldPosts;
+                          isLoading = true;
+                          //   return Text("${obj.message}");
+                        }
+                        else if (state is AllOrderLoadedState) {
+                          listProducts=state.itemData;
+                          return OrderItems(state.itemData, scrollController: scrollController,);
+                          //   return Text("${obj.message}");
+                        } else if (state is AllOrderErrorState) {
+                          return Center(
+                            child: Text(state.error),
+                          );
+                        }
 
-                          return Container();
-                        },
-                      ),
+                        return Container();
+                      },
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ));
   }
 }

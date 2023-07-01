@@ -54,6 +54,7 @@ class ProductScreenState extends State<ProductScreen> {
           child: Column(
             children: [
 // if(listProducts?.isNotEmpty ?? true)
+            SizedBox(height: 40,),
               ProductHeader(
                 CubitAddNewProuct,
                 onValueUpdate: (val) {
@@ -96,8 +97,6 @@ class ProductScreenState extends State<ProductScreen> {
                               child: CircularProgressIndicator(),
                             );
                           } else if (state is AllProductLoadedState) {
-                            print(
-                                'value increment  ${state.products.itemData?.length}');
                             log(state.products.runtimeType.toString());
                             var obj = state.products;
                             listProducts = obj.itemData;
@@ -242,7 +241,7 @@ class ProductItem extends StatelessWidget {
   }
 }
 
-class ProductHeader extends StatelessWidget {
+class ProductHeader extends StatefulWidget {
   AddProductCubit addNewProductCubit;
   final Function(String) onValueUpdate;
 
@@ -251,6 +250,11 @@ class ProductHeader extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ProductHeader> createState() => _ProductHeaderState();
+}
+
+class _ProductHeaderState extends State<ProductHeader> {
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -258,28 +262,17 @@ class ProductHeader extends StatelessWidget {
             flex: 2,
             child: Row(
               children: [
-                if (!Responsive.isDesktop(context))
-                  IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        ScaffoldState? scaffoldState = Scaffold.of(context);
-                        if (!scaffoldState.isDrawerOpen) {
-                          scaffoldState.openDrawer();
-                        }
-                      }),
-                if (!Responsive.isMobile(context))
-                  Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
                 Expanded(child: SearchField(textChanged: (value) {
                   print('ProductScreen  ${value}  ');
                   //  setState((){
                   // listProducts = items;
-                  onValueUpdate(value!);
+                 widget.onValueUpdate(value!);
 
 //                  });
                 })),
                 AddCard(onTap: (tap) {
                   if (tap) {
-                    openAlert(context, addNewProductCubit, false, ItemData());
+                    openAlert(context, widget.addNewProductCubit, false, ItemData());
                   }
                 })
               ],

@@ -13,60 +13,58 @@ class OrderItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(defaultPadding),
-        decoration: const BoxDecoration(
-          color: secondaryColor,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Total Orders",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 1200,
-              child: DataTable(
-                columnSpacing: defaultPadding,
+    return Container(
+      padding: const EdgeInsets.all(defaultPadding),
+      decoration: const BoxDecoration(
+        color: secondaryColor,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Total Orders",
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 600,
+            child: DataTable2(
+              scrollController: scrollController,
+              columnSpacing: defaultPadding,
+              minWidth: 1300,
 
-                columns: const [
-                  DataColumn(label: Text("Product Image")),
-                  DataColumn(
-                    label: Text("Order Id"),
-                  ),
-                  DataColumn(
-                    label: Text("Product"),
-                  ),
-                  DataColumn(
-                    label: Text("Status"),
-                  ),
-                  DataColumn(
-                    label: Text("Mobile Number"),
-                  ),
-                  DataColumn(
-                    label: Text("Address"),
-                  ),
-                  DataColumn(
-                    label: Text("Payment Mode"),
-                  ),
-                  DataColumn(
-                    label: Text("Payment in Rs"),
-                  ),
-                ],
-                rows: itemData != null
-                    ? List.generate(
-                  itemData!.length,
-                      (index) => productItemRow(itemData![index]),
-                )
-                    : [],
+              columns: const [
+                DataColumn(label: Text("Product Image")),
+                DataColumn(
+                  label: Text("Order Id"),
+                ),
+                DataColumn(
+                  label: Text("Product"),
+                ),
+                DataColumn(
+                  label: Text("Status"),
+                ),
+                DataColumn(
+                  label: Text("Mobile Number"),
+                ),
+                DataColumn(
+                  label: Text("Address"),
+                ),
+                DataColumn(
+                  label: Text("Payment Mode"),
+                ),
+                DataColumn(
+                  label: Text("Payment in Rs"),
+                ),
+              ],
+              rows: List.generate(
+                itemData?.length??0,
+                    (index) => productItemRow(itemData![index]),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

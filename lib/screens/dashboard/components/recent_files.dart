@@ -6,11 +6,15 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
 
+
+
+
 class RecentOrders extends StatelessWidget {
-  final List<RecentOrders1>? recentOrders;
-   RecentOrders(this.recentOrders, {
-    Key? key,
-  }) : super(key: key);
+  final List<RecentOrders1>? itemData;
+
+
+  const RecentOrders(this.itemData, {Key? key,})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +28,43 @@ class RecentOrders extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Order",
+            "Recent Orders",
             style: Theme.of(context).textTheme.subtitle1,
           ),
           SizedBox(
             width: double.infinity,
-            height: 400,
+            height: 600,
             child: DataTable2(
               columnSpacing: defaultPadding,
-              minWidth: 600,
+              minWidth: 1300,
+
               columns: const [
+                DataColumn(label: Text("Product Image")),
                 DataColumn(
                   label: Text("Order Id"),
                 ),
                 DataColumn(
-                  label: Text("Date"),
+                  label: Text("Product"),
                 ),
                 DataColumn(
-                  label: Text("Quantity"),
+                  label: Text("Status"),
+                ),
+                DataColumn(
+                  label: Text("Mobile Number"),
+                ),
+                DataColumn(
+                  label: Text("Address"),
+                ),
+                DataColumn(
+                  label: Text("Payment Mode"),
+                ),
+                DataColumn(
+                  label: Text("Payment in Rs"),
                 ),
               ],
               rows: List.generate(
-                recentOrders?.length??0,
-                (index) => recentFileDataRow(recentOrders![index]),
+                itemData?.length??0,
+                    (index) => productItemRow(itemData![index]),
               ),
             ),
           ),
@@ -56,26 +74,68 @@ class RecentOrders extends StatelessWidget {
   }
 }
 
-DataRow recentFileDataRow(RecentOrders1 order) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            // SvgPicture.asset(
-            //   fileInfo.icon!,
-            //   height: 30,
-            //   width: 30,
-            // ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(order.orderId!),
+DataRow productItemRow(RecentOrders1 data) {
+  Function(RecentOrders1) fnData;
+  SizedBox(height: 16.0);
+  return DataRow(cells: [
+    DataCell(
+      Row(
+        children: [
+          // SvgPicture.asset(
+          //   fileInfo.icon!,
+          //   height: 30,
+          //   width: 30,
+          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Image.network(
+              data.mobilenumber.toString(),
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (ctx, obj, stack) {
+                return Image.asset(
+                  'assets/images/logo.png',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                );
+                ;
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      DataCell(Text(order.createdDate!)),
-      DataCell(Text(order.paymentmode!)),
-    ],
-  );
+    ),
+    DataCell(Text(data.orderId!)),
+    DataCell(ListView.builder(
+      itemCount: data.orderList!.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(data.orderList![index].productId.toString()),
+        );
+      },
+    )),
+    DataCell(Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.check),
+          onPressed: () {
+            // Perform delete operation
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            // Perform delete operation
+          },
+        )
+      ],
+    )),
+    DataCell(Text(data.mobilenumber.toString())),
+    DataCell(Text(data.address.toString())),
+    DataCell(Text(data.paymentmode.toString())),
+    DataCell(Text("₹${data.totalOrderValue.toString()}")),
+  ]);
 }
+

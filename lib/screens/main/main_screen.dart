@@ -5,7 +5,6 @@ import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OfferScreen.dart'
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OrderScreen.dart';
 
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/ProductScreen.dart';
-import 'package:adminpannelgrocery/screens/dashboard/NavScreen/UserScreen.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/MenuController.dart';
 import '../../models/AllOrders.dart';
 import '../../navigationPackage/NavigationItem.dart';
+import '../dashboard/NavScreen/AllUserScreen.dart';
 import 'components/side_menu.dart';
 
 import '../dashboard/NavScreen/ProductScreen.dart';
@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
       case NavigationItem.offer:
         return const Offerscreen();
       case NavigationItem.users:
-        return const UserScreen();
+        return const AllUserScreen();
       case NavigationItem.product:
         return ProductScreen();
       case NavigationItem.order:

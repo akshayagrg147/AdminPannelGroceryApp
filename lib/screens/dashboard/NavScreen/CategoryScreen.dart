@@ -56,7 +56,7 @@ class CategoryScreenState extends State<CategoryScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 30,),
+              SizedBox(height: 60,),
 // if(listProducts?.isNotEmpty ?? true)
               Align(
                 alignment: Alignment.topRight,
@@ -126,7 +126,7 @@ class CategoryScreenState extends State<CategoryScreen> {
 
 void openAlert(BuildContext context, bool editButton,
     ItemData data) {
-
+  double dialogWidth = Responsive.isMobile(context) ? 300.0 : 600.0;
   TextEditingController categoryName = TextEditingController();
 
 
@@ -135,79 +135,82 @@ void openAlert(BuildContext context, bool editButton,
     insetPadding: const EdgeInsets.all(32.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
     //this right here
-    child: ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(15.0),
-        children: [
-          const SizedBox(
-              width: double.infinity,
-              child: Text("ADD CATEGORY",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ))),
+    child: Container(
+      width: double.infinity,
+      child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(15.0),
+          children: [
+            const SizedBox(
+                width: double.infinity,
+                child: Text("ADD CATEGORY",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ))),
 
-          const SizedBox(height: 20),
-          commonTextFieldWidget(
-            type: TextInputType.text,
-            controller: categoryName,
-            hintText: "Bottle",
-            secondaryColor: secondaryColor,
-            labelText: "Enter Product Name",
-            onChanged: (val) {},
-          ),
+            const SizedBox(height: 20),
+            commonTextFieldWidget(
+              type: TextInputType.text,
+              controller: categoryName,
+              hintText: "Bottle",
+              secondaryColor: secondaryColor,
+              labelText: "Enter Product Name",
+              onChanged: (val) {},
+            ),
 
 
 
-          BlocConsumer<AddCategoryCubit, AddCategoryState>(
-              listener: (context, state) {
-            if (state is AddCategoryErrorState) {
-              SnackBar snackBar = SnackBar(
-                content: Text(state.error),
-                backgroundColor: Colors.red,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else if (state is AddCategoryLoadedState) {
-              SnackBar snackBar = const SnackBar(
-                content: Text('success'),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          }, builder: (context, state) {
-            if (state is AddCategoryLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is AddCategoryLoadedState) {
-              var response = state.products;
-              if (response.statusCode == 200) {
-                CategoryScreen();
-                Navigator.of(context).pop();
+            BlocConsumer<AddCategoryCubit, AddCategoryState>(
+                listener: (context, state) {
+              if (state is AddCategoryErrorState) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (state is AddCategoryLoadedState) {
+                SnackBar snackBar = const SnackBar(
+                  content: Text('success'),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
-            }
-            return ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
-                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                  textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 15))),
-              onPressed: () {
-                BlocProvider.of<AddCategoryCubit>(context).addCategory(categoryName.text);
-              },
-              child: const Text('Save!'),
-            );
-          }),
-          const SizedBox(height: 20),
-          ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                  textStyle:
-                      MaterialStateProperty.all(const TextStyle(fontSize: 15))),
-              onPressed: () {},
-              child: const Text('Cancel!'))
-        ]),
+            }, builder: (context, state) {
+              if (state is AddCategoryLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is AddCategoryLoadedState) {
+                var response = state.products;
+                if (response.statusCode == 200) {
+                  CategoryScreen();
+                  Navigator.of(context).pop();
+                }
+              }
+              return ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.green),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                    textStyle:
+                        MaterialStateProperty.all(const TextStyle(fontSize: 15))),
+                onPressed: () {
+                  BlocProvider.of<AddCategoryCubit>(context).addCategory(categoryName.text);
+                },
+                child: const Text('Save!'),
+              );
+            }),
+            const SizedBox(height: 20),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                    textStyle:
+                        MaterialStateProperty.all(const TextStyle(fontSize: 15))),
+                onPressed: () {},
+                child: const Text('Cancel!'))
+          ]),
+    ),
   );
   showDialog(
       context: context,

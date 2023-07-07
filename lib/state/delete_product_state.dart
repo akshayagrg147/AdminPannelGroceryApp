@@ -6,6 +6,7 @@ import '../repositories/Modal/HomeProduct.dart';
 
 abstract class DeleteProductState{
 }
+
 class DeleteProductLoadingState  extends DeleteProductState {
 
 }

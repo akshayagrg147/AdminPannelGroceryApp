@@ -21,9 +21,7 @@ import '../api/ProductRepository.dart';
 
 
 class ProductCategoryCubit extends Cubit<AllCategoryState> {
-  ProductCategoryCubit() : super( AllCategoryLoadingState() ) {
-    fetchCategory();
-  }
+  ProductCategoryCubit() : super( AllCategoryLoadingState() );
 
   ProductRepository postRepository = ProductRepository();
 

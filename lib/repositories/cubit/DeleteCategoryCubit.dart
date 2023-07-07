@@ -18,14 +18,14 @@ import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 class DeleteCategoryCubit extends Cubit<DeleteProductState> {
-  DeleteCategoryCubit() : super( DeleteProductInitialState() );
+  DeleteCategoryCubit(super.initialState);
+  // DeleteCategoryCubit() : super( DeleteProductInitialState() );
 
   ProductRepository postRepository = ProductRepository();
 
 
-void deleteCategory(String categoryId) async {
+Future<void> deleteCategory(String categoryId) async {
   try {
-
     AddProductResponse posts = await postRepository.deleteCategory(categoryId);
     emit(DeleteProductLoadedState(posts));
   }

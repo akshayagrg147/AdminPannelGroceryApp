@@ -14,6 +14,7 @@ import 'package:adminpannelgrocery/repositories/cubit/login_response_cubit.dart'
 import 'package:adminpannelgrocery/screens/Login/login_screen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/NavigationBloc.dart';
 import 'package:adminpannelgrocery/screens/main/main_screen.dart';
+import 'package:adminpannelgrocery/state/delete_product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<AddCategoryCubit>(
               create: (context) => AddCategoryCubit()),
           BlocProvider<DeleteCategoryCubit>(
-              create: (context) => DeleteCategoryCubit()),
+              create: (context) => DeleteCategoryCubit(DeleteProductInitialState())),
           BlocProvider<LoginResponseCubit>(
               create: (context) => LoginResponseCubit())
         ],

@@ -99,7 +99,9 @@ class CategoryScreenState extends State<CategoryScreen> {
                             var obj = state.category;
                               listProducts = obj.itemData??[];
                               return CategoryItems(
-                                listProducts);
+                                listProducts,(delete){
+                                Cubit.fetchCategory();
+                              });
                             //   return Text("${obj.message}");
                           } else if (state is AllCategoryErrorState) {
                             return Center(

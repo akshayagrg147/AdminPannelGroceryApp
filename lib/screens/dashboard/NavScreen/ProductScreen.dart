@@ -496,7 +496,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
               },
                 listener: (context, state) {
                 if(state is AllCategoryLoadedState) {
-                  categoryList = state.category.category
+                  categoryList = state.category.itemData
                       ?.map((category) => category.category)
                       .toList();
                   categoryList

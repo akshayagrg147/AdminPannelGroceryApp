@@ -15,7 +15,7 @@ import '../../../repositories/cubit/DeleteProductCubit.dart';
 import '../../../state/delete_product_state.dart';
 
 class CategoryItems extends StatelessWidget {
-  final List<Category>? itemData;
+  final List<ItemDataCategory>? itemData;
 
    CategoryItems( this.itemData ,{
     Key? key,
@@ -66,7 +66,7 @@ class CategoryItems extends StatelessWidget {
   }
 }
 
-DataRow productItemRow(Category data,BuildContext context) {
+DataRow productItemRow(ItemDataCategory data,BuildContext context) {
 
   return DataRow(
       cells: [

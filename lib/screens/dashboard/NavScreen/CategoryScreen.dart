@@ -38,7 +38,7 @@ class CategoryScreen extends StatefulWidget {
 class CategoryScreenState extends State<CategoryScreen> {
   late ProductCategoryCubit Cubit;
   late DeleteProductCubit cubitdeleteNewProuct;
-  List<Category>? listProducts = [];
+  List<ItemDataCategory>? listProducts = [];
 
 
   @override
@@ -94,10 +94,10 @@ class CategoryScreenState extends State<CategoryScreen> {
                               child: CircularProgressIndicator(),
                             );
                           } else if (state is AllCategoryLoadedState) {
-                            print('category Items ${state.category.category?.length.toString()}');
+                            print('category Items ${state.category.itemData?.length.toString()}');
                             log(state.category.runtimeType.toString());
                             var obj = state.category;
-                              listProducts = obj.category??[];
+                              listProducts = obj.itemData??[];
                               return CategoryItems(
                                 listProducts);
                             //   return Text("${obj.message}");

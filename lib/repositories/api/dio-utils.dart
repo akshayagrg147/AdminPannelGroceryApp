@@ -27,7 +27,7 @@ class DioUtil {
 
   Dio createDioInstance() {
     var dio = Dio();
-    dio.options.baseUrl = "https://8ff3-182-69-181-169.ngrok-free.app";
+    dio.options.baseUrl = "https://cced-2401-4900-1c55-6017-4579-7e39-7cf9-52c7.ngrok-free.app";
     dio.interceptors.clear();
     return dio
       ..interceptors

@@ -36,7 +36,7 @@ class ProductCategoryCubit extends Cubit<AllCategoryState> {
   void fetchCategory() async {
     try {
       ProductCategoryModal posts = await postRepository.fetchCategory();
-      print('category wise data ${posts.category}');
+      print('category wise data ${posts.itemData}');
       emit(AllCategoryLoadedState(posts));
     }
     on DioError catch(ex) {

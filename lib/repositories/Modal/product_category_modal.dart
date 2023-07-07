@@ -1,15 +1,15 @@
 class ProductCategoryModal {
-  List<Category>? category;
+  List<ItemDataCategory>? itemData;
   int? statusCode;
   String? message;
 
-  ProductCategoryModal({this.category, this.statusCode, this.message});
+  ProductCategoryModal({this.itemData, this.statusCode, this.message});
 
   ProductCategoryModal.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {
-      category = <Category>[];
+      itemData = <ItemDataCategory>[];
       json['itemData'].forEach((v) {
-        category!.add(new Category.fromJson(v));
+        itemData!.add(new ItemDataCategory.fromJson(v));
       });
     }
     statusCode = json['statusCode'];
@@ -18,8 +18,8 @@ class ProductCategoryModal {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.category != null) {
-      data['itemData'] = this.category!.map((v) => v.toJson()).toList();
+    if (this.itemData != null) {
+      data['itemData'] = this.itemData!.map((v) => v.toJson()).toList();
     }
     data['statusCode'] = this.statusCode;
     data['message'] = this.message;
@@ -27,18 +27,51 @@ class ProductCategoryModal {
   }
 }
 
-class Category {
+class ItemDataCategory {
   String? category;
+  String? imageUrl;
+  List<SubCategoryList>? subCategoryList;
 
-  Category({this.category});
+  ItemDataCategory({this.category, this.imageUrl, this.subCategoryList});
 
-  Category.fromJson(Map<String, dynamic> json) {
+  ItemDataCategory.fromJson(Map<String, dynamic> json) {
     category = json['category'];
+    imageUrl = json['imageUrl'];
+    if (json['subCategoryList'] != null) {
+      subCategoryList = <SubCategoryList>[];
+      json['subCategoryList'].forEach((v) {
+        subCategoryList!.add(new SubCategoryList.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['category'] = this.category;
+    data['imageUrl'] = this.imageUrl;
+    if (this.subCategoryList != null) {
+      data['subCategoryList'] =
+          this.subCategoryList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class SubCategoryList {
+  String? name;
+  String? subCategoryUrl;
+
+  SubCategoryList({this.name, this.subCategoryUrl});
+
+  SubCategoryList.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    subCategoryUrl = json['subCategoryUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['subCategoryUrl'] = this.subCategoryUrl;
     return data;
   }
 }

@@ -87,7 +87,7 @@ class ProductRepository {
   }
   Future<AddProductResponse> deleteCategory(String categoryName) async {
     try {
-      final response = await _dio?.get("/Admin/deleteCategory", queryParameters: {"categoryName": categoryName});
+      final response = await _dio?.delete("/Admin/deleteCategory/$categoryName", );
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
         AddProductResponse.fromJson(response?.data);

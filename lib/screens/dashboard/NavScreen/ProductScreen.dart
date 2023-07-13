@@ -1,27 +1,22 @@
 import 'dart:developer';
 
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
+import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
-import 'package:adminpannelgrocery/screens/main/components/side_menu.dart';
 import 'package:adminpannelgrocery/state/all_category_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
-import '../../../models/AddProductResponse.dart';
 import '../../../models/productScreenModal.dart';
-import '../../../state/add_category_state.dart';
 import '../../../state/add_product_state.dart';
 import '../components/product_item.dart';
 
@@ -49,78 +44,77 @@ class ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         body: SingleChildScrollView(
-          child: Column(
-            children: [
+      child: Column(
+        children: [
 // if(listProducts?.isNotEmpty ?? true)
-            SizedBox(height: 40,),
-              ProductHeader(
-                CubitAddNewProuct,
-                onValueUpdate: (val) {
-                  if (val.isNotEmpty) {
-                    print('value get after search ${val}');
-                    List<ItemData>? items = listProducts
-                        ?.where((item) => item.productName!.contains(val))
-                        .toList();
-                    print('value get after search ${items?.length}');
-                    if (val.isEmpty) {
-                      Cubit.passFilterData(listProducts ?? <ItemData>[]);
-                    } else {
-                      Cubit.passFilterData(items ?? <ItemData>[]);
-                    }
-                  }
-                },
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          SizedBox(
+            height: 40,
+          ),
+          ProductHeader(
+            CubitAddNewProuct,
+            onValueUpdate: (val) {
+              if (val.isNotEmpty) {
+                print('value get after search ${val}');
+                List<ItemData>? items = listProducts
+                    ?.where((item) => item.productName!.contains(val))
+                    .toList();
+                print('value get after search ${items?.length}');
+                if (val.isEmpty) {
+                  Cubit.passFilterData(listProducts ?? <ItemData>[]);
+                } else {
+                  Cubit.passFilterData(items ?? <ItemData>[]);
+                }
+              }
+            },
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 5,
+                child: SafeArea(
+                  child: BlocConsumer<AllProductCubit, AllProductState>(
+                    listener: (context, state) {
+                      if (state is AllProductErrorState) {
+                        SnackBar snackBar = SnackBar(
+                          content: Text(state.error),
+                          backgroundColor: Colors.red,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    builder: (context, state) {
+                      print(state);
+                      if (state is AllProductLoadingState) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is AllProductLoadedState) {
+                        log(state.products.runtimeType.toString());
+                        var obj = state.products;
+                        listProducts = obj.itemData;
+                        return ProductItems(listProducts, CubitdeleteNewProuct,
+                            (val) {
+                          openAlert(context, CubitAddNewProuct, true, val);
+                        });
+                        //   return Text("${obj.message}");
+                      } else if (state is AllProductErrorState) {
+                        return Center(
+                          child: Text(state.error),
+                        );
+                      }
 
-                  Expanded(
-                    flex: 5,
-                    child: SafeArea(
-                      child: BlocConsumer<AllProductCubit, AllProductState>(
-                        listener: (context, state) {
-                          if (state is AllProductErrorState) {
-                            SnackBar snackBar = SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.red,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                        builder: (context, state) {
-                          print(state);
-                          if (state is AllProductLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is AllProductLoadedState) {
-                            log(state.products.runtimeType.toString());
-                            var obj = state.products;
-                            listProducts = obj.itemData;
-                            return ProductItems(
-                                listProducts, CubitdeleteNewProuct, (val) {
-                              openAlert(context, CubitAddNewProuct, true, val);
-                            });
-                            //   return Text("${obj.message}");
-                          } else if (state is AllProductErrorState) {
-                            return Center(
-                              child: Text(state.error),
-                            );
-                          }
-
-                          return Container();
-                        },
-                      ),
-                    ),
+                      return Container();
+                    },
                   ),
-                ],
+                ),
               ),
             ],
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }
 
@@ -150,7 +144,6 @@ class ProductItem extends StatelessWidget {
                 height: 200,
                 fit: BoxFit.cover,
               );
-              ;
             },
           ),
           const SizedBox(width: 10),
@@ -210,7 +203,6 @@ class ProductItem extends StatelessWidget {
                 return Container();
               } else if (state is DeleteProductLoadedState) {
                 log(state.products.runtimeType.toString());
-                var obj = state.products;
                 SnackBar snackBar = const SnackBar(
                   content: Text('success'),
                   backgroundColor: Colors.green,
@@ -237,7 +229,6 @@ class ProductItem extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
 
@@ -266,13 +257,14 @@ class _ProductHeaderState extends State<ProductHeader> {
                   print('ProductScreen  ${value}  ');
                   //  setState((){
                   // listProducts = items;
-                 widget.onValueUpdate(value!);
+                  widget.onValueUpdate(value!);
 
 //                  });
                 })),
                 AddCard(onTap: (tap) {
                   if (tap) {
-                    openAlert(context, widget.addNewProductCubit, false, ItemData());
+                    openAlert(
+                        context, widget.addNewProductCubit, false, ItemData());
                   }
                 })
               ],
@@ -285,291 +277,329 @@ class _ProductHeaderState extends State<ProductHeader> {
 void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
     ItemData data) {
   int? dashboardDisplay = 2;
+  double dialogWidth = Responsive.isMobile(context)
+      ? MediaQuery.of(context).size.width * 0.8
+      : 600.0;
+
   TextEditingController productname = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController deliveryInstructionController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
-  TextEditingController regularPriceController = TextEditingController();
-  TextEditingController mrpController = TextEditingController();
+  TextEditingController sellingPriceController = TextEditingController();
+  TextEditingController orignalPriceController = TextEditingController();
 
   String selectedValue = "";
+  String radioSelectValue = "";
+  int indexValue = 0;
   List<String?>? categoryList;
+  List<ItemDataCategory?>? spinnerData;
   if (editButton) {
     productname.text = data.productName ?? '';
     productDescriptionController.text = data.productDescription ?? '';
     deliveryInstructionController.text = '';
     pincodeController.text = '';
     quantityController.text = data.quantity ?? '';
-    regularPriceController.text = data.price ?? '';
+    sellingPriceController.text = data.price ?? '';
   }
 
   var dialog = Dialog(
     insetPadding: const EdgeInsets.all(32.0),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
     //this right here
-    child: StatefulBuilder(
-      builder: (context, setState) {
-        return ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(15.0),
-            children: [
-              const SizedBox(
-                  width: double.infinity,
-                  child: Text("ADD PRODUCT",
+    child: Container(
+      width: dialogWidth,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(15.0),
+              children: [
+                const SizedBox(
+                    width: double.infinity,
+                    child: Text("ADD PRODUCT",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ))),
+
+                const SizedBox(height: 20),
+                commonTextFieldWidget(
+                  type: TextInputType.text,
+                  controller: productname,
+                  hintText: "Bottle",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Product Name",
+                  onChanged: (val) {},
+                ),
+
+                const SizedBox(height: 20),
+
+                commonTextFieldWidget(
+                  type: TextInputType.text,
+                  controller: productDescriptionController,
+                  hintText: "desc",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Poduct Description",
+                  onChanged: (val) {},
+                ),
+                const SizedBox(height: 20),
+                commonTextFieldWidget(
+                  type: TextInputType.text,
+                  controller: deliveryInstructionController,
+                  hintText: "desc",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Product Delivery Instruction",
+                  onChanged: (val) {},
+                ),
+
+                const SizedBox(height: 20),
+                //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
+                commonTextFieldWidget(
+                  type: TextInputType.number,
+                  controller: pincodeController,
+                  hintText: "123456",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Pin code",
+                  onChanged: (val) {},
+                ),
+
+                Text(
+                  "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(height: 20),
+                commonTextFieldWidget(
+                  type: TextInputType.number,
+                  controller: quantityController,
+                  hintText: "e.g. 16",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter Quantity",
+                  onChanged: (val) {},
+                ),
+
+                commonTextFieldWidget(
+                  type: TextInputType.number,
+                  controller: sellingPriceController,
+                  hintText: "Rs.250",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter selling Price",
+                  onChanged: (val) {},
+                ),
+
+                const SizedBox(height: 20),
+                commonTextFieldWidget(
+                  type: TextInputType.number,
+                  controller: orignalPriceController,
+                  hintText: "Rs.300",
+                  secondaryColor: secondaryColor,
+                  labelText: "Enter actual Price",
+                  onChanged: (val) {},
+                ),
+
+                const SizedBox(height: 20),
+                Container(
+                  width: 242.0,
+                  height: 42.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24.0),
+                    color: const Color(0xff2c2c2c),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Upload Image1',
                       style: TextStyle(
+                        fontFamily: 'Arial',
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ))),
-
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                type: TextInputType.text,
-                controller: productname,
-                hintText: "Bottle",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Product Name",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-
-              commonTextFieldWidget(
-                type: TextInputType.text,
-                controller: productDescriptionController,
-                hintText: "desc",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Poduct Description",
-                onChanged: (val) {},
-              ),
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                type: TextInputType.text,
-                controller: deliveryInstructionController,
-                hintText: "desc",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Product Delivery Instruction",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              //AddProductTextField(image: "assets/icons/Search.svg",hint:"Enter Pin code", ),
-              commonTextFieldWidget(
-                type: TextInputType.number,
-                controller: pincodeController,
-                hintText: "123456",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Pin code",
-                onChanged: (val) {},
-              ),
-
-              Text(
-                "Please fill all the pincode if it is supported on specific pincode and if it is supported on all pincode the leave it empty",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                type: TextInputType.number,
-                controller: quantityController,
-                hintText: "e.g. 16",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Quantity",
-                onChanged: (val) {},
-              ),
-
-              commonTextFieldWidget(
-                type: TextInputType.number,
-                controller: regularPriceController,
-                hintText: "Rs.250",
-                secondaryColor: secondaryColor,
-                labelText: "Enter regular Price",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              commonTextFieldWidget(
-                type: TextInputType.number,
-                controller: mrpController,
-                hintText: "Rs.300",
-                secondaryColor: secondaryColor,
-                labelText: "Enter Mrp Price",
-                onChanged: (val) {},
-              ),
-
-              const SizedBox(height: 20),
-              Container(
-                width: 242.0,
-                height: 42.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24.0),
-                  color: const Color(0xff2c2c2c),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Upload Image1',
-                    style: TextStyle(
-                      fontFamily: 'Arial',
-                      fontSize: 18,
-                      color: Colors.white,
-                      height: 1,
+                        color: Colors.white,
+                        height: 1,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: 242.0,
-                height: 42.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24.0),
-                  color: const Color(0xff2c2c2c),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Upload Image2',
-                    style: TextStyle(
-                      fontFamily: 'Arial',
-                      fontSize: 18,
-                      color: Colors.white,
-                      height: 1,
+                const SizedBox(height: 20),
+                Container(
+                  width: 242.0,
+                  height: 42.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24.0),
+                    color: const Color(0xff2c2c2c),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Upload Image2',
+                      style: TextStyle(
+                        fontFamily: 'Arial',
+                        fontSize: 18,
+                        color: Colors.white,
+                        height: 1,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              Text(
-                "Dashboard Display",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 20),
-              Column(children: [
-                ListTile(
-                  title: const Text('Yes'),
-                  leading: Radio(
-                    value: 1,
-                    groupValue: dashboardDisplay,
-                    onChanged: (value) {
-                      setState(() {
-                        dashboardDisplay = value;
-                      });
-                    },
-                  ),
+                Text(
+                  "Dashboard Display",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
                 ),
-                ListTile(
-                  title: const Text('No'),
-                  leading: Radio(
-                    value: 2,
-                    groupValue: dashboardDisplay,
-                    onChanged: (value) {
-                      setState(() {
-                        dashboardDisplay = value;
-                      });
-                    },
+                const SizedBox(height: 20),
+                Column(children: [
+                  ListTile(
+                    title: const Text('Yes'),
+                    leading: Radio(
+                      value: 1,
+                      groupValue: dashboardDisplay,
+                      onChanged: (value) {
+                        setState(() {
+                          dashboardDisplay = value;
+                        });
+                      },
+                    ),
                   ),
+                  ListTile(
+                    title: const Text('No'),
+                    leading: Radio(
+                      value: 2,
+                      groupValue: dashboardDisplay,
+                      onChanged: (value) {
+                        setState(() {
+                          dashboardDisplay = value;
+                        });
+                      },
+                    ),
+                  ),
+                ]),
+                Text(
+                  "Select Category",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
                 ),
-
-              ]),
-              Text(
-                "Select Category",
-                style: Theme.of(context).textTheme.titleMedium,
-                textAlign: TextAlign.start,
-              ),
-              BlocConsumer<ProductCategoryCubit, AllCategoryState>(builder: (context, state) {
-
-                if (state is AllCategoryLoadingState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return SpinnerWidget(
-                  items: categoryList!.cast<String>(),
-                  onChanged: (value) {
-                    BlocProvider.of<ProductCategoryCubit>(context).selectCatgory(value);
-                  },
-                  selectedValue: selectedValue,
-                );
-              },
-                listener: (context, state) {
-                if(state is AllCategoryLoadedState) {
-                  categoryList = state.category.itemData
-                      ?.map((category) => category.category)
-                      .toList();
-                  categoryList
-                      ?.removeWhere((item) => item == null || item.isEmpty);
-                  selectedValue = categoryList?.first ?? '';
-                }
-               else if (state is SelectedCategoryValue) {
-                  selectedValue = state.value;
-                }
-              },),
-
-SizedBox(height: 20,),
-
-              BlocConsumer<AddProductCubit, AddProductState>(
-                  listener: (context, state) {
-                    if (state is AddProductErrorState) {
-                      SnackBar snackBar = SnackBar(
-                        content: Text(state.error),
-                        backgroundColor: Colors.red,
+                BlocConsumer<ProductCategoryCubit, AllCategoryState>(
+                  builder: (context, state) {
+                    if (state is AllCategoryLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    } else if (state is AddProductLoadedState) {
-                      SnackBar snackBar = const SnackBar(
-                        content: Text('success'),
-                        backgroundColor: Colors.green,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  }, builder: (context, state) {
-                if (state is AddProductLoadingState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is AddProductLoadedState) {
-                  var response = state.products;
-                  if (response.statusCode == 200) {
-                    Navigator.of(context).pop();
-                  }
-                }
-                return ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green),
-                      padding:
-                      MaterialStateProperty.all(const EdgeInsets.all(15)),
-                      textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 15))),
-                  onPressed: () {
-                    cubit.addProduct(ProductScreenModal(
-                        productName: productname.text.toString(),
-                        price: regularPriceController.text.toString(),
-                        quantity: quantityController.text,
-                        actualPrice: mrpController.text,
-                        productId: "1",
-                        productDescription: productDescriptionController.text,
-                        dashboardDisplay: false,
-                        itemCategoryId: "1",
-                        categoryType: 1));
+                    if (categoryList?.isNotEmpty == true) {
+                      return Column(
+                        children: [
+                          SpinnerWidget(
+                            items: categoryList!.cast<String>(),
+                            onChanged: (value, index) {
+                              BlocProvider.of<ProductCategoryCubit>(context)
+                                  .selectCatgory(value, index);
+                            },
+                            selectedValue: selectedValue,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          if (spinnerData != null)
+                            Column(
+                              children: spinnerData![indexValue]!
+                                  .subCategoryList!
+                                  .map((value) {
+                                return RadioListTile(
+                                  title: Text(value.name!),
+                                  value: value.name,
+                                  groupValue: radioSelectValue,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      radioSelectValue = newValue as String;
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                        ],
+                      );
+                    }
+
+                    return Container();
                   },
-                  child: const Text('Save!'),
-                );
-              }),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                      padding:
-                      MaterialStateProperty.all(const EdgeInsets.all(15)),
-                      textStyle: MaterialStateProperty.all(
-                          const TextStyle(fontSize: 15))),
-                  onPressed: () {},
-                  child: const Text('Cancel!'))
-            ]);
-      },
+                  listener: (context, state) {
+                    if (state is AllCategoryLoadedState) {
+                      spinnerData = state.category.itemData;
+                      categoryList = state.category.itemData
+                          ?.map((category) => category.category)
+                          .toList();
+                      categoryList
+                          ?.removeWhere((item) => item == null || item.isEmpty);
+                      selectedValue = categoryList?.first ?? '';
+                    } else if (state is SelectedCategoryValue) {
+                      selectedValue = state.value;
+                      indexValue = state.index;
+                    }
+                  },
+                ),
+
+                BlocConsumer<AddProductCubit, AddProductState>(
+                    listener: (context, state) {
+                  if (state is AddProductErrorState) {
+                    SnackBar snackBar = SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else if (state is AddProductLoadedState) {
+                    SnackBar snackBar = const SnackBar(
+                      content: Text('success'),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }, builder: (context, state) {
+                  if (state is AddProductLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is AddProductLoadedState) {
+                    var response = state.products;
+                    if (response.statusCode == 200) {
+                      Navigator.of(context).pop();
+                    }
+                  }
+                  return ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.green),
+                        padding:
+                            MaterialStateProperty.all(const EdgeInsets.all(15)),
+                        textStyle: MaterialStateProperty.all(
+                            const TextStyle(fontSize: 15))),
+                    onPressed: () {
+                      cubit.addProduct(ProductScreenModal(
+                          productName: productname.text.toString(),
+                          orignalPrice: orignalPriceController.text.toString(),
+                          sellingPrice: sellingPriceController.text.toString(),
+                          quantity: quantityController.text,
+                          productDescription: productDescriptionController.text,
+                          dashboardDisplay: false,
+                          itemCategoryName: selectedValue,
+                          itemSubcategoryName: radioSelectValue));
+                    },
+                    child: const Text('Save!'),
+                  );
+                }),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                        padding:
+                            MaterialStateProperty.all(const EdgeInsets.all(15)),
+                        textStyle: MaterialStateProperty.all(
+                            const TextStyle(fontSize: 15))),
+                    onPressed: () {},
+                    child: const Text('Cancel!'))
+              ]);
+        },
+      ),
     ),
   );
 
@@ -584,6 +614,10 @@ SizedBox(height: 20,),
           ),
         );
       });
+}
+
+List<String?>? getStringList(List<SubCategoryList>? subCategoryList) {
+  return subCategoryList?.map((e) => e.name).toList();
 }
 
 void setState(Null Function() param0) {}

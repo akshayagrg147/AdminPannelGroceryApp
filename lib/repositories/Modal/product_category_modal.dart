@@ -61,7 +61,7 @@ class SubCategoryList {
   String? name;
   String? subCategoryUrl;
 
-  SubCategoryList({this.name, this.subCategoryUrl});
+  SubCategoryList({required this.name, required this.subCategoryUrl});
 
   SubCategoryList.fromJson(Map<String, dynamic> json) {
     name = json['name'];

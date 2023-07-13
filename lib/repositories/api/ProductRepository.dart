@@ -8,23 +8,26 @@ import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
+import '../Modal/add_category_modal.dart';
 
 import '../../models/productScreenModal.dart';
 import '../Modal/AddedItemResponse.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
+import '../Modal/add_category_modal.dart';
 import '../Modal/product_category_modal.dart';
 import 'api.dart';
 
 class ProductRepository {
   Api api = Api();
    final _dio = DioUtil().getInstance();
-  Future<AddProductResponse> addCategory(String category) async {
+  Future<AddProductResponse>  addCategory(String category, List<AddSubCategoryList> list) async {
     try {
-      final Map<String, String> mp = {
+      final Map<String, dynamic> mp = {
         'category': category,
+       ' subCategoryList':list
       };
-      final response = await _dio?.post("/Admin/AddItemCategory",data: mp);
+      final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category, subCategoryList:list ));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class SpinnerWidget extends StatelessWidget {
   final List<String> items;
-  final Function(String) onChanged;
+  final Function(String,int) onChanged;
   final String selectedValue;
 
   SpinnerWidget({
@@ -24,7 +24,7 @@ class SpinnerWidget extends StatelessWidget {
       child: DropdownButton<String>(
         value: selectedValue,
         onChanged: (newValue) {
-          onChanged(newValue!);
+          onChanged(newValue!,items.indexOf(newValue));
         },
         iconSize: 24,
         elevation: 16,

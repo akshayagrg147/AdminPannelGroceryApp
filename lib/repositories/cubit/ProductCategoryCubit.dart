@@ -25,8 +25,8 @@ class ProductCategoryCubit extends Cubit<AllCategoryState> {
 
   ProductRepository postRepository = ProductRepository();
 
-  void selectCatgory(String value) {
-    emit(SelectedCategoryValue(value));
+  void selectCatgory(String value,int indexValue) {
+    emit(SelectedCategoryValue(value,indexValue));
   }
 
 

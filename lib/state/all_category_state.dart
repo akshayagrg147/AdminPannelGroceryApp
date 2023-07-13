@@ -26,6 +26,7 @@ class AllCategoryErrorState extends AllCategoryState {
 
 class SelectedCategoryValue extends AllCategoryState {
   final String value;
-  SelectedCategoryValue(this.value);
+  final int index;
+  SelectedCategoryValue(this.value,this.index);
 }
 

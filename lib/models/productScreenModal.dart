@@ -1,49 +1,53 @@
 
 class ProductScreenModal {
   String? productName;
-  String? price;
+  String? orignalPrice;
+  String? sellingPrice;
   String? quantity;
-  String? actualPrice;
   String? productId;
   String? productDescription;
   bool? dashboardDisplay;
-  String? itemCategoryId;
   int? categoryType;
+  String? itemCategoryName;
+  String? itemSubcategoryName;
 
   ProductScreenModal(
       {this.productName,
-        this.price,
+        this.orignalPrice,
+        this.sellingPrice,
         this.quantity,
-        this.actualPrice,
         this.productId,
         this.productDescription,
         this.dashboardDisplay,
-        this.itemCategoryId,
-        this.categoryType});
+        this.categoryType,
+        this.itemCategoryName,
+        this.itemSubcategoryName});
 
   ProductScreenModal.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
-    price = json['price'];
+    orignalPrice = json['orignal_price'];
+    sellingPrice = json['selling_price'];
     quantity = json['quantity'];
-    actualPrice = json['actual_price'];
     productId = json['productId'];
     productDescription = json['ProductDescription'];
     dashboardDisplay = json['DashboardDisplay'];
-    itemCategoryId = json['itemCategoryId'];
     categoryType = json['categoryType'];
+    itemCategoryName = json['item_category_name'];
+    itemSubcategoryName = json['item_subcategory_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['productName'] = this.productName;
-    data['price'] = this.price;
+    data['orignal_price'] = this.orignalPrice;
+    data['selling_price'] = this.sellingPrice;
     data['quantity'] = this.quantity;
-    data['actual_price'] = this.actualPrice;
     data['productId'] = this.productId;
     data['ProductDescription'] = this.productDescription;
     data['DashboardDisplay'] = this.dashboardDisplay;
-    data['itemCategoryId'] = this.itemCategoryId;
     data['categoryType'] = this.categoryType;
+    data['item_category_name'] = this.itemCategoryName;
+    data['item_subcategory_name'] = this.itemSubcategoryName;
     return data;
   }
 }

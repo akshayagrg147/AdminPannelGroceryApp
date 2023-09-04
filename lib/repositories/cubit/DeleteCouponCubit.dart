@@ -3,6 +3,7 @@
 
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
+import 'package:adminpannelgrocery/state/delete_coupon_state.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,32 +18,27 @@ import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
-class DeleteCategoryCubit extends Cubit<DeleteProductState> {
-  DeleteCategoryCubit(super.initialState);
-  // DeleteCategoryCubit() : super( DeleteProductInitialState() );
+class DeleteCouponCubit extends Cubit<DeleteCouponState> {
+  DeleteCouponCubit() : super( DeleteCouponInitialState() );
 
   ProductRepository postRepository = ProductRepository();
 
 
-Future<void> deleteCategory(String categoryId) async {
+void deleteCoupon(String couponName) async {
   try {
-    print("delete_category_id $categoryId");
-    AddProductResponse posts = await postRepository.deleteCategory(categoryId);
-    emit(DeleteProductLoadedState(posts));
+
+    AddProductResponse posts = await postRepository.deleteCoupon(couponName);
+    emit(DeleteCouponLoadedState(posts));
   }
   on DioError catch(ex) {
     if(ex.type == DioErrorType.other) {
-      emit( DeleteProductErrorState("Can't fetch posts, please check your internet connection!") );
+      emit( DeleteCouponErrorState("Can't fetch posts, please check your internet connection!") );
     }
     else {
-      emit( DeleteProductErrorState(ex.type.toString()) );
+      emit( DeleteCouponErrorState(ex.type.toString()) );
     }
   }
 }
-  void resetState() {
-    emit(DeleteProductInitialState());
-  }
-
 
 }
 

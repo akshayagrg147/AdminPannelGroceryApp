@@ -1,15 +1,17 @@
 class AddCategoryModal {
   String? category;
-  List<AddSubCategoryList>? subCategoryList;
+    String? imageUrl;
+  List<SubCategoryListData>? subCategoryList;
 
-  AddCategoryModal({required this.category, required this.subCategoryList});
+  AddCategoryModal({this.category, this.imageUrl, this.subCategoryList});
 
   AddCategoryModal.fromJson(Map<String, dynamic> json) {
     category = json['category'];
+    imageUrl = json['imageUrl'];
     if (json['subCategoryList'] != null) {
-      subCategoryList = <AddSubCategoryList>[];
+      subCategoryList = <SubCategoryListData>[];
       json['subCategoryList'].forEach((v) {
-        subCategoryList!.add(new AddSubCategoryList.fromJson(v));
+        subCategoryList!.add(new SubCategoryListData.fromJson(v));
       });
     }
   }
@@ -17,6 +19,7 @@ class AddCategoryModal {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['category'] = this.category;
+    data['imageUrl'] = this.imageUrl;
     if (this.subCategoryList != null) {
       data['subCategoryList'] =
           this.subCategoryList!.map((v) => v.toJson()).toList();
@@ -25,18 +28,21 @@ class AddCategoryModal {
   }
 }
 
-class AddSubCategoryList {
+class SubCategoryListData {
   String? name;
+  String? image;
 
-  AddSubCategoryList({this.name});
+  SubCategoryListData({this.name, this.image});
 
-  AddSubCategoryList.fromJson(Map<String, dynamic> json) {
+  SubCategoryListData.fromJson(Map<String, dynamic> json) {
     name = json['name'];
+    image = json['subCategoryUrl'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
+    data['subCategoryUrl'] = this.image;
     return data;
   }
 }

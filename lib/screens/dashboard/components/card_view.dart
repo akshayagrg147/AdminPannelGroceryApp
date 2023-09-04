@@ -36,12 +36,13 @@ class CardView extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(defaultPadding * 0.75),
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
+                  height: 45,
+                  width: 45,
 
-                    color: primaryColor.withOpacity(0.1),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: Image.network(
+
+                    info.image.toString(), // Replace with your actual image URL
+                    fit: BoxFit.cover, // How the image should be fitted within the container
                   ),
 
                 ),

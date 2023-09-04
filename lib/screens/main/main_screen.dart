@@ -1,4 +1,5 @@
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CategoryScreen.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CouponScreen.dart';
 
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/LogoutScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/OfferScreen.dart';
@@ -10,7 +11,7 @@ import 'package:adminpannelgrocery/screens/dashboard/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/MenuController.dart';
+import '../../controllers/DrawerController.dart';
 import '../../models/AllOrders.dart';
 import '../../navigationPackage/NavigationItem.dart';
 import '../dashboard/NavScreen/AllUserScreen.dart';
@@ -30,12 +31,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MenuController1>(
+    return Consumer<DrawController>(
       builder: (_,consumer,__) {
        var x=  consumer.navigationItem;
         return Scaffold(
 
-          drawer: SideMenu(),
+          drawer: SideMenu(false),
           body: buildPages(x),);
       }
     );
@@ -58,6 +59,8 @@ class _MainScreenState extends State<MainScreen> {
         return ProductScreen();
       case NavigationItem.order:
         return OrderScreen();
+      case NavigationItem.coupons:
+        return CouponScreen();
     }
   }
 

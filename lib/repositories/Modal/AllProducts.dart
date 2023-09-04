@@ -30,14 +30,14 @@ class AllProducts {
 
 class ItemData {
   String? productName;
-  String? price;
+  String? selling_price;
   String? quantity;
   String? productImage1;
   String? productImage2;
   String? productImage3;
   String? productId;
   String? productDescription;
-  String? actualPrice;
+  String? orignal_price;
   bool? dashboardDisplay;
   String? category;
   List<Rating>? rating;
@@ -46,14 +46,14 @@ class ItemData {
 
   ItemData(
       {this.productName,
-        this.price,
+        this.selling_price,
         this.quantity,
         this.productImage1,
         this.productImage2,
         this.productImage3,
         this.productId,
         this.productDescription,
-        this.actualPrice,
+        this.orignal_price,
         this.dashboardDisplay,
         this.category,
         this.rating,
@@ -62,14 +62,14 @@ class ItemData {
 
   ItemData.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
-    price = json['price'];
+    selling_price = json['selling_price'];
     quantity = json['quantity'];
     productImage1 = json['ProductImage1'];
     productImage2 = json['ProductImage2'];
     productImage3 = json['ProductImage3'];
     productId = json['productId'];
     productDescription = json['ProductDescription'];
-    actualPrice = json['actual_price'];
+    orignal_price = json['orignal_price'];
     dashboardDisplay = json['DashboardDisplay'];
     category = json['category'];
     if (json['rating'] != null) {
@@ -85,14 +85,14 @@ class ItemData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['productName'] = this.productName;
-    data['price'] = this.price;
+    data['orignal_price'] = this.orignal_price;
     data['quantity'] = this.quantity;
     data['ProductImage1'] = this.productImage1;
     data['ProductImage2'] = this.productImage2;
     data['ProductImage3'] = this.productImage3;
     data['productId'] = this.productId;
     data['ProductDescription'] = this.productDescription;
-    data['actual_price'] = this.actualPrice;
+    data['selling_price'] = this.selling_price;
     data['DashboardDisplay'] = this.dashboardDisplay;
     data['category'] = this.category;
     if (this.rating != null) {

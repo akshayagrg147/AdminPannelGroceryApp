@@ -8,6 +8,7 @@ import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
+import '../Modal/CouponFormData.dart';
 import '../Modal/add_category_modal.dart';
 
 import '../../models/productScreenModal.dart';
@@ -15,19 +16,21 @@ import '../Modal/AddedItemResponse.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../Modal/add_category_modal.dart';
+import '../Modal/allCouponsResponse.dart';
 import '../Modal/product_category_modal.dart';
 import 'api.dart';
 
 class ProductRepository {
   Api api = Api();
    final _dio = DioUtil().getInstance();
-  Future<AddProductResponse>  addCategory(String category, List<AddSubCategoryList> list) async {
+  Future<AddProductResponse>  addCategory(String category,String image, List<SubCategoryListData> list) async {
     try {
-      final Map<String, dynamic> mp = {
-        'category': category,
-       ' subCategoryList':list
-      };
-      final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category, subCategoryList:list ));
+      // final Map<String, dynamic> mp = {
+      //   'category': category,
+      //   'imageUrl':image,
+      //  ' subCategoryList':list
+      // };
+      final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category,imageUrl: image, subCategoryList:list ));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;
@@ -76,6 +79,27 @@ class ProductRepository {
   Future<AddProductResponse> deleteProduct(String projectId) async {
     try {
       final response = await _dio?.get("/Admin/deleteProduct", queryParameters: {"projectId": projectId});
+      print("deleted data $response");
+      if (response?.statusCode == 200) {
+        AddProductResponse postMaps =
+        AddProductResponse.fromJson(response?.data);
+        return postMaps;
+      } else {
+        print(response?.statusCode);
+      }
+    } catch (ex) {
+      print("deleted data ${ex}");
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse> deleteCoupon(String name) async {
+    try {
+      final Map<String, String> mp = {
+        'couponName': name,
+
+      };
+      final response = await _dio?.post("/Admin/deleteCoupon", data: mp);
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
         AddProductResponse.fromJson(response?.data);
@@ -121,7 +145,7 @@ class ProductRepository {
       print(ex.toString());
       rethrow;
     }
-    return AllProducts(itemData: <ItemData>[],statusCode: 200,message: "true");
+    return AllProducts(itemData: [],statusCode: 200,message: "true");
   }
   Future<ProductCategoryModal> fetchCategory() async {
     try {
@@ -141,6 +165,25 @@ class ProductRepository {
       rethrow;
     }
     return ProductCategoryModal();
+  }
+  Future<allCouponsResponse> fetchAllCoupons() async {
+    try {
+      final response = await _dio?.post("/Admin/allCoupons");
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        allCouponsResponse res = allCouponsResponse.fromJson(response?.data);
+        return res;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return allCouponsResponse();
   }
   Future<AllOrders> fetchOrders(int page,int limit) async {
     try {
@@ -187,7 +230,28 @@ class ProductRepository {
       print(response?.statusMessage);
 
       if (response?.statusCode == 200) {
+        print("catch error ${response?.statusCode}");
         UserResponse products = UserResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error ${ex}");
+      print(ex.toString());
+      rethrow;
+    }
+    return UserResponse();
+  }
+  Future<AddProductResponse> updateProduct( ProductScreenModal obj) async {
+    try {
+
+      final response = await _dio?.post("/Admin/updateProduct",data: obj);
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200 ) {
+        AddProductResponse products = AddProductResponse.fromJson(response?.data);
         return products;
       } else {
         print("DioError status code${response?.statusCode}");
@@ -197,6 +261,48 @@ class ProductRepository {
       print(ex.toString());
       rethrow;
     }
-    return UserResponse();
+    return AddProductResponse();
+  }
+
+  Future<AddProductResponse> addCoupons( CouponFormData obj) async {
+    try {
+
+      final response = await _dio?.post("/Admin/AddCoupon",data: obj.toJson());
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200 ) {
+        AddProductResponse products = AddProductResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse> updateStatus( OrderData obj) async {
+    try {
+
+      print("jsonRequest ${obj.toJson()}");
+      final response = await _dio?.post("/Admin/OrderStatus",data: obj.toJson());
+
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200 ) {
+        AddProductResponse products = AddProductResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return AddProductResponse();
   }
 }

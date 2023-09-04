@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
-import '../../../controllers/MenuController.dart';
+
+import '../../../controllers/DrawerController.dart';
+import '../../../sharedpreference/PreferencesUtil.dart';
 import '../../main/main_screen.dart';
 
 class LoginForm extends StatelessWidget {
@@ -74,12 +76,13 @@ class LoginForm extends StatelessWidget {
           Hero(
             tag: "login_btn",
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await PreferencesUtil.saveString('login_save',  true);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider<MenuController1>(
-                      create: (context) => MenuController1(),
+                    builder: (_) => ChangeNotifierProvider<DrawController>(
+                      create: (context) => DrawController(),
                       child: const MainScreen(),
                     ),
                   ),

@@ -1,78 +1,140 @@
-import 'package:data_table_2/data_table_2.dart';
+import 'package:data_table_2/data_table_2.dart' hide SelectionState;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/AllOrders.dart';
+import '../../../repositories/cubit/SelectionCubit.dart';
+import '../../../repositories/cubit/UpdateOrderStatusCubit.dart';
+import '../../../state/SelectionState.dart';
+import '../../../state/add_order_state.dart';
 
-class OrderItems extends StatelessWidget {
+class OrderItems extends StatefulWidget {
   final List<OrderData>? itemData;
   final ScrollController scrollController;
 
-  const OrderItems(this.itemData, {Key? key, required this.scrollController})
+  OrderItems(this.itemData, {Key? key, required this.scrollController})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(defaultPadding),
-      decoration: const BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Total Orders",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: 600,
-            child: DataTable2(
-              scrollController: scrollController,
-              columnSpacing: defaultPadding,
-              minWidth: 1300,
+  State<OrderItems> createState() => _OrderItemsState();
+}
 
-              columns: const [
-                DataColumn(label: Text("Product Image")),
-                DataColumn(
-                  label: Text("Order Id"),
-                ),
-                DataColumn(
-                  label: Text("Product"),
-                ),
-                DataColumn(
-                  label: Text("Status"),
-                ),
-                DataColumn(
-                  label: Text("Mobile Number"),
-                ),
-                DataColumn(
-                  label: Text("Address"),
-                ),
-                DataColumn(
-                  label: Text("Payment Mode"),
-                ),
-                DataColumn(
-                  label: Text("Payment in Rs"),
-                ),
-              ],
-              rows: List.generate(
-                itemData?.length??0,
-                    (index) => productItemRow(itemData![index]),
+class _OrderItemsState extends State<OrderItems> {
+  late SelectionCubit cubit;
+  late UpdateOrderStatusCubit orderStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = BlocProvider.of<SelectionCubit>(context);
+    orderStatus=BlocProvider.of<UpdateOrderStatusCubit>(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(defaultPadding),
+        decoration: const BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          BlocBuilder<SelectionCubit, SelectionState>(
+        builder: (context, state) {
+          print("updated_value 1 ${state}");
+          if(state is SelectionUpdated) {
+            print("updated_value 2 ${state.selectedItem} ${state.data} ${state.data.orderStatus}");
+            state.data.orderStatus=state.selectedItem;
+            orderStatus.updateOrderStatus(state.data);
+            return Container();
+          }
+          return Container();
+        }),
+            BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
+                listener: (context, state){
+                  if(state is AddOrderLoadedState) {
+                    SnackBar snackBar = const SnackBar(
+                      content: Text('status updated'),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  }
+                  else  if(state is AddOrderErrorState) {
+                    SnackBar snackBar =  SnackBar(
+                      content: Text("${state.error.toString()}"),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  }
+                },
+                builder: (context, state) {
+                  print("updated_value ${state}");
+
+                  return Container();
+                }),
+            Text(
+              "Total Orders",
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 600,
+              child: DataTable2(
+                scrollController: widget.scrollController,
+                columnSpacing: defaultPadding,
+                  dataRowHeight: 60.0,
+
+                minWidth: 1300,
+                columns: const [
+                  DataColumn(label: Text("Product Image")),
+                  DataColumn(
+                    label: Text("Order Id"),
+                  ),
+                  DataColumn(
+                    label: Text("Product"),
+                  ),
+                  DataColumn(
+                    label: Text("Mobile Number"),
+                  ),
+                  DataColumn(
+                    label: Text("Address"),
+                  ),
+                  DataColumn(
+                    label: Text("Payment Mode"),
+                  ),
+                  DataColumn(
+                    label: Text("Payment in Rs"),
+                  ),
+                  DataColumn(
+                    label: Text("Status"),
+                  ),
+                ],
+                rows: List.generate(
+                  widget.itemData?.length ?? 0,
+                  (index) {
+                    return productItemRow(widget.itemData![index], cubit);
+                  },
+                )
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-DataRow productItemRow(OrderData data) {
-  Function(OrderData) fnData;
-  SizedBox(height: 16.0);
+DataRow productItemRow(OrderData data, SelectionCubit cubit) {
+  // Function(OrderData) fnData;
+  String selectedSpinnerValue = 'Ordered';
+  // SizedBox(height: 16.0);
   return DataRow(cells: [
     DataCell(
       Row(
@@ -112,25 +174,19 @@ DataRow productItemRow(OrderData data) {
         );
       },
     )),
-    DataCell(Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.check),
-          onPressed: () {
-            // Perform delete operation
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            // Perform delete operation
-          },
-        )
-      ],
-    )),
     DataCell(Text(data.mobilenumber.toString())),
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
+    DataCell(SpinnerWidget(
+
+      items: const ['Ordered', 'Delivered', 'Cancelled'],
+      onChanged: (value, index) {
+        print("value changed $value");
+        cubit.selectItem(value,data);
+        // Handle the selected value
+      },
+      selectedValue: data.orderStatus??"ordered", // Provide the initial selected value
+    ))
   ]);
 }

@@ -20,7 +20,7 @@ import '../api/ProductRepository.dart';
 
 
 class AllOrderCubit extends Cubit<AllOrderState> {
-  int page = 1;
+  int page = 0;
   final ProductRepository repository;
   AllOrderCubit(this.repository) : super( AllOrderLoadingState() );
 
@@ -43,6 +43,10 @@ class AllOrderCubit extends Cubit<AllOrderState> {
 
       emit(AllOrderLoadedState(orders));
     });
+  }
+
+  void resetState() {
+    emit(AllOrderInitialState());
   }
 
 

@@ -12,8 +12,9 @@ import 'package:flutter/material.dart';
 class DashboardHeader extends StatelessWidget {
   final String imageUrl;
   final String name;
+  final String title;
 
-  DashboardHeader({required this.imageUrl, required this.name});
+  DashboardHeader({required this.imageUrl, required this.name,required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class DashboardHeader extends StatelessWidget {
           ),
         Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
           Text(
-            "Dashboard",
+            title,
             style: Theme.of(context).textTheme.titleLarge,textAlign: TextAlign.center,
           ),
 
@@ -40,12 +41,13 @@ class DashboardHeader extends StatelessWidget {
         Column(
 
           children: [
-
+if(imageUrl.isNotEmpty)
             CircleAvatar(
               radius: 30.0,
               backgroundImage: NetworkImage(imageUrl),
             ),
             SizedBox(height: 8.0),
+            if(imageUrl.isNotEmpty)
             Text(
               name,
               style: TextStyle(

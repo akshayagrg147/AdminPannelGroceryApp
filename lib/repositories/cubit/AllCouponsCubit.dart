@@ -1,5 +1,7 @@
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
+import 'package:adminpannelgrocery/repositories/Modal/allCouponsResponse.dart';
+import 'package:adminpannelgrocery/state/allCouponsState.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
 
 import 'package:dio/dio.dart';
@@ -14,32 +16,27 @@ import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
-class AllProductCubit extends Cubit<AllProductState> {
-  AllProductCubit() : super(AllProductLoadingState()) {
+class AllCouponsCubit extends Cubit<AllCouponsState> {
+  AllCouponsCubit() : super(AllCouponsInitialState()) {
+    fetchAllCoupons();
 
   }
 
   ProductRepository postRepository = ProductRepository();
 
-  void fetchProducts() async {
+  void fetchAllCoupons() async {
     try {
-      AllProducts posts = await postRepository.fetchPosts();
-      emit(AllProductLoadedState(posts));
+      allCouponsResponse posts = await postRepository.fetchAllCoupons();
+      emit(AllCouponsLoadedState(posts));
     } on DioError catch (ex) {
       if (ex.type == DioErrorType.other) {
-        emit(AllProductErrorState(
+        emit(AllCouponsErrorState(
             "Can't fetch posts, please check your internet connection!"));
       } else {
-        emit(AllProductErrorState(ex.type.toString()));
+        emit(AllCouponsErrorState(ex.type.toString()));
       }
     }
   }
 
-  void passFilterData(List<ItemData>? list) {
-    emit(AllProductLoadedState(
-        AllProducts(itemData: list, statusCode: 200, message: "")));
-  }
-  void clearProducts() {
-    emit(AllProductLoadingState());
-  }
+
 }

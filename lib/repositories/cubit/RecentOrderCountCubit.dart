@@ -23,7 +23,7 @@ import '../api/ProductRepository.dart';
 
 class RecentOrderCubit extends Cubit<RecentOrderCountState> {
   RecentOrderCubit() : super( RecentOrderCountLoadingState() ) {
-    fetchAllOrderCount();
+
   }
 
   ProductRepository postRepository = ProductRepository();
@@ -35,6 +35,7 @@ class RecentOrderCubit extends Cubit<RecentOrderCountState> {
       emit(RecentOrderCountLoadedState(orders));
     }
     on DioError catch(ex) {
+      print("corsage"+ex.message);
       if(ex.type == DioErrorType.other) {
         emit( RecentOrderCountErrorState("Can't fetch posts, please check your internet connection!") );
       }

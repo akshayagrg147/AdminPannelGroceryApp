@@ -6,5 +6,6 @@ enum NavigationItem {
   offer,
   users,
   logout,
+  coupons
 
 }

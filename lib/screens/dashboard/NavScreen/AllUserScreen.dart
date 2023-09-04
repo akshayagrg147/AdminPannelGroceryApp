@@ -270,6 +270,6 @@ class ProductList extends StatelessWidget {
 
 
 
-void setState(Null Function() param0) {}
+
 
 enum State1 { yes, no }

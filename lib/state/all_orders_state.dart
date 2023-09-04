@@ -7,6 +7,9 @@ import '../repositories/Modal/HomeProduct.dart';
 
 abstract class AllOrderState{
 }
+class AllOrderInitialState extends AllOrderState {
+
+}
 class AllOrderLoadingState extends AllOrderState {
 
 }

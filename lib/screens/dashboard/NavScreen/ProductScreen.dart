@@ -11,14 +11,20 @@ import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/state/all_category_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../../commonWidget/common_elevted_Button.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/productScreenModal.dart';
 import '../../../state/add_product_state.dart';
+import '../../main/components/side_menu.dart';
+import '../components/headerDashboard.dart';
 import '../components/product_item.dart';
+import 'CategoryScreen.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -30,91 +36,136 @@ class ProductScreen extends StatefulWidget {
 class ProductScreenState extends State<ProductScreen> {
   late AllProductCubit Cubit;
   late AddProductCubit CubitAddNewProuct;
+  late ProductCategoryCubit cubitCategory;
   late DeleteProductCubit CubitdeleteNewProuct;
+   late ProductCategoryCubit pCubit;
+
   List<ItemData>? listProducts = [];
+  List<ItemData>? listProductsIfEmpty = [];
 
   @override
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllProductCubit>(context);
     CubitAddNewProuct = BlocProvider.of<AddProductCubit>(context);
+     pCubit= BlocProvider.of<ProductCategoryCubit>(context);
     CubitdeleteNewProuct = BlocProvider.of<DeleteProductCubit>(context);
+    Cubit.fetchProducts();
+     // pCubit.clearCategory();
+
+
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    CubitAddNewProuct.clearProducts();
+    Cubit.clearProducts();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        children: [
-// if(listProducts?.isNotEmpty ?? true)
-          SizedBox(
-            height: 40,
-          ),
-          ProductHeader(
-            CubitAddNewProuct,
-            onValueUpdate: (val) {
-              if (val.isNotEmpty) {
-                print('value get after search ${val}');
-                List<ItemData>? items = listProducts
-                    ?.where((item) => item.productName!.contains(val))
-                    .toList();
-                print('value get after search ${items?.length}');
-                if (val.isEmpty) {
-                  Cubit.passFilterData(listProducts ?? <ItemData>[]);
-                } else {
-                  Cubit.passFilterData(items ?? <ItemData>[]);
-                }
-              }
-            },
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        drawer: SideMenu(false),
+        body: Row(
+          children: [
+            if (Responsive.isDesktop(context))
               Expanded(
-                flex: 5,
-                child: SafeArea(
-                  child: BlocConsumer<AllProductCubit, AllProductState>(
-                    listener: (context, state) {
-                      if (state is AllProductErrorState) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(state.error),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    builder: (context, state) {
-                      print(state);
-                      if (state is AllProductLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is AllProductLoadedState) {
-                        log(state.products.runtimeType.toString());
-                        var obj = state.products;
-                        listProducts = obj.itemData;
-                        return ProductItems(listProducts, CubitdeleteNewProuct,
-                            (val) {
-                          openAlert(context, CubitAddNewProuct, true, val);
-                        });
-                        //   return Text("${obj.message}");
-                      } else if (state is AllProductErrorState) {
-                        return Center(
-                          child: Text(state.error),
-                        );
-                      }
+                child: SideMenu(true),
+              ),
+            Expanded(
+              flex: 5,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+// if(listProducts?.isNotEmpty ?? true)
+                    SizedBox(
+                      height: 40,
+                    ),
+                    // DashboardHeader(
+                    //   imageUrl:  "",
+                    //   name: "Products",title: "Products",),
+                    ProductHeader(Cubit,
+                      CubitAddNewProuct,pCubit,
+                      onValueUpdate: (val) {
+                        if (val.isNotEmpty) {
+                          print('value get after search ${val}');
+                          List<ItemData>? items = listProducts
+                              ?.where((item) => item.productName!.contains(val))
+                              .toList();
+                          print('value get after search ${items?.length}');
+                          if (val.isEmpty) {
+                            Cubit.passFilterData(listProducts ?? <ItemData>[]);
+                          } else {
+                            Cubit.passFilterData(items ?? <ItemData>[]);
+                          }
+                        }
+                        else{
+                          setState(() {
+                            listProducts=listProductsIfEmpty;
+                          });
 
-                      return Container();
-                    },
-                  ),
+                          print('value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
+                        }
+                      },
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: SafeArea(
+                            child: BlocConsumer<AllProductCubit, AllProductState>(
+                              listener: (context, state) {
+                                if (state is AllProductErrorState) {
+                                  SnackBar snackBar = SnackBar(
+                                    content: Text(state.error),
+                                    backgroundColor: Colors.red,
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
+                              },
+                              builder: (context, state) {
+                                print(state);
+                                if (state is AllProductLoadingState) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (state is AllProductLoadedState) {
+                                  log(state.products.runtimeType.toString());
+                                  var obj = state.products;
+                                  listProducts = obj.itemData;
+                                  listProductsIfEmpty= obj.itemData;
+                                  return ProductItems(listProducts, CubitdeleteNewProuct,
+                                      (val) {
+                                    openAlert(context, CubitAddNewProuct,pCubit, true, val,(String data){
+                                      if(data=="added")
+                                      Cubit.fetchProducts();
+                                    });
+                                  });
+                                  //   return Text("${obj.message}");
+                                } else if (state is AllProductErrorState) {
+                                  return Center(
+                                    child: Text(state.error),
+                                  );
+                                }
+
+                                return Container();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    ));
+            ),
+          ],
+        ));
   }
 }
 
@@ -162,7 +213,7 @@ class ProductItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   Text(
-                    itemData.price.toString(),
+                    itemData.orignal_price.toString(),
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -234,9 +285,11 @@ class ProductItem extends StatelessWidget {
 
 class ProductHeader extends StatefulWidget {
   AddProductCubit addNewProductCubit;
+  ProductCategoryCubit cubit1;
+  AllProductCubit allProductCubit;
   final Function(String) onValueUpdate;
 
-  ProductHeader(this.addNewProductCubit,
+  ProductHeader(this.allProductCubit,this.addNewProductCubit,this.cubit1,
       {Key? key, required this.onValueUpdate})
       : super(key: key);
 
@@ -261,10 +314,14 @@ class _ProductHeaderState extends State<ProductHeader> {
 
 //                  });
                 })),
-                AddCard(onTap: (tap) {
+                AddCard(" Add new Product",onTap: (tap) {
                   if (tap) {
                     openAlert(
-                        context, widget.addNewProductCubit, false, ItemData());
+                        context, widget.addNewProductCubit,widget.cubit1, false, ItemData(),(String data){
+                      if(data=="added") {
+                        widget.allProductCubit.fetchProducts();
+                      }
+                    });
                   }
                 })
               ],
@@ -274,9 +331,13 @@ class _ProductHeaderState extends State<ProductHeader> {
   }
 }
 
-void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
-    ItemData data) {
+void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit cubit1, bool editButton,
+    ItemData data,Function(String) dataCalled) {
+  cubit1.fetchCategory();
   int? dashboardDisplay = 2;
+  ImageKitRequest uploadImage1=ImageKitRequest("null",null);
+  ImageKitRequest uploadImage2=ImageKitRequest("null",null);
+  ImageKitRequest uploadImage3=ImageKitRequest("null",null);
   double dialogWidth = Responsive.isMobile(context)
       ? MediaQuery.of(context).size.width * 0.8
       : 600.0;
@@ -300,7 +361,11 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
     deliveryInstructionController.text = '';
     pincodeController.text = '';
     quantityController.text = data.quantity ?? '';
-    sellingPriceController.text = data.price ?? '';
+    sellingPriceController.text = data.selling_price ?? '';
+    orignalPriceController.text = data.orignal_price ?? '';
+    uploadImage1.imageUrl=data.productImage1;
+    uploadImage2.imageUrl=data.productImage2;
+    uploadImage3.imageUrl=data.productImage3;
   }
 
   var dialog = Dialog(
@@ -327,7 +392,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.text,
                   controller: productname,
-                  hintText: "Bottle",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter Product Name",
                   onChanged: (val) {},
@@ -338,16 +403,16 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.text,
                   controller: productDescriptionController,
-                  hintText: "desc",
+                  hintText: "",
                   secondaryColor: secondaryColor,
-                  labelText: "Enter Poduct Description",
+                  labelText: "Enter Product Description",
                   onChanged: (val) {},
                 ),
                 const SizedBox(height: 20),
                 commonTextFieldWidget(
                   type: TextInputType.text,
                   controller: deliveryInstructionController,
-                  hintText: "desc",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter Product Delivery Instruction",
                   onChanged: (val) {},
@@ -358,7 +423,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.number,
                   controller: pincodeController,
-                  hintText: "123456",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter Pin code",
                   onChanged: (val) {},
@@ -373,7 +438,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.number,
                   controller: quantityController,
-                  hintText: "e.g. 16",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter Quantity",
                   onChanged: (val) {},
@@ -382,7 +447,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.number,
                   controller: sellingPriceController,
-                  hintText: "Rs.250",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter selling Price",
                   onChanged: (val) {},
@@ -392,53 +457,95 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 commonTextFieldWidget(
                   type: TextInputType.number,
                   controller: orignalPriceController,
-                  hintText: "Rs.300",
+                  hintText: "",
                   secondaryColor: secondaryColor,
                   labelText: "Enter actual Price",
                   onChanged: (val) {},
                 ),
 
                 const SizedBox(height: 20),
-                Container(
-                  width: 242.0,
-                  height: 42.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24.0),
-                    color: const Color(0xff2c2c2c),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Upload Image1',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 18,
-                        color: Colors.white,
-                        height: 1,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                Text(
+                  "Upload image 1",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                CommonImageButton(
+                  onPressed: () {
+                    _uploadImage((imageFile,imageId) {
+                      setState(() {
+                        uploadImage1=(ImageKitRequest(imageFile, imageId));
+
+                      });
+
+
+
+                    });
+                  },
+                  buttonText: "Upload sub category",
+                  selectedImagePath: uploadImage1.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage1,
+                  deleteImage: (obj){
+                    setState((){
+                      uploadImage1=ImageKitRequest("null",null);
+                    });
+
+                  },
+                ),
+
+                const SizedBox(height: 20),
+                Text(
+                  "Upload image 2",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                CommonImageButton(
+                  onPressed: () {
+
+                    _uploadImage((imageFile,imageId) {
+                      print('Image uploaded! ${imageFile}');
+                      setState(() {
+                        uploadImage2=(ImageKitRequest(imageFile, imageId));
+
+                      });
+
+
+
+                    });
+                  },
+                  buttonText: "Upload sub category",
+                  selectedImagePath: uploadImage2.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage2,
+                  deleteImage: (obj){
+                    setState((){
+                      uploadImage2=ImageKitRequest("null",null);
+                    });
+
+                  },
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  width: 242.0,
-                  height: 42.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24.0),
-                    color: const Color(0xff2c2c2c),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Upload Image2',
-                      style: TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 18,
-                        color: Colors.white,
-                        height: 1,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                Text(
+                  "Upload image 3",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                CommonImageButton(
+                  onPressed: () {
+                    _uploadImage((imageFile,imageId) {
+                      print('Image uploaded! ${imageFile}');
+                      setState(() {
+                        uploadImage3=(ImageKitRequest(imageFile, imageId));
+                      });
+
+
+
+                    });
+                  },
+                  buttonText: "Upload sub category",
+                  selectedImagePath: uploadImage3.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage3,
+                  deleteImage: (obj){
+                    setState((){
+                      uploadImage3=ImageKitRequest("null",null);
+                    });
+
+                  },
                 ),
                 const SizedBox(height: 20),
 
@@ -481,10 +588,22 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                 ),
                 BlocConsumer<ProductCategoryCubit, AllCategoryState>(
                   builder: (context, state) {
+                    print("stateis ${state.runtimeType}");
                     if (state is AllCategoryLoadingState) {
+                      print("stateis loading");
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
+                    }
+                    else if (state is AllCategoryLoadedState) {
+                      print("stateis loaded");
+                      spinnerData = state.category.itemData;
+                      categoryList = state.category.itemData
+                          ?.map((category) => category.category)
+                          .toList();
+                      categoryList
+                          ?.removeWhere((item) => item == null || item.isEmpty);
+                      selectedValue = categoryList?.first ?? '';
                     }
                     if (categoryList?.isNotEmpty == true) {
                       return Column(
@@ -525,6 +644,7 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                   },
                   listener: (context, state) {
                     if (state is AllCategoryLoadedState) {
+                      print("stateis loaded");
                       spinnerData = state.category.itemData;
                       categoryList = state.category.itemData
                           ?.map((category) => category.category)
@@ -532,7 +652,9 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                       categoryList
                           ?.removeWhere((item) => item == null || item.isEmpty);
                       selectedValue = categoryList?.first ?? '';
-                    } else if (state is SelectedCategoryValue) {
+                    }
+                    else if (state is SelectedCategoryValue) {
+                      print("stateis loaded SelectedCategoryValue");
                       selectedValue = state.value;
                       indexValue = state.index;
                     }
@@ -541,31 +663,49 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
 
                 BlocConsumer<AddProductCubit, AddProductState>(
                     listener: (context, state) {
+
                   if (state is AddProductErrorState) {
+                    print("stateis loaded AddProductErrorState");
                     SnackBar snackBar = SnackBar(
                       content: Text(state.error),
                       backgroundColor: Colors.red,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else if (state is AddProductLoadedState) {
-                    SnackBar snackBar = const SnackBar(
-                      content: Text('success'),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    print("stateis loaded AddProductLoadedState");
+                    if(state.products.status==true) {
+                      SnackBar snackBar = const SnackBar(
+                        content: Text('success'),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    else{
+                      SnackBar snackBar =  SnackBar(
+                        content: Text("${state.products.message}"),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   }
                 }, builder: (context, state) {
                   if (state is AddProductLoadingState) {
+                    print("stateis loaded AddProductLoadingState");
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (state is AddProductLoadedState) {
+                    print("stateis loaded AddProductLoadedState");
                     var response = state.products;
                     if (response.statusCode == 200) {
                       Navigator.of(context).pop();
+                      cubit.clearProducts();
+                      dataCalled("added");
+
                     }
                   }
                   return ElevatedButton(
+
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.green),
@@ -574,7 +714,39 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                         textStyle: MaterialStateProperty.all(
                             const TextStyle(fontSize: 15))),
                     onPressed: () {
-                      cubit.addProduct(ProductScreenModal(
+                      if( productname.text.toString().isEmpty||
+                      orignalPriceController.text.toString().isEmpty||
+                        sellingPriceController.text.toString().isEmpty||
+                      quantityController.text.isEmpty||
+                      productDescriptionController.text.isEmpty||
+                      selectedValue.isEmpty||
+                      uploadImage1.imageUrl?.contains("null")==true||
+                          uploadImage2.imageUrl?.contains("null")==true||
+                      uploadImage3.imageUrl?.contains("null")==true
+                      )
+                        {
+                          print("${productname.text.toString().isEmpty}"
+                              "${orignalPriceController.text.toString().isEmpty}"
+                              "${ sellingPriceController.text.toString().isEmpty}"
+                              "${ quantityController.text.toString().isEmpty}"
+                              "${ productDescriptionController.text.toString().isEmpty}"
+                              "${ selectedValue.isEmpty}"
+                              "${ uploadImage1.imageUrl?.contains("null")==true}"
+                              "${ uploadImage2.imageUrl?.contains("null")==true}"
+                              "${ uploadImage3.imageUrl?.contains("null")==true}"
+
+
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill all informations'),
+                            ),
+                          );
+                          return;
+
+                        }
+                      editButton?
+                      cubit.update(ProductScreenModal(
                           productName: productname.text.toString(),
                           orignalPrice: orignalPriceController.text.toString(),
                           sellingPrice: sellingPriceController.text.toString(),
@@ -582,9 +754,25 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
                           productDescription: productDescriptionController.text,
                           dashboardDisplay: false,
                           itemCategoryName: selectedValue,
-                          itemSubcategoryName: radioSelectValue));
+                          itemSubcategoryName: radioSelectValue,
+                          image1:uploadImage1.imageUrl ,
+                          image2:uploadImage2.imageUrl,
+                          image3:uploadImage3.imageUrl
+                      ,productId: data.productId))
+                      :   cubit.addProduct(ProductScreenModal(
+                          productName: productname.text.toString(),
+                          orignalPrice: orignalPriceController.text.toString(),
+                          sellingPrice: sellingPriceController.text.toString(),
+                          quantity: quantityController.text,
+                          productDescription: productDescriptionController.text,
+                          dashboardDisplay: false,
+                          itemCategoryName: selectedValue,
+                          itemSubcategoryName: radioSelectValue,
+                          image1:uploadImage1.imageUrl ,
+                          image2:uploadImage2.imageUrl,
+                          image3:uploadImage3.imageUrl ));
                     },
-                    child: const Text('Save!'),
+                    child:  editButton?Text('Update!'):Text('Save!'),
                   );
                 }),
                 const SizedBox(height: 20),
@@ -616,10 +804,59 @@ void openAlert(BuildContext context, AddProductCubit cubit, bool editButton,
       });
 }
 
+Future<void> _uploadImage(Function(String,String) fn) async {
+  var headers = {
+    'Authorization': 'Basic cHJpdmF0ZV9tdHVMdjFGa0YrVE9YbFV5SC9ZbEIvQkpndVE9Og=='
+  };
+
+  var url = 'https://upload.imagekit.io/api/v1/files/upload';
+
+  // Select an image using ImagePicker
+  final picker = ImagePicker();
+  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedImage != null) {
+    var imageFile = await pickedImage.readAsBytes();
+
+    try {
+      var dio = Dio();
+      var timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      var formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(
+          imageFile,
+          filename: pickedImage.path.split('/').last,
+        ),
+        'fileName':'image_$timestamp.png',
+        'folder': 'Products',
+      });
+
+      var response = await dio.post(
+        url,
+        data: formData,
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = response.data;
+        var responseData = jsonResponse["url"].toString();
+        fn(responseData,jsonResponse["fileId"].toString());
+        print('Image uploaded! ${responseData}');
+      } else {
+        print('Failed to upload image: ${response.statusMessage}');
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+    }
+  } else {
+    print('No image selected.');
+  }
+}
+
 List<String?>? getStringList(List<SubCategoryList>? subCategoryList) {
   return subCategoryList?.map((e) => e.name).toList();
 }
 
-void setState(Null Function() param0) {}
+
 
 enum State1 { yes, no }

@@ -10,6 +10,10 @@ class ProductScreenModal {
   int? categoryType;
   String? itemCategoryName;
   String? itemSubcategoryName;
+  String? image1;
+  String? image2;
+  String? image3;
+
 
   ProductScreenModal(
       {this.productName,
@@ -21,19 +25,26 @@ class ProductScreenModal {
         this.dashboardDisplay,
         this.categoryType,
         this.itemCategoryName,
-        this.itemSubcategoryName});
+        this.itemSubcategoryName,
+      this.image1,
+      this.image2,
+      this.image3});
 
   ProductScreenModal.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
     orignalPrice = json['orignal_price'];
     sellingPrice = json['selling_price'];
     quantity = json['quantity'];
-    productId = json['productId'];
+                productId = json['productId'];
     productDescription = json['ProductDescription'];
     dashboardDisplay = json['DashboardDisplay'];
     categoryType = json['categoryType'];
     itemCategoryName = json['item_category_name'];
     itemSubcategoryName = json['item_subcategory_name'];
+    image1 = json['ProductImage1'];
+    image2 = json['ProductImage2'];
+    image3 = json['ProductImage3'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +59,10 @@ class ProductScreenModal {
     data['categoryType'] = this.categoryType;
     data['item_category_name'] = this.itemCategoryName;
     data['item_subcategory_name'] = this.itemSubcategoryName;
+    data['ProductImage1']=this.image1;
+    data['ProductImage2']=this.image2;
+    data['ProductImage3']=this.image3;
+
     return data;
   }
 }

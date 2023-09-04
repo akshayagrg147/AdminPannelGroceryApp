@@ -79,7 +79,8 @@ class ProfileCard extends StatelessWidget {
 
 class AddCard extends StatelessWidget {
   final Function(bool) onTap;
-  const AddCard({
+  final String text;
+  const AddCard(this.text,{
     Key? key,required this.onTap
   }) : super(key: key);
 
@@ -99,13 +100,13 @@ class AddCard extends StatelessWidget {
       ),
       child:  InkWell(
         onTap: (){onTap(true);},
-        child: const Row(
+        child:  Row(
 
           children: [
             Icon(Icons.add),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: defaultPadding / 3),
-              child: Text("Add new Category"),
+              child: Text(text),
             ),
           ],
         ),
@@ -165,15 +166,18 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return  commonTextFieldWidget(
-      type: TextInputType.text,
-      controller: productname,
-      hintText: "Milk",
-      secondaryColor: secondaryColor,
-      labelText: "Search",
-      onChanged: (val) {
-        widget.textChanged!(val);
-        },
+    return  Padding(
+      padding: const EdgeInsets.only(left: 10,bottom: 10),
+      child: commonTextFieldWidget(
+        type: TextInputType.text,
+        controller: productname,
+        hintText: "Milk",
+        secondaryColor: secondaryColor,
+        labelText: "Search",
+        onChanged: (val) {
+          widget.textChanged!(val);
+          },
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../navigationPackage/NavigationItem.dart';
 
-class MenuController1 extends ChangeNotifier {
+class DrawController extends ChangeNotifier {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   // GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
   NavigationItem navigationItem = NavigationItem.home;

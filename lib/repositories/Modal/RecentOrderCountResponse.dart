@@ -119,18 +119,22 @@ class OrderList {
 class CountResponse {
   String? name;
   int? count;
+  String? image;
 
   CountResponse({this.name, this.count});
 
   CountResponse.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     count = json['count'];
+    image=json['image'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['count'] = this.count;
+    data['image'] = this.image;
+
     return data;
   }
 }

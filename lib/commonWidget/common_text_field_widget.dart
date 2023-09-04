@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../responsive.dart';
 
 class commonTextFieldWidget extends StatelessWidget {
@@ -38,43 +39,32 @@ class commonTextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(margin),
-      decoration: decoration,
-      child: Container(
-        child: Padding(
-          padding: EdgeInsets.all(padding),
-          child: TextField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: type,
-            textInputAction: textInputAction,
-            onChanged: onChanged,
-            decoration: InputDecoration(
-              hintText: hintText,
-              labelText: labelText,
-              //fillColor: Colors.white,
-              fillColor: secondaryColor,
-              filled: true,
-              border: const OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              prefixIcon: InkWell(
-                onTap: () {},
-                child: Container(
-                  padding:  EdgeInsets.all(defaultPadding * 0.75),
-                  margin:  EdgeInsets.symmetric(
-                      horizontal: defaultPadding / 2),
-                  decoration: const BoxDecoration(
-                    //color: Colors.black,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child:  Icon(Icons.ac_unit_sharp,
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: type,
+      textInputAction: textInputAction,
+      cursorColor: kPrimaryColor,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        hintText: hintText,
+        labelText: labelText,
+        //fillColor: Colors.white,
+        fillColor: secondaryColor,
+        filled: true
+        ,
+        prefixIcon: InkWell(
+          onTap: () {},
+          child: Container(
+            padding:  EdgeInsets.all(defaultPadding * 0.75),
+            margin:  EdgeInsets.symmetric(
+                horizontal: defaultPadding / 2),
+            decoration: const BoxDecoration(
+              //color: Colors.black,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child:  Icon(Icons.ac_unit_sharp,
 
-                  ),
-                ),
-              ),
             ),
           ),
         ),

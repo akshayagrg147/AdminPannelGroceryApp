@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controllers/MenuController.dart';
+import '../../../controllers/DrawerController.dart';
 import '../../../navigationPackage/NavigationItem.dart';
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({
+  final isDesktop;
+  const SideMenu(this.isDesktop, {
     Key? key,
   }) : super(key: key);
 
@@ -15,11 +16,11 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  late final MenuController1 provider;
+  late final DrawController provider;
 
   @override
   void initState() {
-    provider = Provider.of<MenuController1>(context, listen: false);
+    provider = Provider.of<DrawController>(context, listen: false);
     super.initState();
   }
 
@@ -38,6 +39,7 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
             title: "Home",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
              provider.setNavigationItem(NavigationItem.home);
             },
@@ -45,6 +47,7 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
             title: "Products",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
              provider.setNavigationItem(NavigationItem.product);
             },
@@ -52,6 +55,7 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
             title: "Category",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
               selectItem(context, NavigationItem.category,provider);
             },
@@ -59,27 +63,39 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
             title: "Order",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
               selectItem(context, NavigationItem.order, provider);
             },
           ),
-          DrawerListTile(
-            title: "Offer",
-            press: () {
-              Navigator.pop(context);
-              selectItem(context, NavigationItem.offer,provider);
-            },
-          ),
+          // DrawerListTile(
+          //   title: "Offer",
+          //   press: () {
+          //     if(!widget.isDesktop)
+          //     Navigator.pop(context);
+          //     selectItem(context, NavigationItem.offer,provider);
+          //   },
+          // ),
           DrawerListTile(
             title: "Users",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
               selectItem(context, NavigationItem.users, provider);
             },
           ),
           DrawerListTile(
+            title: "Coupons",
+            press: () {
+              if(!widget.isDesktop)
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.coupons, provider);
+            },
+          ),
+          DrawerListTile(
             title: "Log out",
             press: () {
+              if(!widget.isDesktop)
               Navigator.pop(context);
               selectItem(context, NavigationItem.logout,provider);
             },
@@ -91,7 +107,7 @@ class _SideMenuState extends State<SideMenu> {
 }
 
 void selectItem(
-    BuildContext context, NavigationItem item, MenuController1 provider) {
+    BuildContext context, NavigationItem item, DrawController provider) {
   provider.setNavigationItem(item);
 }
 

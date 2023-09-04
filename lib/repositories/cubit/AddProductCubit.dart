@@ -17,7 +17,7 @@ import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 class ProductCubit extends Cubit<AddProductState> {
-  ProductCubit() : super( AddProductLoadingState() );
+  ProductCubit() : super( AddProductInitialState() );
 
   ProductRepository postRepository = ProductRepository();
 
@@ -60,6 +60,25 @@ class AddProductCubit extends Cubit<AddProductState> {
         emit( AddProductErrorState(ex.type.toString()) );
       }
     }
+  }
+  void update(ProductScreenModal object) async {
+    try {
+
+      AddProductResponse posts = await postRepository.updateProduct(object);
+      emit(AddProductLoadedState(posts));
+    }
+    on DioError catch(ex) {
+      if(ex.type == DioErrorType.other) {
+        emit( AddProductErrorState("Can't fetch posts, please check your internet connection!") );
+      }
+      else {
+        emit( AddProductErrorState(ex.type.toString()) );
+      }
+    }
+  }
+
+  void clearProducts() {
+    emit(AddProductInitialState());
   }
 
 }

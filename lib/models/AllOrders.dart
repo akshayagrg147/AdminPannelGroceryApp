@@ -35,6 +35,7 @@ class OrderData {
   String? mobilenumber;
   String? createdDate;
   String? orderId;
+  String? orderStatus;
 
   OrderData(
       {this.orderList,
@@ -43,7 +44,8 @@ class OrderData {
         this.address,
         this.mobilenumber,
         this.createdDate,
-        this.orderId});
+        this.orderId,
+      this.orderStatus});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     if (json['orderList'] != null) {
@@ -58,6 +60,7 @@ class OrderData {
     mobilenumber = json['mobilenumber'];
     createdDate = json['createdDate'];
     orderId = json['orderId'];
+    orderStatus=json['orderStatus'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +74,8 @@ class OrderData {
     data['mobilenumber'] = this.mobilenumber;
     data['createdDate'] = this.createdDate;
     data['orderId'] = this.orderId;
+    data['orderStatus'] = this.orderStatus;
+
     return data;
   }
 }

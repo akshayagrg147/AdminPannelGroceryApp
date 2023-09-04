@@ -38,17 +38,21 @@ class ProductCategoryCubit extends Cubit<AllCategoryState> {
       emit(AllCategoryLoadedState(posts));
     }
     on DioError catch(ex) {
+      print('category wise data ${ex.message}');
       if(ex.type == DioErrorType.other) {
         emit( AllCategoryErrorState("Can't fetch posts, please check your internet connection!") );
       }
       else {
+        print('category wise data ${ex.message}');
         emit( AllCategoryErrorState(ex.type.toString()) );
       }
     }
   }
 
 
-
+  void clearCategory() {
+    emit(AllCategoryLoadingState());
+  }
 
 
 

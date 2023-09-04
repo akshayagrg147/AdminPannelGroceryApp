@@ -12,7 +12,7 @@ import 'card_view.dart';
 class CardViewCount extends StatelessWidget {
 
   final List<CountResponse>? responseCount;
-   CardViewCount(this.responseCount, {
+    CardViewCount(this.responseCount, {
     Key? key,
   }) : super(key: key);
 
@@ -21,41 +21,44 @@ class CardViewCount extends StatelessWidget {
     print('print my fields ${responseCount}');
     final Size _size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Summary",
-              style: Theme.of(context).textTheme.subtitle1,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Summary",
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              // ElevatedButton.icon(
+              //   style: TextButton.styleFrom(
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: defaultPadding * 1.5,
+              //       vertical:
+              //           defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+              //     ),
+              //   ),
+              //   onPressed: () {},
+              //   icon: Icon(Icons.add),
+              //   label: Text("Add New"),
+              // ),
+            ],
+          ),
+          SizedBox(height: defaultPadding),
+          Responsive(
+            mobile: FileInfoCardGridView(responseCount,
+              crossAxisCount: _size.width < 650 ? 2 : 4,
+              childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
             ),
-            // ElevatedButton.icon(
-            //   style: TextButton.styleFrom(
-            //     padding: EdgeInsets.symmetric(
-            //       horizontal: defaultPadding * 1.5,
-            //       vertical:
-            //           defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-            //     ),
-            //   ),
-            //   onPressed: () {},
-            //   icon: Icon(Icons.add),
-            //   label: Text("Add New"),
-            // ),
-          ],
-        ),
-        SizedBox(height: defaultPadding),
-        Responsive(
-          mobile: FileInfoCardGridView(responseCount,
-            crossAxisCount: _size.width < 650 ? 2 : 4,
-            childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
+            tablet: FileInfoCardGridView(responseCount),
+            desktop: FileInfoCardGridView(responseCount,
+              childAspectRatio: _size.width < 1400 ? 2 : 1.1,
+            ),
           ),
-          tablet: FileInfoCardGridView(responseCount),
-          desktop: FileInfoCardGridView(responseCount,
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -88,16 +91,16 @@ class FileInfoCardGridView extends StatelessWidget {
       itemBuilder: (context, index) =>
           CardView(info: countResponse![index],performClick: (){
         if(index==0) {
-          navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
+        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
         }
         else if(index==1) {
-          navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
         }
         else if(index==2) {
-          navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
+         // navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
         }
         else{
-          navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
+        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
         }
       },),
     );

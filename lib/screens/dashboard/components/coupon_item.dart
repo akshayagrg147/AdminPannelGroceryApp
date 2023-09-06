@@ -15,9 +15,9 @@ import '../../../repositories/cubit/DeleteProductCubit.dart';
 import '../../../state/delete_product_state.dart';
 
 class CouponsItems extends StatelessWidget {
-  final List<ItemData>? itemData;
+  final List<ItemDataa>? itemData;
   final DeleteCouponCubit Cubit;
-  final  Function(ItemData) editClick;
+  final  Function(ItemDataa) editClick;
   const CouponsItems( this.itemData,this.Cubit,this.editClick ,{
     Key? key,
   }) : super(key: key);
@@ -94,7 +94,7 @@ class CouponsItems extends StatelessWidget {
   }
 }
 
-DataRow productItemRow(ItemData data, DeleteCouponCubit cubit) {
+DataRow productItemRow(ItemDataa data, DeleteCouponCubit cubit) {
 
   return DataRow(
       cells: [

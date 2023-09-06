@@ -6,6 +6,8 @@ import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/best_selling_checkbox_cubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/exclusive_selling_checkbox_cubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/state/all_category_state.dart';
@@ -38,6 +40,8 @@ class ProductScreenState extends State<ProductScreen> {
   late AddProductCubit CubitAddNewProuct;
   late ProductCategoryCubit cubitCategory;
   late DeleteProductCubit CubitdeleteNewProuct;
+  late BestSellingCheckBoxCubit checkBoxCubit;
+  late ExclusiveCheckBoxCubit exclusiveCheckBoxCubit;
    late ProductCategoryCubit pCubit;
 
   List<ItemData>? listProducts = [];
@@ -50,6 +54,8 @@ class ProductScreenState extends State<ProductScreen> {
     CubitAddNewProuct = BlocProvider.of<AddProductCubit>(context);
      pCubit= BlocProvider.of<ProductCategoryCubit>(context);
     CubitdeleteNewProuct = BlocProvider.of<DeleteProductCubit>(context);
+    checkBoxCubit= BlocProvider.of<BestSellingCheckBoxCubit>(context);
+    exclusiveCheckBoxCubit= BlocProvider.of<ExclusiveCheckBoxCubit>(context);
     Cubit.fetchProducts();
      // pCubit.clearCategory();
 
@@ -139,13 +145,13 @@ class ProductScreenState extends State<ProductScreen> {
                                   var obj = state.products;
                                   listProducts = obj.itemData;
                                   listProductsIfEmpty= obj.itemData;
-                                  return ProductItems(listProducts, CubitdeleteNewProuct,
+                                  return ProductItems(listProducts, CubitdeleteNewProuct,checkBoxCubit,exclusiveCheckBoxCubit,
                                       (val) {
                                     openAlert(context, CubitAddNewProuct,pCubit, true, val,(String data){
                                       if(data=="added")
                                       Cubit.fetchProducts();
                                     });
-                                  });
+                                  } );
                                   //   return Text("${obj.message}");
                                 } else if (state is AllProductErrorState) {
                                   return Center(

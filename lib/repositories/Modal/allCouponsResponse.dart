@@ -1,6 +1,6 @@
 
 class allCouponsResponse {
-  List<ItemData>? itemData;
+  List<ItemDataa>? itemData;
   int? statusCode;
   String? message;
 
@@ -8,9 +8,9 @@ class allCouponsResponse {
 
   allCouponsResponse.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {
-      itemData = <ItemData>[];
+      itemData = <ItemDataa>[];
       json['itemData'].forEach((v) {
-        itemData!.add(new ItemData.fromJson(v));
+        itemData!.add(new ItemDataa.fromJson(v));
       });
     }
     statusCode = json['statusCode'];
@@ -28,7 +28,7 @@ class allCouponsResponse {
   }
 }
 
-class ItemData {
+class ItemDataa {
   String? couponTitle;
   String? couponCode;
   String? discountPercentage;
@@ -37,7 +37,7 @@ class ItemData {
   String? startDate;
   String? expireDate;
 
-  ItemData(
+  ItemDataa(
       {this.couponTitle,
         this.couponCode,
         this.discountPercentage,
@@ -46,7 +46,7 @@ class ItemData {
         this.startDate,
         this.expireDate});
 
-  ItemData.fromJson(Map<String, dynamic> json) {
+  ItemDataa.fromJson(Map<String, dynamic> json) {
     couponTitle = json['couponTitle'];
     couponCode = json['couponCode'];
     discountPercentage = json['discountPercentage'];

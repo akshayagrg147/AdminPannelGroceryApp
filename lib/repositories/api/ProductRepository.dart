@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
@@ -9,6 +9,7 @@ import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
 import '../Modal/CouponFormData.dart';
+import '../Modal/AllProducts.dart';
 import '../Modal/add_category_modal.dart';
 
 import '../../models/productScreenModal.dart';
@@ -76,10 +77,10 @@ class ProductRepository {
     }
     return AddProductResponse();
   }
-  Future<AddProductResponse> deleteProduct(String projectId) async {
+  Future<AddProductResponse> deleteProduct(String productId) async {
     try {
-      final response = await _dio?.get("/Admin/deleteProduct", queryParameters: {"projectId": projectId});
-      print("deleted data $response");
+      final response = await _dio?.delete("/Admin/deleteProduct/$productId", );
+     print("deleted data $response");
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
         AddProductResponse.fromJson(response?.data);
@@ -93,13 +94,11 @@ class ProductRepository {
     }
     return AddProductResponse();
   }
-  Future<AddProductResponse> deleteCoupon(String name) async {
+  Future<AddProductResponse> deleteCoupon(String couponName) async {
     try {
-      final Map<String, String> mp = {
-        'couponName': name,
 
-      };
-      final response = await _dio?.post("/Admin/deleteCoupon", data: mp);
+      final response = await _dio?.delete("/Admin/deleteCoupon/$couponName", );
+
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
         AddProductResponse.fromJson(response?.data);
@@ -123,6 +122,26 @@ class ProductRepository {
         print(response?.statusCode);
       }
     } catch (ex) {
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse> updateSellingCheckBox(ItemData data) async {
+    try {
+
+        final response = await _dio?.post("/Admin/updateProduct",data: data);
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200 ) {
+        AddProductResponse products = AddProductResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
       rethrow;
     }
     return AddProductResponse();

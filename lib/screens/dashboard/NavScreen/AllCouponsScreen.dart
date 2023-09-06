@@ -28,7 +28,7 @@ class AllCouponsScreenState extends State<AllCouponsScreen> {
   late DeleteCouponCubit CubitdeleteNewProuct;
 
 
-  List<ItemData> listProducts = [];
+  List<ItemDataa> listProducts = [];
 
   @override
   void initState() {

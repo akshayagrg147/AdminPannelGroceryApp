@@ -23,10 +23,10 @@ class DeleteProductCubit extends Cubit<DeleteProductState> {
   ProductRepository postRepository = ProductRepository();
 
 
-void deleteProduct(String projectId) async {
+void deleteProduct(String productId) async {
   try {
 
-    AddProductResponse posts = await postRepository.deleteProduct(projectId);
+    AddProductResponse posts = await postRepository.deleteProduct(productId);
     emit(DeleteProductLoadedState(posts));
   }
   on DioError catch(ex) {

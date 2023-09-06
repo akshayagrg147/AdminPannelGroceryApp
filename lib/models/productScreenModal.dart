@@ -10,6 +10,8 @@ class ProductScreenModal {
   int? categoryType;
   String? itemCategoryName;
   String? itemSubcategoryName;
+  bool ? bestSellingCheckBox;
+  bool ? exclusiveSellingCheckBox;
   String? image1;
   String? image2;
   String? image3;
@@ -26,6 +28,8 @@ class ProductScreenModal {
         this.categoryType,
         this.itemCategoryName,
         this.itemSubcategoryName,
+        this. bestSellingCheckBox,
+        this.  exclusiveSellingCheckBox,
       this.image1,
       this.image2,
       this.image3});
@@ -36,6 +40,8 @@ class ProductScreenModal {
     sellingPrice = json['selling_price'];
     quantity = json['quantity'];
                 productId = json['productId'];
+    bestSellingCheckBox = json['productBestSelling'];
+    exclusiveSellingCheckBox = json['productExclusiveSelling'];
     productDescription = json['ProductDescription'];
     dashboardDisplay = json['DashboardDisplay'];
     categoryType = json['categoryType'];
@@ -60,6 +66,8 @@ class ProductScreenModal {
     data['item_category_name'] = this.itemCategoryName;
     data['item_subcategory_name'] = this.itemSubcategoryName;
     data['ProductImage1']=this.image1;
+    data['productBestSelling'] = this.bestSellingCheckBox;
+    data['productExclusiveSelling'] = this.exclusiveSellingCheckBox;
     data['ProductImage2']=this.image2;
     data['ProductImage3']=this.image3;
 

@@ -16,6 +16,8 @@ import 'package:adminpannelgrocery/repositories/cubit/SelectionCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UpdateOrderStatusCubit.dart';
 
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/best_selling_checkbox_cubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/exclusive_selling_checkbox_cubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/login_response_cubit.dart';
 import 'package:adminpannelgrocery/screens/Login/login_screen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CouponScreen.dart';
@@ -74,7 +76,11 @@ class MyApp extends StatelessWidget {
               BlocProvider<SelectionCubit>(
                   create: (context) => SelectionCubit()),
               BlocProvider<UpdateOrderStatusCubit>(
-                  create: (context) => UpdateOrderStatusCubit())
+                  create: (context) => UpdateOrderStatusCubit()),
+              BlocProvider<BestSellingCheckBoxCubit>(
+                  create: (context) => BestSellingCheckBoxCubit()),
+              BlocProvider<ExclusiveCheckBoxCubit>(
+                  create: (context) => ExclusiveCheckBoxCubit())
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

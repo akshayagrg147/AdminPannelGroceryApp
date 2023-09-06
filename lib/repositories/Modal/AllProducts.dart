@@ -28,21 +28,25 @@ class AllProducts {
   }
 }
 
-class ItemData {
-  String? productName;
-  String? selling_price;
-  String? quantity;
-  String? productImage1;
-  String? productImage2;
-  String? productImage3;
-  String? productId;
-  String? productDescription;
-  String? orignal_price;
-  bool? dashboardDisplay;
-  String? category;
-  List<Rating>? rating;
-  String? itemCategoryId;
-  int? categoryType;
+  class ItemData {
+    String? productName;
+    String? selling_price;
+    String? quantity;
+    String? productImage1;
+    String? productImage2;
+    String? productImage3;
+    String? productId;
+    String? productDescription;
+    String? orignal_price;
+    bool? dashboardDisplay;
+    String? category;
+    bool ? bestSellingCheckBox;
+    bool ? exclusiveSellingCheckBox;
+    List<Rating>? rating;
+    String? item_category_name;
+    String? item_subcategory_name
+    ;
+
 
   ItemData(
       {this.productName,
@@ -56,9 +60,15 @@ class ItemData {
         this.orignal_price,
         this.dashboardDisplay,
         this.category,
+        this. bestSellingCheckBox,
+        this.  exclusiveSellingCheckBox,
         this.rating,
-        this.itemCategoryId,
-        this.categoryType});
+        this.item_category_name,
+        this.item_subcategory_name});
+    @override
+    String toString() {
+      return 'ItemData{productName: $productName, selling_price: $selling_price, quantity: $quantity, productImage1: $productImage1, productImage2: $productImage2, productImage3: $productImage3, productId: $productId, productDescription: $productDescription, orignal_price: $orignal_price, dashboardDisplay: $dashboardDisplay, category: $category, bestSellingCheckBox: $bestSellingCheckBox, exclusiveSellingCheckBox: $exclusiveSellingCheckBox, rating: $rating, item_category_name: $item_category_name, item_subcategory_name: $item_subcategory_name}';
+    }
 
   ItemData.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
@@ -68,6 +78,9 @@ class ItemData {
     productImage2 = json['ProductImage2'];
     productImage3 = json['ProductImage3'];
     productId = json['productId'];
+    bestSellingCheckBox = json['productBestSelling'];
+    exclusiveSellingCheckBox = json['productExclusiveSelling'];
+
     productDescription = json['ProductDescription'];
     orignal_price = json['orignal_price'];
     dashboardDisplay = json['DashboardDisplay'];
@@ -78,8 +91,8 @@ class ItemData {
         rating!.add(new Rating.fromJson(v));
       });
     }
-    itemCategoryId = json['itemCategoryId'];
-    categoryType = json['categoryType'];
+    item_category_name = json['item_category_name'];
+    item_subcategory_name = json['item_subcategory_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -92,14 +105,16 @@ class ItemData {
     data['ProductImage3'] = this.productImage3;
     data['productId'] = this.productId;
     data['ProductDescription'] = this.productDescription;
+    data['productBestSelling'] = this.bestSellingCheckBox;
+    data['productExclusiveSelling'] = this.exclusiveSellingCheckBox;
     data['selling_price'] = this.selling_price;
     data['DashboardDisplay'] = this.dashboardDisplay;
     data['category'] = this.category;
     if (this.rating != null) {
       data['rating'] = this.rating!.map((v) => v.toJson()).toList();
     }
-    data['itemCategoryId'] = this.itemCategoryId;
-    data['categoryType'] = this.categoryType;
+    data['item_category_name'] = this.item_category_name;
+    data['item_subcategory_name'] = this.item_subcategory_name;
     return data;
   }
 }

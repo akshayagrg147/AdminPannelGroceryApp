@@ -129,11 +129,11 @@ class _CouponScreenState extends State<CouponScreen> {
 
                               Expanded(
                                 child: commonTextFieldWidget(
-
+                                  secondaryColor: Colors.white,
                                   type: TextInputType.text,
                                   controller: cuponCodeName,
                                   hintText: "Coupon Code",
-                                  secondaryColor: secondaryColor,
+
                                   labelText: "Please enter a coupon code.",
                                   onChanged: (val) {},
                                 ),
@@ -147,7 +147,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                   type: TextInputType.text,
                                   controller: cuponTitle,
                                   hintText: "Coupon Code",
-                                  secondaryColor: secondaryColor,
+                                  secondaryColor: Colors.white,
                                   labelText: "Please enter a coupon title.",
                                   onChanged: (val) {},
                                 ),
@@ -184,7 +184,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                     type: TextInputType.text,
                                     controller: discountedAmountController,
                                     hintText: "Discounted Amount",
-                                    secondaryColor: secondaryColor,
+                                    secondaryColor: Colors.white,
                                     labelText: "Please enter the discounted amount.",
                                     onChanged: (val) {},
                                   ),
@@ -193,7 +193,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                   type: TextInputType.text,
                                   controller: discountPercentageController,
                                   hintText: "Enter Percentage",
-                                  secondaryColor: secondaryColor,
+                                  secondaryColor: Colors.white,
                                   labelText: "Please enter the percentage.",
                                   onChanged: (val) {},
                                 )),
@@ -214,7 +214,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                 controller: minimumPurchaseController,
                                 margin: 40,
                                 hintText: "Minimum Purchase",
-                                secondaryColor: secondaryColor,
+                                    secondaryColor: Colors.white,
                                 labelText: "Please enter the minimum purchase amount.",
                                 onChanged: (val) {},
                               )),
@@ -228,7 +228,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                     ElevatedButton(
                                       onPressed: () => _picstartDate(context),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.transparent, // Remove background color
+                                        primary: Colors.black, // Remove background color
                                         elevation: 0, // Remove elevation
                                       ),
                                       child: Row(
@@ -255,7 +255,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                     ElevatedButton(
                                       onPressed: () => _picExpireDate(context),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.transparent, // Remove background color
+                                        primary: Colors.black, // Remove background color
                                         elevation: 0, // Remove elevation
                                       ),
                                       child: Row(
@@ -380,10 +380,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black38, // Change the background color here
                     ),
-                    child: const Text('All Coupons->',style: TextStyle(
-                      color: Colors.white, // Change the text color here
-                      fontSize: 16, // Adjust the font size as needed
-                    ),),
+                    child: const Text('All Coupons->',),
                   ),
                   const SizedBox(
                     height: 20,
@@ -393,7 +390,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     padding: 10,
                     controller: cuponCodeName,
                     hintText: "Coupon Code",
-                    secondaryColor: secondaryColor,
+                    secondaryColor: Colors.white,
                     labelText: "Please enter a coupon code.",
                     onChanged: (val) {},
                   ),
@@ -405,7 +402,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     padding: 10,
                     controller: cuponTitle,
                     hintText: "Coupon Code",
-                    secondaryColor: secondaryColor,
+                    secondaryColor: Colors.white  ,
                     labelText: "Please enter a coupon title.",
                     onChanged: (val) {},
                   ),
@@ -431,7 +428,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     type: TextInputType.text,
                     controller: discountedAmountController,
                     hintText: "Discounted Amount",
-                    secondaryColor: secondaryColor,
+                    secondaryColor: Colors.white  ,
                     labelText: "Please enter the discounted amount.",
                     onChanged: (val) {},
                   ) else
@@ -439,7 +436,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     type: TextInputType.text,
                     controller: discountPercentageController,
                     hintText: "Enter Percentage",
-                    secondaryColor: secondaryColor,
+                    secondaryColor: Colors.white  ,
                     labelText: "Please enter the percentage.",
                     onChanged: (val) {},
                   ),
@@ -452,7 +449,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     controller: minimumPurchaseController,
                     margin: 40,
                     hintText: "Minimum Purchase",
-                    secondaryColor: secondaryColor,
+                    secondaryColor: Colors.white  ,
                     labelText: "Please enter the minimum purchase amount.",
                     onChanged: (val) {},
                   ),
@@ -463,16 +460,16 @@ class _CouponScreenState extends State<CouponScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Start Date ',style: TextStyle(
-                    color: Colors.white, // Change the text color here
+                    color: Colors.black, // Change the text color here
                     fontSize: 14, // Adjust the font size as needed
                   ),),
 
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey, // Change the background color here
+                      primary: Colors.black, // Change the background color here
                     ),
                     onPressed: () => _picstartDate(context),
-                    child: Text(_picDate !=  null ? '${_picDate.toLocal()}' : 'Start Date')
+                    child: Text(_picDate !=  null ? '${_picDate.toLocal()}' : 'Start Date',style: TextStyle(color: Colors.white),)
       ,
                   ),
 
@@ -484,17 +481,17 @@ class _CouponScreenState extends State<CouponScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Expire Date ',style: TextStyle(
-                  color: Colors.white, // Change the text color here
+                  color: Colors.black, // Change the text color here
                   fontSize: 14, // Adjust the font size as needed
                 ),),
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey, // Change the background color here
+                      primary: Colors.black, // Change the background color here
                     ),
                     onPressed: () => _picExpireDate(context),
                     child:   Text(
-                        _expireedDate !=  null ? '${_expireedDate.toLocal()}' : 'Expire Date')
+                        _expireedDate !=  null ? '${_expireedDate.toLocal()}' : 'Expire Date',style: TextStyle(color: Colors.white),)
       ,
                   ),
                 ),

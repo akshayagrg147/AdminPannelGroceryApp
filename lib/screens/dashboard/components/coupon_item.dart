@@ -46,7 +46,7 @@ class CouponsItems extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(defaultPadding),
             decoration: const BoxDecoration(
-              color: secondaryColor,
+              color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: Column(
@@ -107,7 +107,7 @@ DataRow productItemRow(ItemDataa data, DeleteCouponCubit cubit) {
               children: [
 
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.delete,color: Colors.black,),
                   onPressed: () {
 
                     // cubit.deleteCoupon(data.couponCode!);

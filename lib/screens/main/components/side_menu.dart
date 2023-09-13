@@ -34,7 +34,7 @@ class _SideMenuState extends State<SideMenu> {
 
               ),
           DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
+            child: Image.asset("assets/images/logo_dashboard.png"),
           ),
           DrawerListTile(
             title: "Home",

@@ -74,14 +74,14 @@ class AllProducts {
     productName = json['productName'];
     selling_price = json['selling_price'];
     quantity = json['quantity'];
-    productImage1 = json['ProductImage1'];
-    productImage2 = json['ProductImage2'];
-    productImage3 = json['ProductImage3'];
+    productImage1 = json['productImage1'];
+    productImage2 = json['productImage2'];
+    productImage3 = json['productImage3'];
     productId = json['productId'];
     bestSellingCheckBox = json['productBestSelling'];
     exclusiveSellingCheckBox = json['productExclusiveSelling'];
 
-    productDescription = json['ProductDescription'];
+    productDescription = json['productDescription'];
     orignal_price = json['orignal_price'];
     dashboardDisplay = json['DashboardDisplay'];
     category = json['category'];
@@ -100,11 +100,11 @@ class AllProducts {
     data['productName'] = this.productName;
     data['orignal_price'] = this.orignal_price;
     data['quantity'] = this.quantity;
-    data['ProductImage1'] = this.productImage1;
-    data['ProductImage2'] = this.productImage2;
-    data['ProductImage3'] = this.productImage3;
+    data['productImage1'] = this.productImage1;
+    data['productImage2'] = this.productImage2;
+    data['productImage3'] = this.productImage3;
     data['productId'] = this.productId;
-    data['ProductDescription'] = this.productDescription;
+    data['productDescription'] = this.productDescription;
     data['productBestSelling'] = this.bestSellingCheckBox;
     data['productExclusiveSelling'] = this.exclusiveSellingCheckBox;
     data['selling_price'] = this.selling_price;

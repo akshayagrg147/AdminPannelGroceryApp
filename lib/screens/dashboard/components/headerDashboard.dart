@@ -22,7 +22,7 @@ class DashboardHeader extends StatelessWidget {
       children: [
         if (!Responsive.isDesktop(context))
           IconButton(
-              icon: const Icon(Icons.menu),
+              icon: const Icon(Icons.menu,color: Colors.black,),
               onPressed: (){
                 ScaffoldState? scaffoldState = Scaffold.of(context);
                 if (!scaffoldState.isDrawerOpen) {

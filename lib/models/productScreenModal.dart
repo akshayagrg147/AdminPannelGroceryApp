@@ -12,6 +12,7 @@ class ProductScreenModal {
   String? itemSubcategoryName;
   bool ? bestSellingCheckBox;
   bool ? exclusiveSellingCheckBox;
+  String ? quantityInstructionController;
   String? image1;
   String? image2;
   String? image3;
@@ -30,6 +31,7 @@ class ProductScreenModal {
         this.itemSubcategoryName,
         this. bestSellingCheckBox,
         this.  exclusiveSellingCheckBox,
+        this.quantityInstructionController,
       this.image1,
       this.image2,
       this.image3});
@@ -42,14 +44,15 @@ class ProductScreenModal {
                 productId = json['productId'];
     bestSellingCheckBox = json['productBestSelling'];
     exclusiveSellingCheckBox = json['productExclusiveSelling'];
-    productDescription = json['ProductDescription'];
+    productDescription = json['productDescription'];
     dashboardDisplay = json['DashboardDisplay'];
     categoryType = json['categoryType'];
     itemCategoryName = json['item_category_name'];
     itemSubcategoryName = json['item_subcategory_name'];
-    image1 = json['ProductImage1'];
-    image2 = json['ProductImage2'];
-    image3 = json['ProductImage3'];
+    quantityInstructionController= json['quantityInstructionController'];
+    image1 = json['productImage1'];
+    image2 = json['productImage2'];
+    image3 = json['productImage3'];
 
   }
 
@@ -60,16 +63,17 @@ class ProductScreenModal {
     data['selling_price'] = this.sellingPrice;
     data['quantity'] = this.quantity;
     data['productId'] = this.productId;
-    data['ProductDescription'] = this.productDescription;
+    data['productDescription'] = this.productDescription;
     data['DashboardDisplay'] = this.dashboardDisplay;
     data['categoryType'] = this.categoryType;
     data['item_category_name'] = this.itemCategoryName;
     data['item_subcategory_name'] = this.itemSubcategoryName;
-    data['ProductImage1']=this.image1;
+    data['productImage1']=this.image1;
     data['productBestSelling'] = this.bestSellingCheckBox;
     data['productExclusiveSelling'] = this.exclusiveSellingCheckBox;
-    data['ProductImage2']=this.image2;
-    data['ProductImage3']=this.image3;
+    data['quantityInstructionController'] = this.quantityInstructionController;
+    data['productImage2']=this.image2;
+    data['productImage3']=this.image3;
 
     return data;
   }

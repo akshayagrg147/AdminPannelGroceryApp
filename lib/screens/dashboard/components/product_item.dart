@@ -175,22 +175,24 @@ DataRow productItemRow(ItemData data, DeleteProductCubit cubit, BestSellingCheck
               //   height: 30,
               //   width: 30,
               // ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Image.network(
-                  data.productImage1.toString(),
-                  width: 100,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  errorBuilder: (ctx, obj, stack) {
-                    return Image.asset(
-                      'assets/images/logo.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    );
-                    ;
-                  },
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: Image.network(
+                    data.productImage1.toString(),
+                    width: 100,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, obj, stack) {
+                      return Image.asset(
+                        'assets/images/logo.png',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      );
+                      ;
+                    },
+                  ),
                 ),
               ),
             ],
@@ -203,7 +205,7 @@ DataRow productItemRow(ItemData data, DeleteProductCubit cubit, BestSellingCheck
 StatefulBuilder(
 builder: (context, setState) {
   return CommonCheckbox(
-  value: isChecked,
+  value: data.bestSellingCheckBox==true,
   onChanged: (newValue) {
 
   if(newValue==true) {
@@ -227,7 +229,7 @@ builder: (context, setState) {
 
                     builder: (context, setState) {
                       return CommonCheckbox(
-                        value: isChecked,
+                        value: data.exclusiveSellingCheckBox==true,
                         onChanged: (newValue) {
                           if(newValue==true) {
             data.bestSellingCheckBox = false;
@@ -268,25 +270,25 @@ builder: (context, setState) {
                 }
               },
               builder: (context, state) {
-                  if (state is DeleteProductErrorState) {
-                  return Center(
-                    child: Text(state.error),
-                  );
-                }
-                  else if (state is DeleteProductLoadedState) {
-                    return IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        cubit.deleteProduct(data.productId.toString());
-                        // Perform delete operation
-                      },
-                    );
-                  }
+                //   if (state is DeleteProductErrorState) {
+                //   return Center(
+                //     child: Text(state.error),
+                //   );
+                // }
+                //   else if (state is DeleteProductLoadedState) {
+                //     return IconButton(
+                //       icon: Icon(Icons.delete,color: Colors.black,),
+                //       onPressed: () {
+                //         cubit.deleteProduct(data.productId.toString());
+                //         // Perform delete operation
+                //       },
+                //     );
+                //   }
 
                     return Row(
                       children: [
                     IconButton(
-                    icon: Icon(Icons.edit),
+                    icon: Icon(Icons.edit,color: Colors.black,),
                 onPressed: () {
                   editClick(data);
 
@@ -295,7 +297,7 @@ builder: (context, setState) {
                 },
                 ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: Icon(Icons.delete,color: Colors.black,),
                           onPressed: () {
                             cubit.deleteProduct(data.productId.toString());
                             // Perform delete operation

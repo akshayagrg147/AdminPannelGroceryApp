@@ -44,7 +44,7 @@ class CommonImageButton extends StatelessWidget {
               right: 8,
               child: IconButton(
                 icon: Icon(Icons.close),
-                color: Colors.white,
+                color: Colors.black,
                 onPressed: () {
                   deleteImage(selectedImagePath!);
                   // Handle close button tap

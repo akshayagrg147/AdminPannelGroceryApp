@@ -54,12 +54,12 @@ class AllCouponsScreenState extends State<AllCouponsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent, // Make the app bar transparent
-          elevation: 0, // Remove shadow
-
-          title: Text('All Coupons'),
+backgroundColor: Colors.white,
+          title: Text('All Coupons',style: TextStyle(
+            color: Colors.black, // Change this to your desired text color
+          ),),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back,color: Colors.black,),
             onPressed: () {
               Navigator.pop(context); // Navigate back when the back arrow is pressed
             },

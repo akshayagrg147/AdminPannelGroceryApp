@@ -48,7 +48,7 @@ class _SpinnerWidgetState extends State<SpinnerWidget> {
               );
             },
           ).toList(),
-          icon: Icon(Icons.arrow_drop_down),
+          icon: Icon(Icons.arrow_drop_down,color: Colors.black,),
         ),
       );
     }

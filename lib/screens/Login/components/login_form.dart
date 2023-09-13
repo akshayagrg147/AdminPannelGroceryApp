@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../constants.dart';
 
 import '../../../controllers/DrawerController.dart';
@@ -24,35 +25,55 @@ class LoginForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-          TextFormField(
-            controller: username,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            cursorColor: kPrimaryColor,
-            onSaved: (email) {},
-            decoration: InputDecoration(
-              hintText: "Your email",
-              prefixIcon: Padding(
-                padding: const EdgeInsets.all(defaultPadding),
-                child: Icon(Icons.person),
-              ),
+          Image.asset(
+            'assets/images/logo.png',
+            width: 200,
+            height: 200,
+
+          ),
+          Text(
+            "Login Screen",
+
+            style: TextStyle(
+              fontSize: 26,
+              fontFamily: 'YourFontFamily', // Replace with your desired font family
+              fontWeight: FontWeight.bold, // Set the font weight to bold
             ),
           ),
+           SizedBox(height: 20,),
+
+           commonTextFieldWidget(
+            secondaryColor: Colors.white,
+            type: TextInputType.text,
+            controller: username,
+             keyboardType: TextInputType.emailAddress,
+             textInputAction: TextInputAction.next,
+            hintText: "Your email",
+icon: Icons.mail,
+
+            labelText: "Enter your email",
+            onChanged: (val) {},
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-            child: TextFormField(
+            child:
+            commonTextFieldWidget(
+              secondaryColor: Colors.white,
+              type: TextInputType.text,
               controller: password,
+              icon: Icons.lock,
+              keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.done,
-              obscureText: true,
-              cursorColor: kPrimaryColor,
-              decoration: const InputDecoration(
-                hintText: "Your password",
-                prefixIcon: Padding(
-                  padding: EdgeInsets.all(defaultPadding),
-                  child: Icon(Icons.lock),
-                ),
-              ),
-            ),
+              hintText: "Your password",
+
+
+              labelText: "Enter your password",
+              onChanged: (val) {},
+            )
+
+
+
           ),
           const SizedBox(height: defaultPadding),
           BlocBuilder<LoginResponseCubit, LoginResponseState>(

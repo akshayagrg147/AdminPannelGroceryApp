@@ -1,6 +1,8 @@
 import 'package:data_table_2/data_table_2.dart' hide SelectionState;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
@@ -38,7 +40,7 @@ class _OrderItemsState extends State<OrderItems> {
       child: Container(
         padding: const EdgeInsets.all(defaultPadding),
         decoration: const BoxDecoration(
-          color: secondaryColor,
+          color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -81,6 +83,7 @@ class _OrderItemsState extends State<OrderItems> {
                 }),
             Text(
               "Total Orders",
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             SizedBox(
@@ -178,15 +181,56 @@ DataRow productItemRow(OrderData data, SelectionCubit cubit) {
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
-    DataCell(SpinnerWidget(
+    DataCell(StatefulBuilder(
+  builder: (context, setState) {
+    return SpinnerWidget(
 
       items: const ['Ordered', 'Delivered', 'Cancelled'],
       onChanged: (value, index) {
+        setState((){
+          selectedSpinnerValue=value;
+        });
         print("value changed $value");
-        cubit.selectItem(value,data);
+       cubit.selectItem(value, data);
+        sendEmail();
+
         // Handle the selected value
       },
-      selectedValue: data.orderStatus??"ordered", // Provide the initial selected value
+      selectedValue:
+          selectedSpinnerValue, // Provide the initial selected value
+    );
+  },
     ))
   ]);
+}
+
+
+sendEmail() async {
+
+  String username = 'akshaygarg147@gmail.com';
+  String password = '7973434833';
+
+  final smtpServer = gmail(username, password);
+
+  // Create our message.
+  final message = Message()
+    ..from = Address(username, 'Akshay')
+    ..recipients.add('grgakshay@gmail.com')
+    // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
+    // ..bccRecipients.add(Address('bccAddress@example.com'))
+    ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
+    ..text = 'This is the plain text.\nThis is line 2 of the text part.'
+    ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Message sent: ' + sendReport.toString());
+  } on MailerException catch (e) {
+    print('Message not sent.');
+    for (var p in e.problems) {
+      print('Problem: ${p.code}: ${p.msg}');
+    }
+  }
+  // DONE
+
 }

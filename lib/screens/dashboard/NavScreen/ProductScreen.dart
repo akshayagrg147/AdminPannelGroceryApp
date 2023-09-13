@@ -87,7 +87,9 @@ class ProductScreenState extends State<ProductScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-// if(listProducts?.isNotEmpty ?? true)
+                    DashboardHeader(
+                      imageUrl:  "",
+                      name: "null", title: "Dashboard",),
                     SizedBox(
                       height: 40,
                     ),
@@ -274,7 +276,7 @@ class ProductItem extends StatelessWidget {
               }
 
               return IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete,color: Colors.black,),
                 onPressed: () {
                   cubit.deleteProduct(itemData.productId.toString());
 
@@ -306,33 +308,36 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                Expanded(child: SearchField(textChanged: (value) {
-                  print('ProductScreen  ${value}  ');
-                  //  setState((){
-                  // listProducts = items;
-                  widget.onValueUpdate(value!);
+    return Container(
+      color: Colors.grey,
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Row(
+                children: [
+                  Expanded(child: SearchField(textChanged: (value) {
+                    print('ProductScreen  ${value}  ');
+                    //  setState((){
+                    // listProducts = items;
+                    widget.onValueUpdate(value!);
 
 //                  });
-                })),
-                AddCard(" Add new Product",onTap: (tap) {
-                  if (tap) {
-                    openAlert(
-                        context, widget.addNewProductCubit,widget.cubit1, false, ItemData(),(String data){
-                      if(data=="added") {
-                        widget.allProductCubit.fetchProducts();
-                      }
-                    });
-                  }
-                })
-              ],
-            )),
-      ],
+                  })),
+                  AddCard(" Add new Product",onTap: (tap) {
+                    if (tap) {
+                      openAlert(
+                          context, widget.addNewProductCubit,widget.cubit1, false, ItemData(),(String data){
+                        if(data=="added") {
+                          widget.allProductCubit.fetchProducts();
+                        }
+                      });
+                    }
+                  })
+                ],
+              )),
+        ],
+      ),
     );
   }
 }
@@ -350,7 +355,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
 
   TextEditingController productname = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
-  TextEditingController deliveryInstructionController = TextEditingController();
+  TextEditingController quantityInstructionController = TextEditingController();
   TextEditingController pincodeController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController sellingPriceController = TextEditingController();
@@ -364,7 +369,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
   if (editButton) {
     productname.text = data.productName ?? '';
     productDescriptionController.text = data.productDescription ?? '';
-    deliveryInstructionController.text = '';
+    quantityInstructionController.text = '';
     pincodeController.text = '';
     quantityController.text = data.quantity ?? '';
     sellingPriceController.text = data.selling_price ?? '';
@@ -379,6 +384,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
     //this right here
     child: Container(
+      color: Colors.white,
       width: dialogWidth,
       child: StatefulBuilder(
         builder: (context, setState) {
@@ -399,7 +405,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.text,
                   controller: productname,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+                  secondaryColor: Colors.white,
                   labelText: "Enter Product Name",
                   onChanged: (val) {},
                 ),
@@ -407,20 +413,22 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                 const SizedBox(height: 20),
 
                 commonTextFieldWidget(
-                  type: TextInputType.text,
+                  type: TextInputType.multiline,
                   controller: productDescriptionController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+
+                  secondaryColor: Colors.white,
                   labelText: "Enter Product Description",
                   onChanged: (val) {},
+
                 ),
                 const SizedBox(height: 20),
                 commonTextFieldWidget(
                   type: TextInputType.text,
-                  controller: deliveryInstructionController,
+                  controller: quantityInstructionController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
-                  labelText: "Enter Product Delivery Instruction",
+                  secondaryColor: Colors.white,
+                  labelText: "Enter Product quantity Instruction",
                   onChanged: (val) {},
                 ),
 
@@ -430,7 +438,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.number,
                   controller: pincodeController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+                  secondaryColor: Colors.white,
                   labelText: "Enter Pin code",
                   onChanged: (val) {},
                 ),
@@ -445,7 +453,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.number,
                   controller: quantityController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+                  secondaryColor: Colors.white,
                   labelText: "Enter Quantity",
                   onChanged: (val) {},
                 ),
@@ -454,7 +462,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.number,
                   controller: sellingPriceController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+                  secondaryColor: Colors.white,
                   labelText: "Enter selling Price",
                   onChanged: (val) {},
                 ),
@@ -464,7 +472,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.number,
                   controller: orignalPriceController,
                   hintText: "",
-                  secondaryColor: secondaryColor,
+                  secondaryColor: Colors.white,
                   labelText: "Enter actual Price",
                   onChanged: (val) {},
                 ),
@@ -573,6 +581,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                         });
                       },
                     ),
+
                   ),
                   ListTile(
                     title: const Text('No'),
@@ -723,6 +732,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                       if( productname.text.toString().isEmpty||
                       orignalPriceController.text.toString().isEmpty||
                         sellingPriceController.text.toString().isEmpty||
+                          quantityInstructionController.text.toString().isEmpty||
                       quantityController.text.isEmpty||
                       productDescriptionController.text.isEmpty||
                       selectedValue.isEmpty||
@@ -757,10 +767,12 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                           orignalPrice: orignalPriceController.text.toString(),
                           sellingPrice: sellingPriceController.text.toString(),
                           quantity: quantityController.text,
-                          productDescription: productDescriptionController.text,
+                          productDescription: productDescriptionController.text.toString(),
                           dashboardDisplay: false,
                           itemCategoryName: selectedValue,
                           itemSubcategoryName: radioSelectValue,
+                          quantityInstructionController:quantityInstructionController.text,
+
                           image1:uploadImage1.imageUrl ,
                           image2:uploadImage2.imageUrl,
                           image3:uploadImage3.imageUrl
@@ -774,6 +786,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                           dashboardDisplay: false,
                           itemCategoryName: selectedValue,
                           itemSubcategoryName: radioSelectValue,
+                          quantityInstructionController:quantityInstructionController.text,
                           image1:uploadImage1.imageUrl ,
                           image2:uploadImage2.imageUrl,
                           image3:uploadImage3.imageUrl ));

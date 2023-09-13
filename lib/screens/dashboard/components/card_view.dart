@@ -39,10 +39,17 @@ class CardView extends StatelessWidget {
                   height: 45,
                   width: 45,
 
-                  child: Image.network(
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.white, // Replace with your desired tint color
+                      BlendMode.srcIn), // Blend mode for the tint color
 
-                    info.image.toString(), // Replace with your actual image URL
-                    fit: BoxFit.cover, // How the image should be fitted within the container
+                    child: Image.network(
+
+
+                      info.image.toString(), // Replace with your actual image URL
+                      fit: BoxFit.cover, // How the image should be fitted within the container
+                    ),
                   ),
 
                 ),
@@ -52,6 +59,9 @@ class CardView extends StatelessWidget {
               info.name!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white, // Change this color to the desired color
+              ),
             ),
             // ProgressLine(
             //   color: info.color,

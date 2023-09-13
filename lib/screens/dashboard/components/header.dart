@@ -18,7 +18,7 @@ class Header extends StatelessWidget {
       children: [
         if (!Responsive.isDesktop(context))
           IconButton(
-            icon: const Icon(Icons.menu),
+            icon: const Icon(Icons.menu,color: Colors.black),
             onPressed: (){
               ScaffoldState? scaffoldState = Scaffold.of(context);
               if (!scaffoldState.isDrawerOpen) {
@@ -32,7 +32,9 @@ class Header extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
+          Container(
+              color: Colors.grey,
+              child: Spacer(flex: Responsive.isDesktop(context) ? 2 : 1)),
          Expanded(child: SearchField(textChanged: (value ) {  },)),
         const ProfileCard()
       ],
@@ -94,9 +96,9 @@ class AddCard extends StatelessWidget {
         vertical: defaultPadding / 3,
       ),
       decoration: BoxDecoration(
-        color: secondaryColor,
+        color: Colors.white,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Colors.black),
       ),
       child:  InkWell(
         onTap: (){onTap(true);},
@@ -166,17 +168,20 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding: const EdgeInsets.only(left: 10,bottom: 10),
-      child: commonTextFieldWidget(
-        type: TextInputType.text,
-        controller: productname,
-        hintText: "Milk",
-        secondaryColor: secondaryColor,
-        labelText: "Search",
-        onChanged: (val) {
-          widget.textChanged!(val);
-          },
+    return  Container(
+      color: Colors.grey,
+      child: Padding(
+        padding: const EdgeInsets.only  (left: 10,bottom: 10,top: 10),
+        child: commonTextFieldWidget(
+          type: TextInputType.text,
+          controller: productname,
+          hintText: "Milk",
+          secondaryColor: Colors.white  ,
+          labelText: "Search",
+          onChanged: (val) {
+            widget.textChanged!(val);
+            },
+        ),
       ),
     );
   }
@@ -192,7 +197,7 @@ class HeaderModify extends StatelessWidget {
       children: [
         if (!Responsive.isDesktop(context))
           IconButton(
-              icon: const Icon(Icons.menu),
+              icon: const Icon(Icons.menu,color: Colors.black),
               onPressed: (){
                 ScaffoldState? scaffoldState = Scaffold.of(context);
                 if (!scaffoldState.isDrawerOpen) {

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:html';
 
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
@@ -61,12 +60,9 @@ class CategoryItems extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Total Category",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
@@ -151,14 +147,16 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
     child: Container(
       // padding: const EdgeInsets.all(30),
       decoration: const BoxDecoration(
-        color: secondaryColor,
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Expanded(
           child: Text(data.category.toString(),
+
               textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black,)),
         ),
         Expanded(
           child: Image.network(
@@ -188,9 +186,7 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
                 final item = data.subCategoryList![index];
                 return Text(
                   item.name ?? "null",
-                  style: TextStyle(
-                    // Add your desired text style properties here
-                  ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black,),
                 );
               },
             ),
@@ -200,7 +196,7 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
              child: IconButton(
               icon: const Icon(
                 Icons.delete,
-                color: Colors.red,
+                color: Colors.black,
               ),
               onPressed: () {
                 itemPass(data.category!);
@@ -241,375 +237,378 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
         insetPadding: const EdgeInsets.all(16.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-        child: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return BlocConsumer<AddCategoryCubit, AddCategoryState>(
-              listener: (context, state) {
-                if (state is AddCategoryErrorState) {
-                  SnackBar snackBar = SnackBar(
-                    content: Text(state.error),
-                    backgroundColor: Colors.red,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else if (state is AddCategoryLoadedState) {
-                  addedCategory("added");
-                  SnackBar snackBar = const SnackBar(
-                    content: Text('Success'),
-                    backgroundColor: Colors.green,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              builder: (context, state) {
-                if (state is AddCategoryLoadingState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is AddCategoryLoadedState) {
-                  var response = state.products;
-                  if (response.statusCode == 200) {
-                    CategoryScreen();
-                    Navigator.of(context).pop();
+        child: Container(
+          color: Colors.white,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return BlocConsumer<AddCategoryCubit, AddCategoryState>(
+                listener: (context, state) {
+                  if (state is AddCategoryErrorState) {
+                    SnackBar snackBar = SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else if (state is AddCategoryLoadedState) {
+                    addedCategory("added");
+                    SnackBar snackBar = const SnackBar(
+                      content: Text('Success'),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
-                }
-                return Container(
-                  width: Responsive.isMobile(context) ? 250.0 : 400.0,
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                            width: double.infinity,
-                            child: Text("ADD Coupon",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ))),
-                        const SizedBox(height: 20),
-                        commonTextFieldWidget(
-                          type: TextInputType.text,
-                          controller: categoryName,
-                          hintText: "Bottle",
-                          secondaryColor: secondaryColor,
-                          labelText: "Enter category",
-                          onChanged: (val) {},
-                        ),
-                        const SizedBox(height: 20),
-                        CommonImageButton(
-                          onPressed: () {
-                            setState(() {
-                              isLoading = true;
-                            });
+                },
+                builder: (context, state) {
+                  if (state is AddCategoryLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is AddCategoryLoadedState) {
+                    var response = state.products;
+                    if (response.statusCode == 200) {
+                      CategoryScreen();
+                      Navigator.of(context).pop();
+                    }
+                  }
+                  return Container(
+                    width: Responsive.isMobile(context) ? 250.0 : 400.0,
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                              width: double.infinity,
+                              child: Text("ADD Coupon",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ))),
+                          const SizedBox(height: 20),
+                          commonTextFieldWidget(
+                            type: TextInputType.text,
+                            controller: categoryName,
+                            hintText: "Bottle",
+                            secondaryColor: Colors.white,
+                            labelText: "Enter category",
+                            onChanged: (val) {},
+                          ),
+                          const SizedBox(height: 20),
+                          CommonImageButton(
+                            onPressed: () {
+                              setState(() {
+                                isLoading = true;
+                              });
 
-                            _uploadImage((imageFile, imageId) {
-                              if (imageFile != null) {
+                              _uploadImage((imageFile, imageId) {
+                                if (imageFile != null) {
+                                  setState(() {
+                                    isLoading = false;
+                                    imageupload[0] =
+                                        (ImageKitRequest(imageFile, imageId));
+                                  });
+                                } else {
+                                  // Image file is null, handle the error
+                                  print(
+                                      'Error occurred while picking or reading the image file');
+                                }
+                              });
+                            },
+                            buttonText: "Upload category",
+                            selectedImagePath:
+                                imageupload[0].imageUrl!.contains("null")
+                                    ? ImageKitRequest(null, null)
+                                    : imageupload[0],
+                            deleteImage: (ob) {
+                              deleteImage(
+                                  "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                  "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                  ob.imageId);
+                              imageupload[0] = (ImageKitRequest("null", null));
+                            },
+                          ),
+                          //subcontroller 1
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          isLoading ? CircularProgressIndicator() : SizedBox(),
+                          commonTextFieldWidget(
+                            type: TextInputType.text,
+                            controller: subCategory1,
+                            hintText: "Bottle",
+                            secondaryColor: Colors.white,
+                            labelText: "Enter subcategory 1",
+                            onChanged: (val) {},
+                          ),
+                          const SizedBox(height: 20),
+                          CommonImageButton(
+                            onPressed: () {
+                              print(pressCount);
+                              _uploadImage((imageFile, imageId) {
+                                print('Image uploaded! ${imageFile}');
                                 setState(() {
-                                  isLoading = false;
-                                  imageupload[0] =
+                                  imageupload[1] =
                                       (ImageKitRequest(imageFile, imageId));
                                 });
-                              } else {
-                                // Image file is null, handle the error
-                                print(
-                                    'Error occurred while picking or reading the image file');
-                              }
-                            });
-                          },
-                          buttonText: "Upload category",
-                          selectedImagePath:
-                              imageupload[0].imageUrl!.contains("null")
-                                  ? ImageKitRequest(null, null)
-                                  : imageupload[0],
-                          deleteImage: (ob) {
-                            deleteImage(
-                                "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                ob.imageId);
-                            imageupload[0] = (ImageKitRequest("null", null));
-                          },
-                        ),
-                        //subcontroller 1
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        isLoading ? CircularProgressIndicator() : SizedBox(),
-                        commonTextFieldWidget(
-                          type: TextInputType.text,
-                          controller: subCategory1,
-                          hintText: "Bottle",
-                          secondaryColor: secondaryColor,
-                          labelText: "Enter subcategory 1",
-                          onChanged: (val) {},
-                        ),
-                        const SizedBox(height: 20),
-                        CommonImageButton(
-                          onPressed: () {
-                            print(pressCount);
-                            _uploadImage((imageFile, imageId) {
-                              print('Image uploaded! ${imageFile}');
-                              setState(() {
-                                imageupload[1] =
-                                    (ImageKitRequest(imageFile, imageId));
                               });
-                            });
-                          },
-                          buttonText: "Upload sub category",
-                          selectedImagePath:
-                              imageupload[1].imageUrl!.contains("null")
-                                  ? ImageKitRequest(null, null)
-                                  : imageupload[1],
-                          deleteImage: (obj) {
-                            setState(() {
-                              imageupload[1] = (ImageKitRequest("null", null));
-                            });
-                          },
-                        ),
-
-                        //sub controller 2
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        commonTextFieldWidget(
-                          type: TextInputType.text,
-                          controller: subCategory2,
-                          hintText: "Bottle",
-                          secondaryColor: secondaryColor,
-                          labelText: "Enter subcategory 2",
-                          onChanged: (val) {},
-                        ),
-                        const SizedBox(height: 20),
-                        CommonImageButton(
-                          onPressed: () {
-                            print(pressCount);
-                            _uploadImage((imageFile, imageId) {
-                              print('Image uploaded! ${imageFile}');
-                              setState(() {
-                                imageupload[2] =
-                                    (ImageKitRequest(imageFile, imageId));
-                              });
-                            });
-                          },
-                          buttonText: "Upload sub category",
-                          selectedImagePath:
-                              imageupload[2].imageUrl!.contains("null")
-                                  ? ImageKitRequest(null, null)
-                                  : imageupload[2],
-                          deleteImage: (obj) {
-                            setState(() {
-                              imageupload[2] = (ImageKitRequest("null", null));
-                            });
-                          },
-                        ),
-
-                        //sub controller 3
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        commonTextFieldWidget(
-                          type: TextInputType.text,
-                          controller: subCategory3,
-                          hintText: "Bottle",
-                          secondaryColor: secondaryColor,
-                          labelText: "Enter subcategory 3",
-                          onChanged: (val) {},
-                        ),
-                        const SizedBox(height: 20),
-                        CommonImageButton(
-                          onPressed: () {
-                            print(pressCount);
-                            _uploadImage((imageFile, imageId) {
-                              print('Image uploaded! ${imageFile}');
-                              setState(() {
-                                imageupload[3] =
-                                    (ImageKitRequest(imageFile, imageId));
-                              });
-                            });
-                          },
-                          buttonText: "Upload sub category",
-                          selectedImagePath:
-                              imageupload[3].imageUrl!.contains("null")
-                                  ? ImageKitRequest(null, null)
-                                  : imageupload[3],
-                          deleteImage: (obj) {
-                            setState(() {
-                              imageupload[3] = (ImageKitRequest(null, "null"));
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        commonTextFieldWidget(
-                          type: TextInputType.text,
-                          controller: subCategory4,
-                          hintText: "Bottle",
-                          secondaryColor: secondaryColor,
-                          labelText: "Enter subcategory4",
-                          onChanged: (val) {},
-                        ),
-                        const SizedBox(height: 20),
-                        CommonImageButton(
-                          onPressed: () {
-                            print(pressCount);
-                            _uploadImage((imageFile, imageId) {
-                              print('Image uploaded! ${imageFile}');
-                              setState(() {
-                                imageupload[4] =
-                                    (ImageKitRequest(imageFile, imageId));
-                              });
-                            });
-                          },
-                          buttonText: "Upload sub category",
-                          selectedImagePath:
-                              imageupload[4].imageUrl!.contains("null")
-                                  ? ImageKitRequest(null, null)
-                                  : imageupload[4],
-                          deleteImage: (obj) {
-                            setState(() {
-                              imageupload[4] = (ImageKitRequest(null, "null"));
-                            });
-                          },
-                        ),
-
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.green),
-                              padding: MaterialStateProperty.all(
-                                  const EdgeInsets.all(15)),
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(fontSize: 15)),
-                            ),
-                            onPressed: () {
-                              // List<AddSubCategoryList> list = getDataFromControllers(controllers);
-                              List<SubCategoryListData> list = [
-                                SubCategoryListData(
-                                    name: subCategory1.text,
-                                    image: imageupload[1].imageUrl),
-                                SubCategoryListData(
-                                    name: subCategory2.text,
-                                    image: imageupload[2].imageUrl),
-                                SubCategoryListData(
-                                    name: subCategory3.text,
-                                    image: imageupload[3].imageUrl),
-                                SubCategoryListData(
-                                    name: subCategory4.text,
-                                    image: imageupload[4].imageUrl)
-                              ];
-                              if ((categoryName.text.isNotEmpty &&
-                                      imageupload[0]
-                                          .imageUrl!
-                                          .contains("null")) ||
-                                  (categoryName.text.isEmpty &&
-                                      !imageupload[0]
-                                          .imageUrl!
-                                          .contains("null"))) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please upload categoryName Url'),
-                                  ),
-                                );
-                                return;
-                              }
-                              if ((subCategory1.text.isNotEmpty &&
-                                      imageupload[1]
-                                          .imageUrl!
-                                          .contains("null")) ||
-                                  (subCategory1.text.isEmpty &&
-                                      !imageupload[1]
-                                          .imageUrl!
-                                          .contains("null"))) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please upload subCategory1 Url'),
-                                  ),
-                                );
-                                return;
-                              }
-                              if ((subCategory2.text.isNotEmpty &&
-                                      imageupload[2]
-                                          .imageUrl!
-                                          .contains("null")) ||
-                                  (subCategory2.text.isEmpty &&
-                                      !imageupload[2]
-                                          .imageUrl!
-                                          .contains("null"))) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please upload subCategory2'),
-                                  ),
-                                );
-                                return;
-                              }
-                              if ((subCategory3.text.isNotEmpty &&
-                                      imageupload[3]
-                                          .imageUrl!
-                                          .contains("null")) ||
-                                  (subCategory3.text.isEmpty &&
-                                      !imageupload[3]
-                                          .imageUrl!
-                                          .contains("null"))) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please upload subCategory3 Url'),
-                                  ),
-                                );
-                                return;
-                              }
-                              if ((subCategory4.text.isNotEmpty &&
-                                      imageupload[4]
-                                          .imageUrl!
-                                          .contains("null")) ||
-                                  (subCategory4.text.isEmpty &&
-                                      !imageupload[4]
-                                          .imageUrl!
-                                          .contains("null"))) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please upload subCategory4 Url'),
-                                  ),
-                                );
-                                return;
-                              }
-
-                              print('imageupload_0 ${imageupload[0].imageUrl}');
-                              BlocProvider.of<AddCategoryCubit>(context)
-                                  .addCategory(list, categoryName.text,
-                                      imageupload[0].imageUrl!);
                             },
-                            child: const Text('Save!'),
+                            buttonText: "Upload sub category",
+                            selectedImagePath:
+                                imageupload[1].imageUrl!.contains("null")
+                                    ? ImageKitRequest(null, null)
+                                    : imageupload[1],
+                            deleteImage: (obj) {
+                              setState(() {
+                                imageupload[1] = (ImageKitRequest("null", null));
+                              });
+                            },
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              padding: MaterialStateProperty.all(
-                                  const EdgeInsets.all(15)),
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(fontSize: 15)),
+
+                          //sub controller 2
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          commonTextFieldWidget(
+                            type: TextInputType.text,
+                            controller: subCategory2,
+                            hintText: "Bottle",
+                            secondaryColor: Colors.white,
+                            labelText: "Enter subcategory 2",
+                            onChanged: (val) {},
+                          ),
+                          const SizedBox(height: 20),
+                          CommonImageButton(
+                            onPressed: () {
+                              print(pressCount);
+                              _uploadImage((imageFile, imageId) {
+                                print('Image uploaded! ${imageFile}');
+                                setState(() {
+                                  imageupload[2] =
+                                      (ImageKitRequest(imageFile, imageId));
+                                });
+                              });
+                            },
+                            buttonText: "Upload sub category",
+                            selectedImagePath:
+                                imageupload[2].imageUrl!.contains("null")
+                                    ? ImageKitRequest(null, null)
+                                    : imageupload[2],
+                            deleteImage: (obj) {
+                              setState(() {
+                                imageupload[2] = (ImageKitRequest("null", null));
+                              });
+                            },
+                          ),
+
+                          //sub controller 3
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          commonTextFieldWidget(
+                            type: TextInputType.text,
+                            controller: subCategory3,
+                            hintText: "Bottle",
+                            secondaryColor: Colors.white,
+                            labelText: "Enter subcategory 3",
+                            onChanged: (val) {},
+                          ),
+                          const SizedBox(height: 20),
+                          CommonImageButton(
+                            onPressed: () {
+                              print(pressCount);
+                              _uploadImage((imageFile, imageId) {
+                                print('Image uploaded! ${imageFile}');
+                                setState(() {
+                                  imageupload[3] =
+                                      (ImageKitRequest(imageFile, imageId));
+                                });
+                              });
+                            },
+                            buttonText: "Upload sub category",
+                            selectedImagePath:
+                                imageupload[3].imageUrl!.contains("null")
+                                    ? ImageKitRequest(null, null)
+                                    : imageupload[3],
+                            deleteImage: (obj) {
+                              setState(() {
+                                imageupload[3] = (ImageKitRequest(null, "null"));
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          commonTextFieldWidget(
+                            type: TextInputType.text,
+                            controller: subCategory4,
+                            hintText: "Bottle",
+                            secondaryColor: Colors.white,
+                            labelText: "Enter subcategory4",
+                            onChanged: (val) {},
+                          ),
+                          const SizedBox(height: 20),
+                          CommonImageButton(
+                            onPressed: () {
+                              print(pressCount);
+                              _uploadImage((imageFile, imageId) {
+                                print('Image uploaded! ${imageFile}');
+                                setState(() {
+                                  imageupload[4] =
+                                      (ImageKitRequest(imageFile, imageId));
+                                });
+                              });
+                            },
+                            buttonText: "Upload sub category",
+                            selectedImagePath:
+                                imageupload[4].imageUrl!.contains("null")
+                                    ? ImageKitRequest(null, null)
+                                    : imageupload[4],
+                            deleteImage: (obj) {
+                              setState(() {
+                                imageupload[4] = (ImageKitRequest(null, "null"));
+                              });
+                            },
+                          ),
+
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.green),
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.all(15)),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(fontSize: 15)),
+                              ),
+                              onPressed: () {
+                                // List<AddSubCategoryList> list = getDataFromControllers(controllers);
+                                List<SubCategoryListData> list = [
+                                  SubCategoryListData(
+                                      name: subCategory1.text,
+                                      image: imageupload[1].imageUrl),
+                                  SubCategoryListData(
+                                      name: subCategory2.text,
+                                      image: imageupload[2].imageUrl),
+                                  SubCategoryListData(
+                                      name: subCategory3.text,
+                                      image: imageupload[3].imageUrl),
+                                  SubCategoryListData(
+                                      name: subCategory4.text,
+                                      image: imageupload[4].imageUrl)
+                                ];
+                                if ((categoryName.text.isNotEmpty &&
+                                        imageupload[0]
+                                            .imageUrl!
+                                            .contains("null")) ||
+                                    (categoryName.text.isEmpty &&
+                                        !imageupload[0]
+                                            .imageUrl!
+                                            .contains("null"))) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please upload categoryName Url'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if ((subCategory1.text.isNotEmpty &&
+                                        imageupload[1]
+                                            .imageUrl!
+                                            .contains("null")) ||
+                                    (subCategory1.text.isEmpty &&
+                                        !imageupload[1]
+                                            .imageUrl!
+                                            .contains("null"))) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please upload subCategory1 Url'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if ((subCategory2.text.isNotEmpty &&
+                                        imageupload[2]
+                                            .imageUrl!
+                                            .contains("null")) ||
+                                    (subCategory2.text.isEmpty &&
+                                        !imageupload[2]
+                                            .imageUrl!
+                                            .contains("null"))) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please upload subCategory2'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if ((subCategory3.text.isNotEmpty &&
+                                        imageupload[3]
+                                            .imageUrl!
+                                            .contains("null")) ||
+                                    (subCategory3.text.isEmpty &&
+                                        !imageupload[3]
+                                            .imageUrl!
+                                            .contains("null"))) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please upload subCategory3 Url'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if ((subCategory4.text.isNotEmpty &&
+                                        imageupload[4]
+                                            .imageUrl!
+                                            .contains("null")) ||
+                                    (subCategory4.text.isEmpty &&
+                                        !imageupload[4]
+                                            .imageUrl!
+                                            .contains("null"))) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please upload subCategory4 Url'),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                print('imageupload_0 ${imageupload[0].imageUrl}');
+                                BlocProvider.of<AddCategoryCubit>(context)
+                                    .addCategory(list, categoryName.text,
+                                        imageupload[0].imageUrl!);
+                              },
+                              child: const Text('Save!'),
                             ),
-                            onPressed: () {},
-                            child: const Text('Cancel!'),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.red),
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.all(15)),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(fontSize: 15)),
+                              ),
+                              onPressed: () {},
+                              child: const Text('Cancel!'),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              );
+            },
+          ),
         ),
       );
     },

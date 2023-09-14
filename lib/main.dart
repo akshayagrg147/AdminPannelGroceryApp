@@ -1,12 +1,15 @@
 import 'package:adminpannelgrocery/constants.dart';
 import 'package:adminpannelgrocery/controllers/DrawerController.dart';
 import 'package:adminpannelgrocery/repositories/api/ProductRepository.dart';
+import 'package:adminpannelgrocery/repositories/cubit/AddBannerCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddCouponsCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllCouponsCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllOrderCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/BannerCategoryCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/DeleteBannerCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteCouponCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
@@ -80,7 +83,13 @@ class MyApp extends StatelessWidget {
               BlocProvider<BestSellingCheckBoxCubit>(
                   create: (context) => BestSellingCheckBoxCubit()),
               BlocProvider<ExclusiveCheckBoxCubit>(
-                  create: (context) => ExclusiveCheckBoxCubit())
+                  create: (context) => ExclusiveCheckBoxCubit()),
+              BlocProvider<BannerCategoryCubit>(
+                  create: (context) => BannerCategoryCubit()),
+              BlocProvider<DeleteBannerCubit>(
+                  create: (context) => DeleteBannerCubit()),
+              BlocProvider<AddBannerCubit>(
+                  create: (context) => AddBannerCubit())
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

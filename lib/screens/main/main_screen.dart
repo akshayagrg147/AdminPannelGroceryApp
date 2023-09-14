@@ -1,3 +1,4 @@
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/BannerScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CategoryScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CouponScreen.dart';
 
@@ -51,8 +52,9 @@ class _MainScreenState extends State<MainScreen> {
         return const CategoryScreen();
       case NavigationItem.logout:
         return const Logoutscreen();
-      case NavigationItem.offer:
-        return const Offerscreen();
+      case NavigationItem.banner:
+        return const BannerScreen();
+
       case NavigationItem.users:
         return const AllUserScreen();
       case NavigationItem.product:

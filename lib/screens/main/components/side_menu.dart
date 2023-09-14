@@ -68,14 +68,14 @@ class _SideMenuState extends State<SideMenu> {
               selectItem(context, NavigationItem.order, provider);
             },
           ),
-          // DrawerListTile(
-          //   title: "Offer",
-          //   press: () {
-          //     if(!widget.isDesktop)
-          //     Navigator.pop(context);
-          //     selectItem(context, NavigationItem.offer,provider);
-          //   },
-          // ),
+          DrawerListTile(
+            title: "Add Banner",
+            press: () {
+              if(!widget.isDesktop)
+              Navigator.pop(context);
+              selectItem(context, NavigationItem.banner,provider);
+            },
+          ),
           DrawerListTile(
             title: "Users",
             press: () {

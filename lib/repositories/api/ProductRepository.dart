@@ -5,6 +5,7 @@ import 'package:adminpannelgrocery/models/AllOrders.dart';
 import 'package:adminpannelgrocery/models/login_response.dart';
 import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
+import 'package:adminpannelgrocery/repositories/Modal/add_bannercategory_modal.dart';
 import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +19,7 @@ import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../Modal/add_category_modal.dart';
 import '../Modal/allCouponsResponse.dart';
+import '../Modal/banner_category_modal.dart';
 import '../Modal/product_category_modal.dart';
 import 'api.dart';
 
@@ -32,6 +34,25 @@ class ProductRepository {
       //  ' subCategoryList':list
       // };
       final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category,imageUrl: image, subCategoryList:list ));
+      if (response?.statusCode == 200) {
+        AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
+        return postMaps;
+      } else {
+        print(response?.statusCode);
+      }
+    } catch (ex) {
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse>  addBannerCategory(String banner1,String image1,String banner2,String imag2,String banner3,String imag3, List<SubBannerCategoryList> list) async {
+    try {
+      // final Map<String, dynamic> mp = {
+      //   'category': category,
+      //   'imageUrl':image,
+      //  ' subCategoryList':list
+      // };
+      final response = await _dio?.post("/Admin/AddBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;
@@ -184,6 +205,25 @@ class ProductRepository {
       rethrow;
     }
     return ProductCategoryModal();
+  }
+  Future<BannerCategoryModal> fetchBannerCategory() async {
+    try {
+      final response = await _dio?.get("/Admin/getBannerCategory");
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        BannerCategoryModal res = BannerCategoryModal.fromJson(response?.data);
+        return res;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return BannerCategoryModal();
   }
   Future<allCouponsResponse> fetchAllCoupons() async {
     try {

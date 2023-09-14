@@ -3,7 +3,7 @@ enum NavigationItem {
   product,
   category,
   order,
-  offer,
+  banner,
   users,
   logout,
   coupons

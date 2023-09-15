@@ -24,10 +24,10 @@ class DeleteBannerCubit extends Cubit<DeleteBannerState> {
   ProductRepository postRepository = ProductRepository();
 
 
-void deleteProduct(String productId) async {
+void deleteBannerCategory(String productId) async {
   try {
 
-    AddProductResponse posts = await postRepository.deleteProduct(productId);
+    AddProductResponse posts = await postRepository.deleteBannerCategory(productId);
     emit(DeleteBannerLoadedState(posts));
   }
   on DioError catch(ex) {
@@ -39,6 +39,11 @@ void deleteProduct(String productId) async {
     }
   }
 }
+  void resetState() {
+    emit(DeleteBannerInitialState());
+  }
+
+
 
 }
 

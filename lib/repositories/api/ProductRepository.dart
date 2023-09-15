@@ -147,6 +147,21 @@ class ProductRepository {
     }
     return AddProductResponse();
   }
+  Future<AddProductResponse> deleteBannerCategory(String bannerName) async {
+    try {
+      final response = await _dio?.delete("/Admin/deleteBanner/$bannerName", );
+      if (response?.statusCode == 200) {
+        AddProductResponse postMaps =
+        AddProductResponse.fromJson(response?.data);
+        return postMaps;
+      } else {
+        print(response?.statusCode);
+      }
+    } catch (ex) {
+      rethrow;
+    }
+    return AddProductResponse();
+  }
   Future<AddProductResponse> updateSellingCheckBox(ItemData data) async {
     try {
 

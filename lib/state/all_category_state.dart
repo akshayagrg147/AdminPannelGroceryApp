@@ -8,6 +8,9 @@ import '../repositories/Modal/product_category_modal.dart';
 
 abstract class AllCategoryState{
 }
+class AllCategoryInitialState extends AllCategoryState {
+
+}
 class AllCategoryLoadingState extends AllCategoryState {
 
 }

@@ -34,16 +34,16 @@ class BannerCategoryCubit extends Cubit<AllBannerState> {
   void fetchBannerCategory() async {
     try {
       BannerCategoryModal posts = await postRepository.fetchBannerCategory();
-      print('category wise data ${posts.itemData}');
+      print('category wise data success ${posts.itemData}');
       emit(AllBannerLoadedState(posts));
     }
     on DioError catch(ex) {
-      print('category wise data ${ex.message}');
+      print('category wise data __ ${ex.message}');
       if(ex.type == DioErrorType.other) {
         emit( AllBannerErrorState("Can't fetch posts, please check your internet connection!") );
       }
       else {
-        print('category wise data ${ex.message}');
+        print('category wise data __ ${ex.message}');
         emit( AllBannerErrorState(ex.type.toString()) );
       }
     }
@@ -54,8 +54,17 @@ class BannerCategoryCubit extends Cubit<AllBannerState> {
     emit(AllBannerLoadingState());
   }
 
+  void selectCatgory(String value,int indexValue) {
+    emit(SelectBannerCategoryValue(value,indexValue));
+  }
 
 
 
 
+
+}
+class SelectBannerCategoryValue extends AllBannerState {
+  final String value;
+  final int index;
+  SelectBannerCategoryValue(this.value,this.index);
 }

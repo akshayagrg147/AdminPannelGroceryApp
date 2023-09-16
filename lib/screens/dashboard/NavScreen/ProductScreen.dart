@@ -4,11 +4,13 @@ import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/BannerCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/best_selling_checkbox_cubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/exclusive_selling_checkbox_cubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
+import 'package:adminpannelgrocery/screens/dashboard/NavScreen/BannerScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:adminpannelgrocery/state/all_category_state.dart';
 import 'package:adminpannelgrocery/state/all_product_state.dart';
@@ -22,7 +24,9 @@ import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/productScreenModal.dart';
+import '../../../repositories/Modal/banner_category_modal.dart';
 import '../../../state/add_product_state.dart';
+import '../../../state/all_banner_state.dart';
 import '../../main/components/side_menu.dart';
 import '../components/headerDashboard.dart';
 import '../components/product_item.dart';
@@ -42,7 +46,7 @@ class ProductScreenState extends State<ProductScreen> {
   late DeleteProductCubit CubitdeleteNewProuct;
   late BestSellingCheckBoxCubit checkBoxCubit;
   late ExclusiveCheckBoxCubit exclusiveCheckBoxCubit;
-   late ProductCategoryCubit pCubit;
+  late ProductCategoryCubit pCubit;
 
   List<ItemData>? listProducts = [];
   List<ItemData>? listProductsIfEmpty = [];
@@ -52,24 +56,19 @@ class ProductScreenState extends State<ProductScreen> {
     super.initState();
     Cubit = BlocProvider.of<AllProductCubit>(context);
     CubitAddNewProuct = BlocProvider.of<AddProductCubit>(context);
-     pCubit= BlocProvider.of<ProductCategoryCubit>(context);
+    pCubit = BlocProvider.of<ProductCategoryCubit>(context);
     CubitdeleteNewProuct = BlocProvider.of<DeleteProductCubit>(context);
-    checkBoxCubit= BlocProvider.of<BestSellingCheckBoxCubit>(context);
-    exclusiveCheckBoxCubit= BlocProvider.of<ExclusiveCheckBoxCubit>(context);
+    checkBoxCubit = BlocProvider.of<BestSellingCheckBoxCubit>(context);
+    exclusiveCheckBoxCubit = BlocProvider.of<ExclusiveCheckBoxCubit>(context);
     Cubit.fetchProducts();
-     // pCubit.clearCategory();
-
-
+    // pCubit.clearCategory();
   }
-
 
   @override
   void dispose() {
     super.dispose();
     CubitAddNewProuct.clearProducts();
     Cubit.clearProducts();
-
-
   }
 
   @override
@@ -88,16 +87,20 @@ class ProductScreenState extends State<ProductScreen> {
                 child: Column(
                   children: [
                     DashboardHeader(
-                      imageUrl:  "",
-                      name: "null", title: "Dashboard",),
+                      imageUrl: "",
+                      name: "null",
+                      title: "Dashboard",
+                    ),
                     SizedBox(
                       height: 40,
                     ),
                     // DashboardHeader(
                     //   imageUrl:  "",
                     //   name: "Products",title: "Products",),
-                    ProductHeader(Cubit,
-                      CubitAddNewProuct,pCubit,
+                    ProductHeader(
+                      Cubit,
+                      CubitAddNewProuct,
+                      pCubit,
                       onValueUpdate: (val) {
                         if (val.isNotEmpty) {
                           print('value get after search ${val}');
@@ -110,13 +113,13 @@ class ProductScreenState extends State<ProductScreen> {
                           } else {
                             Cubit.passFilterData(items ?? <ItemData>[]);
                           }
-                        }
-                        else{
+                        } else {
                           setState(() {
-                            listProducts=listProductsIfEmpty;
+                            listProducts = listProductsIfEmpty;
                           });
 
-                          print('value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
+                          print(
+                              'value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
                         }
                       },
                     ),
@@ -126,14 +129,16 @@ class ProductScreenState extends State<ProductScreen> {
                         Expanded(
                           flex: 5,
                           child: SafeArea(
-                            child: BlocConsumer<AllProductCubit, AllProductState>(
+                            child:
+                                BlocConsumer<AllProductCubit, AllProductState>(
                               listener: (context, state) {
                                 if (state is AllProductErrorState) {
                                   SnackBar snackBar = SnackBar(
                                     content: Text(state.error),
                                     backgroundColor: Colors.red,
                                   );
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
                                 }
                               },
                               builder: (context, state) {
@@ -146,14 +151,18 @@ class ProductScreenState extends State<ProductScreen> {
                                   log(state.products.runtimeType.toString());
                                   var obj = state.products;
                                   listProducts = obj.itemData;
-                                  listProductsIfEmpty= obj.itemData;
-                                  return ProductItems(listProducts, CubitdeleteNewProuct,checkBoxCubit,exclusiveCheckBoxCubit,
-                                      (val) {
-                                    openAlert(context, CubitAddNewProuct,pCubit, true, val,(String data){
-                                      if(data=="added")
-                                      Cubit.fetchProducts();
+                                  listProductsIfEmpty = obj.itemData;
+                                  return ProductItems(
+                                      listProducts,
+                                      CubitdeleteNewProuct,
+                                      checkBoxCubit,
+                                      exclusiveCheckBoxCubit, (val) {
+                                    openAlert(context, CubitAddNewProuct,
+                                        pCubit, true, val, (String data) {
+                                      if (data == "added")
+                                        Cubit.fetchProducts();
                                     });
-                                  } );
+                                  });
                                   //   return Text("${obj.message}");
                                 } else if (state is AllProductErrorState) {
                                   return Center(
@@ -276,7 +285,10 @@ class ProductItem extends StatelessWidget {
               }
 
               return IconButton(
-                icon: const Icon(Icons.delete,color: Colors.black,),
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.black,
+                ),
                 onPressed: () {
                   cubit.deleteProduct(itemData.productId.toString());
 
@@ -297,7 +309,7 @@ class ProductHeader extends StatefulWidget {
   AllProductCubit allProductCubit;
   final Function(String) onValueUpdate;
 
-  ProductHeader(this.allProductCubit,this.addNewProductCubit,this.cubit1,
+  ProductHeader(this.allProductCubit, this.addNewProductCubit, this.cubit1,
       {Key? key, required this.onValueUpdate})
       : super(key: key);
 
@@ -324,11 +336,11 @@ class _ProductHeaderState extends State<ProductHeader> {
 
 //                  });
                   })),
-                  AddCard(" Add new Product",onTap: (tap) {
+                  AddCard(" Add new Product", onTap: (tap) {
                     if (tap) {
-                      openAlert(
-                          context, widget.addNewProductCubit,widget.cubit1, false, ItemData(),(String data){
-                        if(data=="added") {
+                      openAlert(context, widget.addNewProductCubit,
+                          widget.cubit1, false, ItemData(), (String data) {
+                        if (data == "added") {
                           widget.allProductCubit.fetchProducts();
                         }
                       });
@@ -342,13 +354,26 @@ class _ProductHeaderState extends State<ProductHeader> {
   }
 }
 
-void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit cubit1, bool editButton,
-    ItemData data,Function(String) dataCalled) {
+void openAlert(
+    BuildContext context,
+    AddProductCubit cubit,
+    ProductCategoryCubit cubit1,
+    bool editButton,
+    ItemData data,
+    Function(String) dataCalled) {
+  //BlocProvider.of<BannerCategoryCubit>(context).fetchBannerCategory();
+
+  int? dashboardDisplay = 1;
   cubit1.fetchCategory();
-  int? dashboardDisplay = 2;
-  ImageKitRequest uploadImage1=ImageKitRequest("null",null);
-  ImageKitRequest uploadImage2=ImageKitRequest("null",null);
-  ImageKitRequest uploadImage3=ImageKitRequest("null",null);
+  BlocProvider.of<BannerCategoryCubit>(context).fetchBannerCategory();
+  if (dashboardDisplay == 1) {
+    //cubit1.clearCategory();
+  } else if (dashboardDisplay == 2) {
+    BlocProvider.of<BannerCategoryCubit>(context).clearCategory();
+  }
+  ImageKitRequest uploadImage1 = ImageKitRequest("null", null);
+  ImageKitRequest uploadImage2 = ImageKitRequest("null", null);
+  ImageKitRequest uploadImage3 = ImageKitRequest("null", null);
   double dialogWidth = Responsive.isMobile(context)
       ? MediaQuery.of(context).size.width * 0.8
       : 600.0;
@@ -366,6 +391,7 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
   int indexValue = 0;
   List<String?>? categoryList;
   List<ItemDataCategory?>? spinnerData;
+  List<ItemBannerCategory?>? spinnerBannerData;
   if (editButton) {
     productname.text = data.productName ?? '';
     productDescriptionController.text = data.productDescription ?? '';
@@ -374,9 +400,9 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
     quantityController.text = data.quantity ?? '';
     sellingPriceController.text = data.selling_price ?? '';
     orignalPriceController.text = data.orignal_price ?? '';
-    uploadImage1.imageUrl=data.productImage1;
-    uploadImage2.imageUrl=data.productImage2;
-    uploadImage3.imageUrl=data.productImage3;
+    uploadImage1.imageUrl = data.productImage1;
+    uploadImage2.imageUrl = data.productImage2;
+    uploadImage3.imageUrl = data.productImage3;
   }
 
   var dialog = Dialog(
@@ -399,7 +425,42 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ))),
-
+                Text(
+                  "Which Banner you want to add?",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(height: 20),
+                Column(children: [
+                  ListTile(
+                    title: const Text('Festival Banner'),
+                    leading: Radio(
+                      activeColor: Colors.red,
+                      fillColor: MaterialStateProperty.all(Colors.red),
+                      value: 1,
+                      groupValue: dashboardDisplay,
+                      onChanged: (value) {
+                        setState(() {
+                          dashboardDisplay = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Non Festival Banner'),
+                    leading: Radio(
+                      activeColor: Colors.red,
+                      fillColor: MaterialStateProperty.all(Colors.red),
+                      value: 2,
+                      groupValue: dashboardDisplay,
+                      onChanged: (value) {
+                        setState(() {
+                          dashboardDisplay = value;
+                        });
+                      },
+                    ),
+                  ),
+                ]),
                 const SizedBox(height: 20),
                 commonTextFieldWidget(
                   type: TextInputType.text,
@@ -416,11 +477,9 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                   type: TextInputType.multiline,
                   controller: productDescriptionController,
                   hintText: "",
-
                   secondaryColor: Colors.white,
                   labelText: "Enter Product Description",
                   onChanged: (val) {},
-
                 ),
                 const SizedBox(height: 20),
                 commonTextFieldWidget(
@@ -485,23 +544,20 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                 ),
                 CommonImageButton(
                   onPressed: () {
-                    _uploadImage((imageFile,imageId) {
+                    _uploadImage((imageFile, imageId) {
                       setState(() {
-                        uploadImage1=(ImageKitRequest(imageFile, imageId));
-
+                        uploadImage1 = (ImageKitRequest(imageFile, imageId));
                       });
-
-
-
                     });
                   },
                   buttonText: "Upload sub category",
-                  selectedImagePath: uploadImage1.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage1,
-                  deleteImage: (obj){
-                    setState((){
-                      uploadImage1=ImageKitRequest("null",null);
+                  selectedImagePath: uploadImage1.imageUrl!.contains("null")
+                      ? ImageKitRequest(null, null)
+                      : uploadImage1,
+                  deleteImage: (obj) {
+                    setState(() {
+                      uploadImage1 = ImageKitRequest("null", null);
                     });
-
                   },
                 ),
 
@@ -513,25 +569,21 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                 ),
                 CommonImageButton(
                   onPressed: () {
-
-                    _uploadImage((imageFile,imageId) {
+                    _uploadImage((imageFile, imageId) {
                       print('Image uploaded! ${imageFile}');
                       setState(() {
-                        uploadImage2=(ImageKitRequest(imageFile, imageId));
-
+                        uploadImage2 = (ImageKitRequest(imageFile, imageId));
                       });
-
-
-
                     });
                   },
                   buttonText: "Upload sub category",
-                  selectedImagePath: uploadImage2.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage2,
-                  deleteImage: (obj){
-                    setState((){
-                      uploadImage2=ImageKitRequest("null",null);
+                  selectedImagePath: uploadImage2.imageUrl!.contains("null")
+                      ? ImageKitRequest(null, null)
+                      : uploadImage2,
+                  deleteImage: (obj) {
+                    setState(() {
+                      uploadImage2 = ImageKitRequest("null", null);
                     });
-
                   },
                 ),
                 const SizedBox(height: 20),
@@ -542,143 +594,174 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                 ),
                 CommonImageButton(
                   onPressed: () {
-                    _uploadImage((imageFile,imageId) {
+                    _uploadImage((imageFile, imageId) {
                       print('Image uploaded! ${imageFile}');
                       setState(() {
-                        uploadImage3=(ImageKitRequest(imageFile, imageId));
+                        uploadImage3 = (ImageKitRequest(imageFile, imageId));
                       });
-
-
-
                     });
                   },
                   buttonText: "Upload sub category",
-                  selectedImagePath: uploadImage3.imageUrl!.contains("null") ? ImageKitRequest(null,null):uploadImage3,
-                  deleteImage: (obj){
-                    setState((){
-                      uploadImage3=ImageKitRequest("null",null);
+                  selectedImagePath: uploadImage3.imageUrl!.contains("null")
+                      ? ImageKitRequest(null, null)
+                      : uploadImage3,
+                  deleteImage: (obj) {
+                    setState(() {
+                      uploadImage3 = ImageKitRequest("null", null);
                     });
-
                   },
                 ),
                 const SizedBox(height: 20),
 
-                Text(
-                  "Dashboard Display",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(height: 20),
-                Column(children: [
-                  ListTile(
-                    title: const Text('Yes'),
-                    leading: Radio(
-                      value: 1,
-                      groupValue: dashboardDisplay,
-                      onChanged: (value) {
-                        setState(() {
-                          dashboardDisplay = value;
-                        });
-                      },
-                    ),
-
-                  ),
-                  ListTile(
-                    title: const Text('No'),
-                    leading: Radio(
-                      value: 2,
-                      groupValue: dashboardDisplay,
-                      onChanged: (value) {
-                        setState(() {
-                          dashboardDisplay = value;
-                        });
-                      },
-                    ),
-                  ),
-                ]),
                 Text(
                   "Select Category",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.start,
                 ),
-                BlocConsumer<ProductCategoryCubit, AllCategoryState>(
-                  builder: (context, state) {
-                    print("stateis ${state.runtimeType}");
-                    if (state is AllCategoryLoadingState) {
-                      print("stateis loading");
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    else if (state is AllCategoryLoadedState) {
-                      print("stateis loaded");
-                      spinnerData = state.category.itemData;
-                      categoryList = state.category.itemData
-                          ?.map((category) => category.category)
-                          .toList();
-                      categoryList
-                          ?.removeWhere((item) => item == null || item.isEmpty);
-                      selectedValue = categoryList?.first ?? '';
-                    }
-                    if (categoryList?.isNotEmpty == true) {
-                      return Column(
-                        children: [
-                          SpinnerWidget(
-                            items: categoryList!.cast<String>(),
-                            onChanged: (value, index) {
-                              BlocProvider.of<ProductCategoryCubit>(context)
-                                  .selectCatgory(value, index);
-                            },
-                            selectedValue: selectedValue,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          if (spinnerData != null)
-                            Column(
-                              children: spinnerData![indexValue]!
-                                  .subCategoryList!
-                                  .map((value) {
-                                return RadioListTile(
-                                  title: Text(value.name!),
-                                  value: value.name,
-                                  groupValue: radioSelectValue,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      radioSelectValue = newValue as String;
-                                    });
-                                  },
-                                );
-                              }).toList(),
+                if (dashboardDisplay == 2)
+                  BlocConsumer<ProductCategoryCubit, AllCategoryState>(
+                    builder: (context, state) {
+                      print("stateis ${state.runtimeType}");
+                      if (state is AllCategoryLoadingState) {
+                        print("stateis loading");
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is AllCategoryLoadedState) {
+                        print("stateis loaded");
+                        spinnerData = state.category.itemData;
+                        categoryList = state.category.itemData
+                            ?.map((category) => category.category)
+                            .toList();
+                        categoryList?.removeWhere(
+                            (item) => item == null || item.isEmpty);
+                        selectedValue = categoryList?.first ?? '';
+                      }
+                      if (categoryList?.isNotEmpty == true) {
+                        return Column(
+                          children: [
+                            SpinnerWidget(
+                              items: categoryList!.cast<String>(),
+                              onChanged: (value, index) {
+                                BlocProvider.of<ProductCategoryCubit>(context)
+                                    .selectCatgory(value, index);
+                              },
+                              selectedValue: selectedValue,
                             ),
-                        ],
-                      );
-                    }
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            if (spinnerData != null)
+                              Column(
+                                children: spinnerData![indexValue]!
+                                    .subCategoryList!
+                                    .map((value) {
+                                  return RadioListTile(
+                                    title: Text(value.name!),
+                                    value: value.name,
+                                    activeColor: Colors.red,
+                                    fillColor: MaterialStateProperty.all(Colors.red),
+                                    groupValue: radioSelectValue,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        radioSelectValue = newValue as String;
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                          ],
+                        );
+                      }
 
-                    return Container();
-                  },
-                  listener: (context, state) {
-                    if (state is AllCategoryLoadedState) {
-                      print("stateis loaded");
-                      spinnerData = state.category.itemData;
-                      categoryList = state.category.itemData
-                          ?.map((category) => category.category)
-                          .toList();
-                      categoryList
-                          ?.removeWhere((item) => item == null || item.isEmpty);
-                      selectedValue = categoryList?.first ?? '';
-                    }
-                    else if (state is SelectedCategoryValue) {
-                      print("stateis loaded SelectedCategoryValue");
-                      selectedValue = state.value;
-                      indexValue = state.index;
-                    }
-                  },
-                ),
+                      return Container();
+                    },
+                    listener: (context, state) {
+                      print("category state is ${state.runtimeType}");
+
+                      if (state is AllCategoryLoadedState) {
+                        spinnerData = state.category.itemData;
+                        categoryList = state.category.itemData
+                            ?.map((category) => category.category)
+                            .toList();
+                        categoryList?.removeWhere(
+                            (item) => item == null || item.isEmpty);
+                        selectedValue = categoryList?.first ?? '';
+                      } else if (state is SelectedCategoryValue) {
+                        print("stateis loaded SelectedCategoryValue");
+                        selectedValue = state.value;
+                        indexValue = state.index;
+                      }
+                    },
+                  ),
+                if (dashboardDisplay == 1)
+                  BlocConsumer<BannerCategoryCubit, AllBannerState>(
+                    builder: (context, state) {
+                      print("banner_stateis ${state.runtimeType}");
+                      if (state is AllCategoryLoadingState) {
+                        print("stateis loading");
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is AllBannerLoadedState) {
+                        print("stateis loaded");
+                        categoryList = state
+                            .category.itemData?.first.subCategoryList
+                            ?.map((category) => category.name)
+                            .toList();
+
+                        if (categoryList?.isNotEmpty == true) {
+                          return Column(
+                            children: [
+                              Text(
+                                "Festival Type ${state.category.itemData?.first.bannercategory1}",
+                                style: Theme.of(context).textTheme.titleMedium,
+                                textAlign: TextAlign.start,
+                              ),
+                              Column(
+                                children: categoryList!.map((value) {
+                                  return RadioListTile(
+                                    title: Text(value!),
+                                    activeColor: Colors.red,
+                                    fillColor: MaterialStateProperty.all(Colors.red),
+                                    value: value,
+                                    groupValue: radioSelectValue,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        radioSelectValue = newValue as String;
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          );
+                        }
+                      }
+
+                      return Container();
+                    },
+                    listener: (context, state) {
+                      if (state is AllBannerLoadedState) {
+                        print("stateis loaded");
+                        spinnerBannerData = state.category.itemData;
+                        categoryList = state
+                            .category.itemData?.first.subCategoryList
+                            ?.map((category) => category.name)
+                            .toList();
+                        categoryList?.removeWhere(
+                            (item) => item == null || item.isEmpty);
+                        selectedValue = categoryList?.first ?? '';
+                      } else if (state is SelectCategoryValue) {
+                        print("stateis loaded SelectedCategoryValue");
+                        selectedValue = state.value;
+                        indexValue = state.index;
+                      }
+                    },
+                  ),
 
                 BlocConsumer<AddProductCubit, AddProductState>(
                     listener: (context, state) {
-
                   if (state is AddProductErrorState) {
                     print("stateis loaded AddProductErrorState");
                     SnackBar snackBar = SnackBar(
@@ -688,15 +771,14 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else if (state is AddProductLoadedState) {
                     print("stateis loaded AddProductLoadedState");
-                    if(state.products.status==true) {
+                    if (state.products.status == true) {
                       SnackBar snackBar = const SnackBar(
                         content: Text('success'),
                         backgroundColor: Colors.green,
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                    else{
-                      SnackBar snackBar =  SnackBar(
+                    } else {
+                      SnackBar snackBar = SnackBar(
                         content: Text("${state.products.message}"),
                         backgroundColor: Colors.green,
                       );
@@ -716,11 +798,9 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                       Navigator.of(context).pop();
                       cubit.clearProducts();
                       dataCalled("added");
-
                     }
                   }
                   return ElevatedButton(
-
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.green),
@@ -729,69 +809,72 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
                         textStyle: MaterialStateProperty.all(
                             const TextStyle(fontSize: 15))),
                     onPressed: () {
-                      if( productname.text.toString().isEmpty||
-                      orignalPriceController.text.toString().isEmpty||
-                        sellingPriceController.text.toString().isEmpty||
-                          quantityInstructionController.text.toString().isEmpty||
-                      quantityController.text.isEmpty||
-                      productDescriptionController.text.isEmpty||
-                      selectedValue.isEmpty||
-                      uploadImage1.imageUrl?.contains("null")==true||
-                          uploadImage2.imageUrl?.contains("null")==true||
-                      uploadImage3.imageUrl?.contains("null")==true
-                      )
-                        {
-                          print("${productname.text.toString().isEmpty}"
-                              "${orignalPriceController.text.toString().isEmpty}"
-                              "${ sellingPriceController.text.toString().isEmpty}"
-                              "${ quantityController.text.toString().isEmpty}"
-                              "${ productDescriptionController.text.toString().isEmpty}"
-                              "${ selectedValue.isEmpty}"
-                              "${ uploadImage1.imageUrl?.contains("null")==true}"
-                              "${ uploadImage2.imageUrl?.contains("null")==true}"
-                              "${ uploadImage3.imageUrl?.contains("null")==true}"
-
-
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill all informations'),
-                            ),
-                          );
-                          return;
-
-                        }
-                      editButton?
-                      cubit.update(ProductScreenModal(
-                          productName: productname.text.toString(),
-                          orignalPrice: orignalPriceController.text.toString(),
-                          sellingPrice: sellingPriceController.text.toString(),
-                          quantity: quantityController.text,
-                          productDescription: productDescriptionController.text.toString(),
-                          dashboardDisplay: false,
-                          itemCategoryName: selectedValue,
-                          itemSubcategoryName: radioSelectValue,
-                          quantityInstructionController:quantityInstructionController.text,
-
-                          image1:uploadImage1.imageUrl ,
-                          image2:uploadImage2.imageUrl,
-                          image3:uploadImage3.imageUrl
-                      ,productId: data.productId))
-                      :   cubit.addProduct(ProductScreenModal(
-                          productName: productname.text.toString(),
-                          orignalPrice: orignalPriceController.text.toString(),
-                          sellingPrice: sellingPriceController.text.toString(),
-                          quantity: quantityController.text,
-                          productDescription: productDescriptionController.text,
-                          dashboardDisplay: false,
-                          itemCategoryName: selectedValue,
-                          itemSubcategoryName: radioSelectValue,
-                          quantityInstructionController:quantityInstructionController.text,
-                          image1:uploadImage1.imageUrl ,
-                          image2:uploadImage2.imageUrl,
-                          image3:uploadImage3.imageUrl ));
+                      if (productname.text.toString().isEmpty ||
+                          orignalPriceController.text.toString().isEmpty ||
+                          sellingPriceController.text.toString().isEmpty ||
+                          quantityInstructionController.text
+                              .toString()
+                              .isEmpty ||
+                          quantityController.text.isEmpty ||
+                          productDescriptionController.text.isEmpty ||
+                          selectedValue.isEmpty ||
+                          uploadImage1.imageUrl?.contains("null") == true ||
+                          uploadImage2.imageUrl?.contains("null") == true ||
+                          uploadImage3.imageUrl?.contains("null") == true) {
+                        print("${productname.text.toString().isEmpty}"
+                            "${orignalPriceController.text.toString().isEmpty}"
+                            "${sellingPriceController.text.toString().isEmpty}"
+                            "${quantityController.text.toString().isEmpty}"
+                            "${productDescriptionController.text.toString().isEmpty}"
+                            "${selectedValue.isEmpty}"
+                            "${uploadImage1.imageUrl?.contains("null") == true}"
+                            "${uploadImage2.imageUrl?.contains("null") == true}"
+                            "${uploadImage3.imageUrl?.contains("null") == true}");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill all informations'),
+                          ),
+                        );
+                        return;
+                      }
+                      editButton
+                          ? cubit.update(ProductScreenModal(
+                              productName: productname.text.toString(),
+                              orignalPrice:
+                                  orignalPriceController.text.toString(),
+                              sellingPrice:
+                                  sellingPriceController.text.toString(),
+                              quantity: quantityController.text,
+                              productDescription:
+                                  productDescriptionController.text.toString(),
+                              dashboardDisplay: false,
+                              itemCategoryName: selectedValue,
+                              itemSubcategoryName: radioSelectValue,
+                              quantityInstructionController:
+                                  quantityInstructionController.text,
+                              image1: uploadImage1.imageUrl,
+                              image2: uploadImage2.imageUrl,
+                              image3: uploadImage3.imageUrl,
+                              productId: data.productId))
+                          : cubit.addProduct(ProductScreenModal(
+                              productName: productname.text.toString(),
+                              orignalPrice:
+                                  orignalPriceController.text.toString(),
+                              sellingPrice:
+                                  sellingPriceController.text.toString(),
+                              quantity: quantityController.text,
+                              productDescription:
+                                  productDescriptionController.text,
+                              dashboardDisplay: false,
+                              itemCategoryName: selectedValue,
+                              itemSubcategoryName: radioSelectValue,
+                              quantityInstructionController:
+                                  quantityInstructionController.text,
+                              image1: uploadImage1.imageUrl,
+                              image2: uploadImage2.imageUrl,
+                              image3: uploadImage3.imageUrl));
                     },
-                    child:  editButton?Text('Update!'):Text('Save!'),
+                    child: editButton ? Text('Update!') : Text('Save!'),
                   );
                 }),
                 const SizedBox(height: 20),
@@ -823,9 +906,10 @@ void openAlert(BuildContext context, AddProductCubit cubit,ProductCategoryCubit 
       });
 }
 
-Future<void> _uploadImage(Function(String,String) fn) async {
+Future<void> _uploadImage(Function(String, String) fn) async {
   var headers = {
-    'Authorization': 'Basic cHJpdmF0ZV9tdHVMdjFGa0YrVE9YbFV5SC9ZbEIvQkpndVE9Og=='
+    'Authorization':
+        'Basic cHJpdmF0ZV9tdHVMdjFGa0YrVE9YbFV5SC9ZbEIvQkpndVE9Og=='
   };
 
   var url = 'https://upload.imagekit.io/api/v1/files/upload';
@@ -846,7 +930,7 @@ Future<void> _uploadImage(Function(String,String) fn) async {
           imageFile,
           filename: pickedImage.path.split('/').last,
         ),
-        'fileName':'image_$timestamp.png',
+        'fileName': 'image_$timestamp.png',
         'folder': 'Products',
       });
 
@@ -859,7 +943,7 @@ Future<void> _uploadImage(Function(String,String) fn) async {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = response.data;
         var responseData = jsonResponse["url"].toString();
-        fn(responseData,jsonResponse["fileId"].toString());
+        fn(responseData, jsonResponse["fileId"].toString());
         print('Image uploaded! ${responseData}');
       } else {
         print('Failed to upload image: ${response.statusMessage}');
@@ -871,11 +955,5 @@ Future<void> _uploadImage(Function(String,String) fn) async {
     print('No image selected.');
   }
 }
-
-List<String?>? getStringList(List<SubCategoryList>? subCategoryList) {
-  return subCategoryList?.map((e) => e.name).toList();
-}
-
-
 
 enum State1 { yes, no }

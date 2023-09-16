@@ -309,6 +309,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             ListTile(
                               title: const Text('Festival Banner'),
                               leading: Radio(
+                                activeColor: Colors.red,
+                                fillColor: MaterialStateProperty.all(Colors.red),
                                 value: 1,
                                 groupValue: dashboardDisplay,
                                 onChanged: (value) {
@@ -321,6 +323,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             ListTile(
                               title: const Text('Non Festival Banner'),
                               leading: Radio(
+                                activeColor: Colors.red,
+                                fillColor: MaterialStateProperty.all(Colors.red),
                                 value: 2,
                                 groupValue: dashboardDisplay,
                                 onChanged: (value) {
@@ -333,6 +337,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             ListTile(
                               title: const Text('Both'),
                               leading: Radio(
+                                activeColor: Colors.red,
+                                fillColor: MaterialStateProperty.all(Colors.red),
                                 value: 3,
                                 groupValue: dashboardDisplay,
                                 onChanged: (value) {

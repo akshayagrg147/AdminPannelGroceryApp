@@ -130,11 +130,6 @@ class BannerScreenState extends State<BannerScreen> {
 
 
 
-class ImageKitRequest {
-  String ?imageUrl;
-  String ?imageId;
-  ImageKitRequest(this.imageUrl,this.imageId);
-}
 
 
 

@@ -9,6 +9,9 @@ import '../repositories/Modal/product_category_modal.dart';
 
 abstract class AllBannerState{
 }
+class AllBannerInitialState extends AllBannerState {
+
+}
 class AllBannerLoadingState extends AllBannerState {
 
 }
@@ -25,9 +28,9 @@ class AllBannerErrorState extends AllBannerState {
 
 }
 
-class SelectedCategoryValue extends AllBannerState {
+class SelectCategoryValue extends AllBannerState {
   final String value;
   final int index;
-  SelectedCategoryValue(this.value,this.index);
+  SelectCategoryValue(this.value,this.index);
 }
 

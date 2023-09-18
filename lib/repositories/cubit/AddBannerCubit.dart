@@ -36,6 +36,22 @@ class AddBannerCubit extends Cubit<AddBannerCategoryState> {
       }
     }
   }
+  void updateCategory(List<SubBannerCategoryList> list,String banner1,String bannerImage1,String banner2,String bannerImage2,String banner3,String bannerImage3) async {
+    try {
+      emit(AddBannerLoadingState());
+      AddProductResponse posts = await postRepository.updateBannerCategory(banner1,bannerImage1,banner2,bannerImage2,banner3,bannerImage3,list);
+      emit(AddBannerLoadedState(posts));
+    }
+    on DioError catch(ex) {
+      if(ex.type == DioErrorType.other) {
+        emit( AddBannerErrorState("Can't fetch posts, please check your internet connection!") );
+      }
+      else {
+        emit( AddBannerErrorState(ex.type.toString()) );
+      }
+    }
+  }
+
 
 }
 

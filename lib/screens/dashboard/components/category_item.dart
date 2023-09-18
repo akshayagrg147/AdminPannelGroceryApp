@@ -162,8 +162,8 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
           child: Image.network(
             data.imageUrl.toString(),
             width: 100,
-            height: 40,
-            fit: BoxFit.cover,
+            height: 100,
+            fit: BoxFit.fill,
             errorBuilder: (ctx, obj, stack) {
               return Image.asset(
                 'assets/images/logo.png',

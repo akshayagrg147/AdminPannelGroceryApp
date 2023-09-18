@@ -64,6 +64,25 @@ class ProductRepository {
     }
     return AddProductResponse();
   }
+  Future<AddProductResponse>  updateBannerCategory(String banner1,String image1,String banner2,String imag2,String banner3,String imag3, List<SubBannerCategoryList> list) async {
+    try {
+      // final Map<String, dynamic> mp = {
+      //   'category': category,
+      //   'imageUrl':image,
+      //  ' subCategoryList':list
+      // };
+      final response = await _dio?.post("/Admin/UpdateBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ));
+      if (response?.statusCode == 200) {
+        AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
+        return postMaps;
+      } else {
+        print(response?.statusCode);
+      }
+    } catch (ex) {
+      rethrow;
+    }
+    return AddProductResponse();
+  }
   Future<LoginResponse> login(String email,String password) async {
     try {
       final Map<String, String> mp = {

@@ -94,7 +94,7 @@ class _RecentOrdersState extends State<RecentOrders> {
 
 DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
 
-
+  String selectedSpinnerValue = 'Ordered';
   return DataRow(cells: [
     DataCell(
       Row(
@@ -139,15 +139,25 @@ DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
-    DataCell(SpinnerWidget(
+    DataCell(StatefulBuilder(
+      builder: (context, setState) {
+        return SpinnerWidget(
 
-      items: const ['Ordered', 'Delivered', 'Cancelled'],
-      onChanged: (value, index) {
-        print("value changed $value");
-        // cubit.selectItem(value,data);
-        // Handle the selected value
+          items: const ['Ordered', 'Delivered', 'Cancelled'],
+          onChanged: (value, index) {
+            setState((){
+              selectedSpinnerValue=value;
+            });
+            print("value changed $value");
+          //  cubit.selectItem(value, data);
+
+
+            // Handle the selected value
+          },
+          selectedValue:
+          selectedSpinnerValue, // Provide the initial selected value
+        );
       },
-      selectedValue: "ordered", // Provide the initial selected value
     ))
   ]);
 }

@@ -61,12 +61,11 @@ class BannerItems extends StatelessWidget {
                 child: SizedBox(
                   width: 220,
                   child: AddCard("Add new Banner", onTap: (tap) {
-                    print("Add new Category $tap");
                     if (tap) {
                       openAlert(
                           context,
                           false,
-                          ItemData(),
+                          ItemBannerCategory(),
                               (s) => {
                             if (s == "added") cubit.fetchBannerCategory()
                           });
@@ -122,9 +121,12 @@ class BannerItems extends StatelessWidget {
         itemBuilder: (context, index) {
           var data = itemData![index];
 
-          return productItemRow(data, context, (value) {
+          return productItemRow(data, context, ((value) {
             BlocProvider.of<DeleteBannerCubit>(context)
                 .deleteBannerCategory(value);
+          }),(editclick){
+            print("itemcategory  editclick $editclick");
+             openAlert(context, true, data, (p0) => null);
           });
         },
       ),
@@ -137,7 +139,7 @@ class BannerItems extends StatelessWidget {
 }
 
 Widget productItemRow(
-    ItemBannerCategory data, BuildContext context, Function(String) itemPass) {
+    ItemBannerCategory data, BuildContext context, Function(String) itemPass, Function(bool) editClick,) {
   bool isSnackBarShown = false;
   return Padding(
     key: UniqueKey(),
@@ -162,8 +164,8 @@ Widget productItemRow(
           child: Image.network(
             data.imageUrl1.toString(),
             width: 100,
-            height: 40,
-            fit: BoxFit.cover,
+            height: 100,
+            fit: BoxFit.fill,
             errorBuilder: (ctx, obj, stack) {
               return Image.asset(
                 'assets/images/logo.png',
@@ -197,29 +199,43 @@ Widget productItemRow(
           ),
         ),
         Expanded(
-          child: IconButton(
-            icon: const Icon(
-              Icons.delete,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              if(data.bannercategory1?.isNotEmpty==true)
-                itemPass(data.bannercategory1!+"__bannercategory1");
-              else
-              {
-                itemPass(data.bannercategory2!+"__bannercategory1");
-              }
+          child:Row(
+  children: [
+    IconButton(
+      icon: Icon(Icons.edit,color: Colors.black,),
+      onPressed: () {
+         editClick(true);
 
-              // Perform delete operation
-            },
-          ),
+
+        // Perform delete operation
+      },
+    ),
+    IconButton(
+      icon: const Icon(
+        Icons.delete,
+        color: Colors.black,
+      ),
+      onPressed: () {
+        if(data.bannercategory1?.isNotEmpty==true)
+          itemPass(data.bannercategory1!+"__bannercategory1");
+        else
+        {
+          itemPass(data.bannercategory2!+"__bannercategory1");
+        }
+
+        // Perform delete operation
+      },
+    ),
+  ],
+  )
+          
         )
       ]),
     ),
   );
 }
 
-void openAlert(BuildContext context, bool editButton, ItemData data,
+void openAlert(BuildContext context, bool editButton, ItemBannerCategory data,
     final Function(String) addedCategory) {
   int? dashboardDisplay = 2;
   double dialogWidth = Responsive.isMobile(context) ? 300.0 : 600.0;
@@ -244,7 +260,26 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
     ImageKitRequest("null", null),
   ];
   int pressCount = 0;
+print("itemcategory $editButton");
+  if(editButton){
 
+   bannerCategoryTitle.text=data.bannercategory1??'';
+   bannerCategoryTitle1.text =data.bannercategory2??'';
+   bannerCategoryTitle2.text =data.bannercategory3??'';
+
+  subCategory1 .text=data.subCategoryList![0].name!;
+    subCategory2 .text=data.subCategoryList![1].name!;
+     subCategory3 .text=data.subCategoryList![2].name!;
+   subCategory4 .text=data.subCategoryList![3].name!;
+   imageupload[0]= (ImageKitRequest(data.imageUrl1, null));
+   imageupload[1]= (ImageKitRequest(data.subCategoryList![0].subCategoryUrl, null));
+   imageupload[2]= (ImageKitRequest(data.subCategoryList![1].subCategoryUrl, null));
+   imageupload[3]= (ImageKitRequest(data.subCategoryList![2].subCategoryUrl, null));
+   imageupload[4]= (ImageKitRequest(data.subCategoryList![3].subCategoryUrl, null));
+   imageupload[5]= (ImageKitRequest(data.imageUrl2, null));
+   imageupload[6]= (ImageKitRequest(data.imageUrl3, null));
+
+  }
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -265,12 +300,22 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else if (state is AddBannerLoadedState) {
-                    addedCategory("added");
-                    SnackBar snackBar = const SnackBar(
-                      content: Text('Success'),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if(state.category.statusCode==200){
+                      addedCategory("added");
+                      SnackBar snackBar = const SnackBar(
+                        content: Text('Success'),
+                        backgroundColor: Colors.green,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    else{
+                      SnackBar snackBar = const SnackBar(
+                        content: Text('Something went wrong'),
+                        backgroundColor: Colors.red,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
                   }
                 },
                 builder: (context, state) {
@@ -390,13 +435,16 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                         ? ImageKitRequest(null, null)
                                         : imageupload[0],
                                     deleteImage: (ob) {
-                                      deleteImage(
-                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                          ob.imageId);
-                                      imageupload[0] =
-                                      (ImageKitRequest("null", null));
-                                    },
+                                      print("delete image clicked at 0 ");
+                                      // deleteImage(
+                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                      //     ob.imageId);
+                                      setState(() {
+                                        imageupload[0] =
+                                        (ImageKitRequest("null", null));
+                                      });
+                                          },
                                   ),
                                   //subcontroller 1
                                   const SizedBox(
@@ -432,6 +480,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                         ? ImageKitRequest(null, null)
                                         : imageupload[1],
                                     deleteImage: (obj) {
+                                      print('Image uploaded image! ${obj}');
                                       setState(() {
                                         imageupload[1] =
                                         (ImageKitRequest("null", null));
@@ -511,7 +560,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     deleteImage: (obj) {
                                       setState(() {
                                         imageupload[3] =
-                                        (ImageKitRequest(null, "null"));
+                                        (ImageKitRequest( "null",null));
                                       });
                                     },
                                   ),
@@ -546,7 +595,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     deleteImage: (obj) {
                                       setState(() {
                                         imageupload[4] =
-                                        (ImageKitRequest(null, "null"));
+                                        (ImageKitRequest( "null",null));
                                       });
                                     },
                                   ),
@@ -596,12 +645,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                         ? ImageKitRequest(null, null)
                                         : imageupload[5],
                                     deleteImage: (ob) {
-                                      deleteImage(
-                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                          ob.imageId);
-                                      imageupload[5] =
-                                      (ImageKitRequest("null", null));
+                                      // deleteImage(
+                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                      //     ob.imageId);
+                                          setState(() {
+                                        imageupload[5] =
+                                        (ImageKitRequest("null", null));
+                                      });
                                     },
                                   ),
 
@@ -642,12 +693,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                         ? ImageKitRequest(null, null)
                                         : imageupload[6],
                                     deleteImage: (ob) {
-                                      deleteImage(
-                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                          ob.imageId);
-                                      imageupload[6] =
-                                      (ImageKitRequest("null", null));
+                                      // deleteImage(
+                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                      //     ob.imageId);
+                                          setState(() {
+                                        imageupload[6] =
+                                        (ImageKitRequest("null", null));
+                                      });
                                     },
                                   ),
                                 ],
@@ -765,7 +818,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     );
                                     return;
                                   }
-                                } else if (dashboardDisplay == 2) {
+                                }
+                                else if (dashboardDisplay == 2) {
                                   if ((bannerCategoryTitle1.text.isEmpty &&
                                       !imageupload[5]
                                           .imageUrl!
@@ -782,7 +836,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     );
                                     return;
                                   }
-                                } else {
+                                }
+                                else {
                                   if ((bannerCategoryTitle.text.isNotEmpty &&
                                       imageupload[0]
                                           .imageUrl!
@@ -886,7 +941,23 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                 }
 
                                 print(
-                                    'imageupload_0 ${imageupload[0].imageUrl}');
+                                    'imageupload_0 ${bannerCategoryTitle.text}'
+                                        '${list}'
+                                        '${bannerCategoryTitle.text}'
+                                        '${imageupload[0].imageUrl!}'
+                                );
+                                editButton
+                                    ?
+
+                                BlocProvider.of<AddBannerCubit>(context)
+                                    .updateCategory(
+                                    list,
+                                    bannerCategoryTitle.text,
+                                    imageupload[0].imageUrl!,
+                                    bannerCategoryTitle1.text,
+                                    imageupload[5].imageUrl!,
+                                    bannerCategoryTitle2.text,
+                                    imageupload[6].imageUrl!):
                                 BlocProvider.of<AddBannerCubit>(context)
                                     .addBannerCategory(
                                     list,
@@ -897,7 +968,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     bannerCategoryTitle2.text,
                                     imageupload[6].imageUrl!);
                               },
-                              child: const Text('Save!'),
+                              child: editButton ? const Text('Update!') : Text('Save!'),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -955,7 +1026,7 @@ Future<void> _uploadImage(Function(String, String) fn) async {
           filename: pickedImage.path.split('/').last,
         ),
         'fileName': 'image_$timestamp.png',
-        'folder': 'category',
+        'folder': 'BannerItems',
       });
 
       var response = await dio.post(

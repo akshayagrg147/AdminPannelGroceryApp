@@ -125,7 +125,7 @@ class ProductItems extends StatelessWidget {
             height:  1200,
             child: DataTable2(
               dividerThickness: 2.0,
-              columnSpacing: defaultPadding,
+              columnSpacing: 25.0,
               minWidth: 900,
               columns: const [
                 DataColumn(
@@ -181,8 +181,8 @@ DataRow productItemRow(ItemData data, DeleteProductCubit cubit, BestSellingCheck
                   child: Image.network(
                     data.productImage1.toString(),
                     width: 100,
-                    height: 40,
-                    fit: BoxFit.cover,
+                    height: 100,
+                    fit: BoxFit.fill,
                     errorBuilder: (ctx, obj, stack) {
                       return Image.asset(
                         'assets/images/logo.png',

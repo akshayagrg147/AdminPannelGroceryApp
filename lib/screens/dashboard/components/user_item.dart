@@ -19,16 +19,13 @@ class UserItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(defaultPadding),
       decoration: const BoxDecoration(
-        color: secondaryColor,
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Total Orders",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
+
           SizedBox(
             width: double.infinity,
             height:  1200,
@@ -37,7 +34,7 @@ class UserItem extends StatelessWidget {
               minWidth: 900,
               columns: const [
                 DataColumn(
-                  label: Text("Product Image")                ),
+                  label: Text("User Image")                ),
                 DataColumn(
                   label: Text("Phone"),
                 ),

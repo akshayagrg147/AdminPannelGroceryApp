@@ -817,7 +817,7 @@ void openAlert(
                               .isEmpty ||
                           quantityController.text.isEmpty ||
                           productDescriptionController.text.isEmpty ||
-                          selectedValue.isEmpty ||
+                          radioSelectValue.isEmpty ||
                           uploadImage1.imageUrl?.contains("null") == true ||
                           uploadImage2.imageUrl?.contains("null") == true ||
                           uploadImage3.imageUrl?.contains("null") == true) {
@@ -826,7 +826,7 @@ void openAlert(
                             "${sellingPriceController.text.toString().isEmpty}"
                             "${quantityController.text.toString().isEmpty}"
                             "${productDescriptionController.text.toString().isEmpty}"
-                            "${selectedValue.isEmpty}"
+                            "${radioSelectValue.isEmpty}"
                             "${uploadImage1.imageUrl?.contains("null") == true}"
                             "${uploadImage2.imageUrl?.contains("null") == true}"
                             "${uploadImage3.imageUrl?.contains("null") == true}");

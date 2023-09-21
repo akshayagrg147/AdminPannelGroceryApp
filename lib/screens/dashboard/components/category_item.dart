@@ -653,7 +653,7 @@ Future<void> _uploadImage(Function(String, String) fn) async {
         Map<String, dynamic> jsonResponse = response.data;
         var responseData = jsonResponse["url"].toString();
         fn(responseData, jsonResponse["fileId"].toString());
-        print('Image uploaded! ${responseData}');
+        print('Image uploaded! ${responseData}   @@${jsonResponse["fileId"].toString()}');
       } else {
         print('Failed to upload image: ${response.statusMessage}');
       }

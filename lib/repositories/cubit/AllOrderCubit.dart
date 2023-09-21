@@ -20,7 +20,7 @@ import '../api/ProductRepository.dart';
 
 
 class AllOrderCubit extends Cubit<AllOrderState> {
-  int page = 0;
+  int skip = 0;
   final ProductRepository repository;
   AllOrderCubit(this.repository) : super( AllOrderLoadingState() );
 
@@ -33,10 +33,10 @@ class AllOrderCubit extends Cubit<AllOrderState> {
       oldOrders = List.from(currentState.itemData ?? []);
     }
 
-    emit(AllLoadingMoreState(oldOrders, isFirstFetch: page == 1));
+    emit(AllLoadingMoreState(oldOrders, isFirstFetch: skip == 0));
 
-    repository.fetchOrders(page, 30).then((newOrders) {
-      page++;
+    repository.fetchOrders(skip, 10).then((newOrders) {
+      skip=skip+10;
 
       final List<OrderData> orders = List.from(oldOrders);
       orders.addAll(newOrders.itemData!);

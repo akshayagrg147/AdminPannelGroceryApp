@@ -3,7 +3,7 @@ import 'dart:developer';
 
 
 
-
+import 'package:http/http.dart' as http;
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
@@ -131,28 +131,25 @@ class ImageKitRequest {
 
 
 
-Future<void> deleteImage(String publicKey, String privateKey, String imageId) async {
-  final authString = '$publicKey:$privateKey';
-  final encodedAuth = base64.encode(utf8.encode(authString));
+Future<void> deleteImage(String publicKey, String privateKey, String fileId) async {
+  print("deleteimage ${publicKey} ${privateKey} ${fileId}");
+  var headers = {
+    'Authorization': 'Basic private_mtuLv1FkF+TOXlUyH/YlB/BJguQ='
+  };
+  var dio = Dio();
+  var response = await dio.request(
+    'https://api.imagekit.io/v1/files/6508539f88c257da33a7a9f8',
+    options: Options(
+      method: 'DELETE',
+      headers: headers,
+    ),
+  );
 
-  final dio = Dio();
-  dio.options.headers['Authorization'] = 'Basic $encodedAuth';
-
-  final url = 'https://api.imagekit.io/v1/files/$imageId';
-
-  try {
-    final response = await dio.delete(url);
-
-    if (response.statusCode == 204) {
-      // Image deleted successfully
-      print('Image deleted successfully');
-    } else {
-      // Error deleting image
-      print('Error deleting image: ${response.data}');
-    }
-  } catch (error) {
-    // Error handling
-    print('Error deleting image: $error');
+  if (response.statusCode == 200) {
+    print(json.encode(response.data));
+  }
+  else {
+    print(response.statusMessage);
   }
 }
 

@@ -43,6 +43,7 @@ class _SideMenuState extends State<SideMenu> {
               Navigator.pop(context);
              provider.setNavigationItem(NavigationItem.home);
             },
+
           ),
           DrawerListTile(
             title: "Products",

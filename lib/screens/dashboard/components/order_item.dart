@@ -7,13 +7,14 @@ import 'package:mailer/smtp_server/gmail.dart';
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/AllOrders.dart';
+import '../../../repositories/cubit/AllOrderCubit.dart';
 import '../../../repositories/cubit/SelectionCubit.dart';
 import '../../../repositories/cubit/UpdateOrderStatusCubit.dart';
 import '../../../state/SelectionState.dart';
 import '../../../state/add_order_state.dart';
 
 class OrderItems extends StatefulWidget {
-  final List<OrderData>? itemData;
+    List<OrderData>? itemData;
   final ScrollController scrollController;
 
   OrderItems(this.itemData, {Key? key, required this.scrollController})
@@ -33,8 +34,7 @@ class _OrderItemsState extends State<OrderItems> {
     cubit = BlocProvider.of<SelectionCubit>(context);
     orderStatus=BlocProvider.of<UpdateOrderStatusCubit>(context);
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -46,54 +46,69 @@ class _OrderItemsState extends State<OrderItems> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          BlocBuilder<SelectionCubit, SelectionState>(
-        builder: (context, state) {
-          print("updated_value 1 ${state}");
-          if(state is SelectionUpdated) {
-            print("updated_value 2 ${state.selectedItem} ${state.data} ${state.data.orderStatus}");
-            state.data.orderStatus=state.selectedItem;
-            orderStatus.updateOrderStatus(state.data);
-            return Container();
-          }
-          return Container();
-        }),
-            BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
-                listener: (context, state){
-                  if(state is AddOrderLoadedState) {
-                    SnackBar snackBar = const SnackBar(
-                      content: Text('status updated'),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                  }
-                  else  if(state is AddOrderErrorState) {
-                    SnackBar snackBar =  SnackBar(
-                      content: Text("${state.error.toString()}"),
-                      backgroundColor: Colors.green,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                  }
-                },
-                builder: (context, state) {
-                  print("updated_value ${state}");
-
+            BlocBuilder<SelectionCubit, SelectionState>(
+              builder: (context, state) {
+                print("updated_value 1 ${state}");
+                if (state is SelectionUpdated) {
+                  print("updated_value 2 ${state.selectedItem} ${state.data} ${state.data.orderStatus}");
+                  state.data.orderStatus = state.selectedItem;
+                  orderStatus.updateOrderStatus(state.data);
                   return Container();
-                }),
-            Text(
-              "Total Orders",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle1,
+                }
+                return Container();
+              },
+            ),
+            BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
+              listener: (context, state) {
+                if (state is AddOrderLoadedState) {
+                  SnackBar snackBar = const SnackBar(
+                    content: Text('status updated'),
+                    backgroundColor: Colors.green,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else if (state is AddOrderErrorState) {
+                  SnackBar snackBar = SnackBar(
+                    content: Text("${state.error.toString()}"),
+                    backgroundColor: Colors.green,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
+              builder: (context, state) {
+                print("updated_value ${state}");
+                return Container();
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Orders",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Handle the click action here
+                    _selectDate(context);
+                  },
+                  child: Text(
+                    'Filter',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               width: double.infinity,
-              height: 600,
+              height: 800,
               child: DataTable2(
                 scrollController: widget.scrollController,
                 columnSpacing: defaultPadding,
-                  dataRowHeight: 60.0,
-
+                dataRowHeight: 60.0,
                 minWidth: 1300,
                 columns: const [
                   DataColumn(label: Text("Product Image")),
@@ -113,6 +128,9 @@ class _OrderItemsState extends State<OrderItems> {
                     label: Text("Payment Mode"),
                   ),
                   DataColumn(
+                    label: Text("Date"),
+                  ),
+                  DataColumn(
                     label: Text("Payment in Rs"),
                   ),
                   DataColumn(
@@ -121,55 +139,85 @@ class _OrderItemsState extends State<OrderItems> {
                 ],
                 rows: List.generate(
                   widget.itemData?.length ?? 0,
-                  (index) {
+                      (index) {
+                   print("productitemlist ${ widget.itemData?.length} ");
                     return productItemRow(widget.itemData![index], cubit);
                   },
-                )
+                ),
               ),
             ),
+
+            GestureDetector(
+              onTap: (){
+                BlocProvider.of<AllOrderCubit>(context).loadOrders();
+              },
+              child:  const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text("next page>>",textAlign: TextAlign.right,),
+                ],
+              )  ,
+            )
+
           ],
         ),
       ),
     );
   }
+
+
+  DateTime selectedDate = DateTime.now(); // Initialize with the current date
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+
+        print("${selectedDate.day}/${selectedDate.month}/${selectedDate.year}");
+        widget.itemData=[];
+      });
+    }
+  }
 }
 
 DataRow productItemRow(OrderData data, SelectionCubit cubit) {
   // Function(OrderData) fnData;
-  String selectedSpinnerValue = 'Ordered';
+  String selectedSpinnerValue = data.orderStatus??"Ordered";
   // SizedBox(height: 16.0);
   return DataRow(cells: [
     DataCell(
-      Row(
-        children: [
-          // SvgPicture.asset(
-          //   fileInfo.icon!,
-          //   height: 30,
-          //   width: 30,
-          // ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Image.network(
-              data.mobilenumber.toString(),
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              errorBuilder: (ctx, obj, stack) {
-                return Image.asset(
-                  'assets/images/logo.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                );
-                ;
-              },
-            ),
-          ),
-        ],
-      ),
-    ),
+  Row(
+  children: [
+  Expanded(
+      child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+  child: Image.network(
+  data.mobilenumber.toString(),
+  width: 100,
+  height: 100,
+  fit: BoxFit.cover,
+  errorBuilder: (ctx, obj, stack) {
+  return Image.asset(
+  'assets/images/logo.png',
+  width: 100,
+  height: 100,
+  fit: BoxFit.cover,
+  );
+  },
+  ),
+  ),
+  ),
+    ])),
     DataCell(Text(data.orderId!)),
     DataCell(ListView.builder(
+      shrinkWrap: true,
       itemCount: data.orderList!.length,
       itemBuilder: (context, index) {
         return ListTile(
@@ -180,6 +228,7 @@ DataRow productItemRow(OrderData data, SelectionCubit cubit) {
     DataCell(Text(data.mobilenumber.toString())),
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
+    DataCell(Text(data.createdDate.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
     DataCell(StatefulBuilder(
   builder: (context, setState) {

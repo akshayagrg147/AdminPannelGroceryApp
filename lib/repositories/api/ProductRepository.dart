@@ -280,8 +280,9 @@ class ProductRepository {
   }
   Future<AllOrders> fetchOrders(int page,int limit) async {
     try {
+      print("skip_order ${page}  $limit");
       final response = await _dio?.get("/Admin/AllOrdersByPages", queryParameters: {"skip": page,"limit": limit});
-      print("sucess order");
+
       print(response?.statusMessage);
 
       if (response?.statusCode == 200) {

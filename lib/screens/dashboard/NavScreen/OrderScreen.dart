@@ -45,7 +45,7 @@ class OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
-    setupScrollController(context);
+  //  setupScrollController(context);
     BlocProvider.of<AllOrderCubit>(context).loadOrders();
   }
 
@@ -70,7 +70,7 @@ class OrderScreenState extends State<OrderScreen> {
                   children: [
                     DashboardHeader(
                       imageUrl:  "",
-                      name:  "null", title: "Coupons",),
+                      name:  "null", title: "Orders",),
                     BlocConsumer<AllOrderCubit, AllOrderState>(
                       listener: (context, state) {
                         if (state is AllOrderErrorState) {
@@ -83,6 +83,7 @@ class OrderScreenState extends State<OrderScreen> {
                           Cubit.resetState();
 
                         }
+
                       },
                       builder: (context, state) {
                         List<OrderData> orders = [];
@@ -91,10 +92,11 @@ class OrderScreenState extends State<OrderScreen> {
                           return const Center(child: CircularProgressIndicator());
                         }
                        else if (state is AllOrderLoadingState) {
-                          // return const Center(
-                          //   child: CircularProgressIndicator(),
-                       //   );
-                        } else if (state is AllLoadingMoreState) {
+                         //  return const Center(
+                         //    child: CircularProgressIndicator(),
+                         // );
+                        }
+                       else if (state is AllLoadingMoreState) {
                           orders = state.oldPosts;
                           isLoading = true;
                           //   return Text("${obj.message}");
@@ -103,7 +105,8 @@ class OrderScreenState extends State<OrderScreen> {
                           listProducts=state.itemData;
                           return OrderItems(state.itemData, scrollController: scrollController,);
                           //   return Text("${obj.message}");
-                        } else if (state is AllOrderErrorState) {
+                        }
+                        else if (state is AllOrderErrorState) {
                           return Center(
                             child: Text(state.error),
                           );

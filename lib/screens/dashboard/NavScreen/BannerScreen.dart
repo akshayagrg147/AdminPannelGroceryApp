@@ -69,57 +69,60 @@ class BannerScreenState extends State<BannerScreen> {
 
               Expanded(
                 flex: 5,
-                child: SingleChildScrollView(
-                  child:Column(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: SingleChildScrollView(
+                    child:Column(
 
-                  children: [
-                    DashboardHeader(
-                      imageUrl:  "",
-                      name:  "null", title: "Banner Screen",),
-                    BlocConsumer<BannerCategoryCubit, AllBannerState>(
-                      listener: (context, state) {
-                        if (state is AllBannerErrorState) {
-                          SnackBar snackBar = SnackBar(
-                            content: Text(state.error),
-                            backgroundColor: Colors.red,
-                          );
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackBar);
-                        }
-                      },
-                      builder: (context, state) {
-                        print(state);
-                        if (state is AllBannerLoadingState) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        else if (state is AllBannerLoadedState) {
-                          print(
-                              'category Items ${state.category.itemData?.length.toString()}');
-                          log(state.category.runtimeType.toString());
-                          var obj = state.category;
-                          listProducts = obj.itemData ?? [];
-                          return BannerItems(Cubit,listProducts, (delete) {
-                            Cubit.fetchBannerCategory();
-                          });
-                          //   return Text("${obj.message}");
-                        }
-                        else if (state is AllBannerErrorState) {
-                          print(
-                              'category fetch error ${state.error.toString()}');
-                          return Center(
-                            child: Text(state.error),
-                          );
-                        }
+                    children: [
+                      DashboardHeader(
+                        imageUrl:  "",
+                        name:  "null", title: "Banner Screen",),
+                      BlocConsumer<BannerCategoryCubit, AllBannerState>(
+                        listener: (context, state) {
+                          if (state is AllBannerErrorState) {
+                            SnackBar snackBar = SnackBar(
+                              content: Text(state.error),
+                              backgroundColor: Colors.red,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        },
+                        builder: (context, state) {
+                          print(state);
+                          if (state is AllBannerLoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          else if (state is AllBannerLoadedState) {
+                            print(
+                                'category Items ${state.category.itemData?.length.toString()}');
+                            log(state.category.runtimeType.toString());
+                            var obj = state.category;
+                            listProducts = obj.itemData ?? [];
+                            return BannerItems(Cubit,listProducts, (delete) {
+                              Cubit.fetchBannerCategory();
+                            });
+                            //   return Text("${obj.message}");
+                          }
+                          else if (state is AllBannerErrorState) {
+                            print(
+                                'category fetch error ${state.error.toString()}');
+                            return Center(
+                              child: Text(state.error),
+                            );
+                          }
 
-                        return Container();
-                      },
-                    ),
+                          return Container();
+                        },
+                      ),
 
-                  ],
-                  )
-                  ,
+                    ],
+                    )
+                    ,
+                  ),
                 ),
               ),]
         ));

@@ -83,101 +83,104 @@ class ProductScreenState extends State<ProductScreen> {
               ),
             Expanded(
               flex: 5,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    DashboardHeader(
-                      imageUrl: "",
-                      name: "null",
-                      title: "Dashboard",
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    // DashboardHeader(
-                    //   imageUrl:  "",
-                    //   name: "Products",title: "Products",),
-                    ProductHeader(
-                      Cubit,
-                      CubitAddNewProuct,
-                      pCubit,
-                      onValueUpdate: (val) {
-                        if (val.isNotEmpty) {
-                          print('value get after search ${val}');
-                          List<ItemData>? items = listProducts
-                              ?.where((item) => item.productName!.contains(val))
-                              .toList();
-                          print('value get after search ${items?.length}');
-                          if (val.isEmpty) {
-                            Cubit.passFilterData(listProducts ?? <ItemData>[]);
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      DashboardHeader(
+                        imageUrl: "",
+                        name: "null",
+                        title: "All Products",
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      // DashboardHeader(
+                      //   imageUrl:  "",
+                      //   name: "Products",title: "Products",),
+                      ProductHeader(
+                        Cubit,
+                        CubitAddNewProuct,
+                        pCubit,
+                        onValueUpdate: (val) {
+                          if (val.isNotEmpty) {
+                            print('value get after search ${val}');
+                            List<ItemData>? items = listProducts
+                                ?.where((item) => item.productName!.contains(val))
+                                .toList();
+                            print('value get after search ${items?.length}');
+                            if (val.isEmpty) {
+                              Cubit.passFilterData(listProducts ?? <ItemData>[]);
+                            } else {
+                              Cubit.passFilterData(items ?? <ItemData>[]);
+                            }
                           } else {
-                            Cubit.passFilterData(items ?? <ItemData>[]);
+                            setState(() {
+                              listProducts = listProductsIfEmpty;
+                            });
+
+                            print(
+                                'value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
                           }
-                        } else {
-                          setState(() {
-                            listProducts = listProductsIfEmpty;
-                          });
-
-                          print(
-                              'value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
-                        }
-                      },
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: SafeArea(
-                            child:
-                                BlocConsumer<AllProductCubit, AllProductState>(
-                              listener: (context, state) {
-                                if (state is AllProductErrorState) {
-                                  SnackBar snackBar = SnackBar(
-                                    content: Text(state.error),
-                                    backgroundColor: Colors.red,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                }
-                              },
-                              builder: (context, state) {
-                                print(state);
-                                if (state is AllProductLoadingState) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (state is AllProductLoadedState) {
-                                  log(state.products.runtimeType.toString());
-                                  var obj = state.products;
-                                  listProducts = obj.itemData;
-                                  listProductsIfEmpty = obj.itemData;
-                                  return ProductItems(
-                                      listProducts,
-                                      CubitdeleteNewProuct,
-                                      checkBoxCubit,
-                                      exclusiveCheckBoxCubit, (val) {
-                                    openAlert(context, CubitAddNewProuct,
-                                        pCubit, true, val, (String data) {
-                                      if (data == "added")
-                                        Cubit.fetchProducts();
+                        },
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: SafeArea(
+                              child:
+                                  BlocConsumer<AllProductCubit, AllProductState>(
+                                listener: (context, state) {
+                                  if (state is AllProductErrorState) {
+                                    SnackBar snackBar = SnackBar(
+                                      content: Text(state.error),
+                                      backgroundColor: Colors.red,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                                builder: (context, state) {
+                                  print(state);
+                                  if (state is AllProductLoadingState) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (state is AllProductLoadedState) {
+                                    log(state.products.runtimeType.toString());
+                                    var obj = state.products;
+                                    listProducts = obj.itemData;
+                                    listProductsIfEmpty = obj.itemData;
+                                    return ProductItems(
+                                        listProducts,
+                                        CubitdeleteNewProuct,
+                                        checkBoxCubit,
+                                        exclusiveCheckBoxCubit, (val) {
+                                      openAlert(context, CubitAddNewProuct,
+                                          pCubit, true, val, (String data) {
+                                        if (data == "added")
+                                          Cubit.fetchProducts();
+                                      });
                                     });
-                                  });
-                                  //   return Text("${obj.message}");
-                                } else if (state is AllProductErrorState) {
-                                  return Center(
-                                    child: Text(state.error),
-                                  );
-                                }
+                                    //   return Text("${obj.message}");
+                                  } else if (state is AllProductErrorState) {
+                                    return Center(
+                                      child: Text(state.error),
+                                    );
+                                  }
 
-                                return Container();
-                              },
+                                  return Container();
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

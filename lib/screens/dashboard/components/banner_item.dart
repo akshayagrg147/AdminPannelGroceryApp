@@ -436,10 +436,10 @@ print("itemcategory $editButton");
                                         : imageupload[0],
                                     deleteImage: (ob) {
                                       print("delete image clicked at 0 ");
-                                      // deleteImage(
-                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                      //     ob.imageId);
+                                      deleteImage(
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          ob.imageId);
                                       setState(() {
                                         imageupload[0] =
                                         (ImageKitRequest("null", null));

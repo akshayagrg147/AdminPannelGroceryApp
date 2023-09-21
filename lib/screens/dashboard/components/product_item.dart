@@ -198,7 +198,7 @@ DataRow productItemRow(ItemData data, DeleteProductCubit cubit, BestSellingCheck
             ],
           ),
         ),
-        DataCell(Text(data.productName!)),
+        DataCell(Text(data.productName!,overflow: TextOverflow.clip,),),
         DataCell(Text(data.quantity!)),
 
         DataCell(

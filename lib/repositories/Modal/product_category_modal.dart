@@ -2,6 +2,7 @@ class ProductCategoryModal {
   List<ItemDataCategory>? itemData;
   int? statusCode;
   String? message;
+  bool? status;
 
   ProductCategoryModal({this.itemData, this.statusCode, this.message});
 
@@ -14,6 +15,7 @@ class ProductCategoryModal {
     }
     statusCode = json['statusCode'];
     message = json['message'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +25,7 @@ class ProductCategoryModal {
     }
     data['statusCode'] = this.statusCode;
     data['message'] = this.message;
+    data['status'] = this.status;
     return data;
   }
 }

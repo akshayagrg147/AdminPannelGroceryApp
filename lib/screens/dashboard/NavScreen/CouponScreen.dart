@@ -40,10 +40,12 @@ class _CouponScreenState extends State<CouponScreen> {
       TextEditingController();
 
   String selectedOption = 'Discount Amount';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: const SideMenu(false),
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -89,7 +91,7 @@ class _CouponScreenState extends State<CouponScreen> {
                       child: ElevatedButton(
 
                         onPressed:(){
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>  AllCouponsScreen(),
@@ -289,6 +291,36 @@ class _CouponScreenState extends State<CouponScreen> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
                               }
+                              else if (state is AddCouponLoadedState) {
+                                if (state.products.statusCode == 200) {
+                                  SnackBar snackBar = SnackBar(
+                                    content: Text(state.products.message!),
+                                    backgroundColor: Colors.green,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>  AllCouponsScreen(),
+                                    ),
+                                  );
+                                }
+                                else{
+                                  SnackBar snackBar = SnackBar(
+                                    content: Text(state.products.message??"something went wrong"),
+                                    backgroundColor: Colors.red,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+
+
+
+
+
+                                //   return Text("${obj.message}");
+                              }
                             },
                             builder: (context, state) {
                               print(state);
@@ -297,25 +329,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
-                              else if (state is AddCouponLoadedState) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Added Coupon Successfully'),
-                                  ),
-                                );
 
-
-
-
-                                //   return Text("${obj.message}");
-                              }
-                              else if (state is AddCouponErrorState) {
-                                print(
-                                    'category fetch error ${state.error.toString()}');
-                                return Center(
-                                  child: Text(state.error),
-                                );
-                              }
 
                               return  Column(
 
@@ -370,7 +384,7 @@ class _CouponScreenState extends State<CouponScreen> {
                   ElevatedButton(
 
                     onPressed:(){
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>  AllCouponsScreen(),
@@ -499,53 +513,7 @@ class _CouponScreenState extends State<CouponScreen> {
 
               ],),
 
-                  BlocConsumer<AddCouponsCubit, AddCouponState>(
-                    listener: (context, state) {
-                      if (state is AddCouponErrorState) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(state.error),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(snackBar);
-                      }
-                      else if (state is AddCouponLoadedState){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Added Coupon Successfully'),
-                          ),
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      print(state);
-                      if (state is AddCouponLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      else if (state is AddCouponLoadedState) {
 
-
-                        //   return Text("${obj.message}");
-                      }
-                      else if (state is AddCouponErrorState) {
-                        print(
-                            'category fetch error ${state.error.toString()}');
-                        return Center(
-                          child: Text(state.error),
-                        );
-                      }
-
-                      return   Align(
-                        alignment: Alignment.center,
-                        child: ElevatedButton(
-                          onPressed: _submitForm,
-                          child: Text('Submit'),
-                        ),
-                      );
-                    },
-                  )
                 ],
               ),
             ),
@@ -592,8 +560,8 @@ class _CouponScreenState extends State<CouponScreen> {
       _formData.discountPercentage = discountPercentageController.text;
       _formData.discountedAmount = discountedAmountController.text;
       _formData.minimumPurchase = minimumPurchaseController.text;
-      _formData.startDate = _picDate.toString();
-      _formData.expireDate = _expireedDate.toString();
+      _formData.startDate = _picDate.toString().split(" ").first;
+      _formData.expireDate = _expireedDate.toString().split(" ").first;
       cubit.addCoupon(_formData);
     }
   }

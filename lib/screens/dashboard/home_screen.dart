@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../constants.dart';
+import '../../sharedpreference/PreferencesUtil.dart';
 import '../main/components/side_menu.dart';
 import 'components/header.dart';
 
@@ -24,7 +25,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late RecentOrderCubit cubit;
-
+  String? name;
+  String? pincode;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,10 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('print my fields1 ${obj.countResponse
                                 ?.length}');
                             return Column(
+
                               children: [
+
                                 DashboardHeader(
                                   imageUrl: state.response.image ?? "",
-                                  name: state.response.name ?? "null", title: "Dashboard",),
+                                  name:" $name\n$pincode"?? "null", title: "Dashboard",),
                                 SizedBox(height: defaultPadding),
                                 CardViewCount(obj.countResponse),
                                 const SizedBox(height: defaultPadding),
@@ -110,8 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    fetchData();
     cubit = BlocProvider.of<RecentOrderCubit>(context);
     cubit.fetchAllOrderCount();
 
+
+  }
+  Future<void> fetchData() async {
+    name = await PreferencesUtil.getString('name');
+    pincode= await PreferencesUtil.getString('pincode');
+    // After fetching the value, trigger a rebuild
+    setState(() {});
   }
 }

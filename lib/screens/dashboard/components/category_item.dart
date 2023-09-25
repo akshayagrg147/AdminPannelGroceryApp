@@ -39,28 +39,14 @@ class CategoryItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DeleteCategoryCubit, DeleteProductState>(
-        listener: (context1, state) {
-      if (state is DeleteProductLoadedState) {
-        SnackBar snackBar = const SnackBar(
-          content: Text("Deleted Successfully"),
-          backgroundColor: Colors.green,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        deleteCategory("deleted");
-      }
-    }, builder: (context, state) {
-      if (state is DeleteProductLoadingState) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      return SingleChildScrollView(
+
+    return
+       SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
               Align(
@@ -104,13 +90,7 @@ class CategoryItems extends StatelessWidget {
     if (state is DeleteProductLoadingState) {
     return Container();
     }
-    else if (state is DeleteProductLoadedState) {
-    log(state.products.runtimeType.toString());
-
-
-
-    //   return Text("${obj.message}");
-    } else if (state is DeleteProductErrorState) {
+  else if (state is DeleteProductErrorState) {
     return Center(
     child: Text(state.error),
     );
@@ -135,9 +115,9 @@ class CategoryItems extends StatelessWidget {
           ),
         ),
       );
-    });
+    }
   }
-}
+
 
 Widget productItemRow(ItemDataCategory data, BuildContext context,Function(String) itemPass) {
   bool isSnackBarShown = false;

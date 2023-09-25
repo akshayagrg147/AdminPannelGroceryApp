@@ -139,26 +139,7 @@ DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
-    DataCell(StatefulBuilder(
-      builder: (context, setState) {
-        return SpinnerWidget(
-
-          items: const ['Ordered', 'Delivered', 'Cancelled'],
-          onChanged: (value, index) {
-            setState((){
-              selectedSpinnerValue=value;
-            });
-            print("value changed $value");
-          //  cubit.selectItem(value, data);
-
-
-            // Handle the selected value
-          },
-          selectedValue:
-          selectedSpinnerValue, // Provide the initial selected value
-        );
-      },
-    ))
+    DataCell(Text("Ordered"))
   ]);
 }
 

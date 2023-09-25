@@ -38,5 +38,9 @@ class AllCouponsCubit extends Cubit<AllCouponsState> {
     }
   }
 
+  void reset(){
+    emit(AllCouponsInitialState());
+  }
+
 
 }

@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/DrawerController.dart';
 import '../../models/AllOrders.dart';
 import '../../navigationPackage/NavigationItem.dart';
+import '../Login/login_screen.dart';
 import '../dashboard/NavScreen/AllUserScreen.dart';
 import 'components/side_menu.dart';
 
@@ -42,7 +43,9 @@ class _MainScreenState extends State<MainScreen> {
       }
     );
   }
-
+  void navigateToLoginScreen(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
 
   buildPages(var navigationItem) {
     switch (navigationItem) {
@@ -51,7 +54,8 @@ class _MainScreenState extends State<MainScreen> {
       case NavigationItem.category:
         return const CategoryScreen();
       case NavigationItem.logout:
-        return const Logoutscreen();
+          navigateToLoginScreen(context);
+        return SizedBox();
       case NavigationItem.banner:
         return const BannerScreen();
 
@@ -63,6 +67,7 @@ class _MainScreenState extends State<MainScreen> {
         return OrderScreen();
       case NavigationItem.coupons:
         return CouponScreen();
+
     }
   }
 

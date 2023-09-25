@@ -632,6 +632,9 @@ void openAlert(
                         );
                       } else if (state is AllCategoryLoadedState) {
                         print("stateis loaded");
+                        if(state.category.status==false) {
+                          return Container();
+                        }
                         spinnerData = state.category.itemData;
                         categoryList = state.category.itemData
                             ?.map((category) => category.category)
@@ -708,38 +711,44 @@ void openAlert(
                         );
                       } else if (state is AllBannerLoadedState) {
                         print("stateis loaded");
-                        categoryList = state
-                            .category.itemData?.first.subCategoryList
-                            ?.map((category) => category.name)
-                            .toList();
+                        if(state
+                            .category.status==true){
+                          categoryList = state
+                              .category.itemData?.first.subCategoryList
+                              ?.map((category) => category.name)
+                              .toList();
 
-                        if (categoryList?.isNotEmpty == true) {
-                          return Column(
-                            children: [
-                              Text(
-                                "Festival Type ${state.category.itemData?.first.bannercategory1}",
-                                style: Theme.of(context).textTheme.titleMedium,
-                                textAlign: TextAlign.start,
-                              ),
-                              Column(
-                                children: categoryList!.map((value) {
-                                  return RadioListTile(
-                                    title: Text(value!),
-                                    activeColor: Colors.red,
-                                    fillColor: MaterialStateProperty.all(Colors.red),
-                                    value: value,
-                                    groupValue: radioSelectValue,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        radioSelectValue = newValue as String;
-                                      });
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          );
+                          if (categoryList?.isNotEmpty == true) {
+                            return Column(
+                              children: [
+                                Text(
+                                  "Festival Type ${state.category.itemData?.first.bannercategory1}",
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                  textAlign: TextAlign.start,
+                                ),
+                                Column(
+                                  children: categoryList!.map((value) {
+                                    return RadioListTile(
+                                      title: Text(value!),
+                                      activeColor: Colors.red,
+                                      fillColor: MaterialStateProperty.all(Colors.red),
+                                      value: value,
+                                      groupValue: radioSelectValue,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          radioSelectValue = newValue as String;
+                                        });
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            );
+                          }
+
                         }
+
+
                       }
 
                       return Container();
@@ -818,6 +827,7 @@ void openAlert(
                           quantityInstructionController.text
                               .toString()
                               .isEmpty ||
+                          pincodeController.text.isEmpty ||
                           quantityController.text.isEmpty ||
                           productDescriptionController.text.isEmpty ||
                           radioSelectValue.isEmpty ||
@@ -828,6 +838,7 @@ void openAlert(
                             "${orignalPriceController.text.toString().isEmpty}"
                             "${sellingPriceController.text.toString().isEmpty}"
                             "${quantityController.text.toString().isEmpty}"
+                        "${pincodeController.text.toString().isEmpty}"
                             "${productDescriptionController.text.toString().isEmpty}"
                             "${radioSelectValue.isEmpty}"
                             "${uploadImage1.imageUrl?.contains("null") == true}"
@@ -850,6 +861,7 @@ void openAlert(
                               quantity: quantityController.text,
                               productDescription:
                                   productDescriptionController.text.toString(),
+                              pincode: pincodeController.text.toString(),
                               dashboardDisplay: false,
                               itemCategoryName: selectedValue,
                               itemSubcategoryName: radioSelectValue,
@@ -869,6 +881,7 @@ void openAlert(
                               productDescription:
                                   productDescriptionController.text,
                               dashboardDisplay: false,
+                          pincode: pincodeController.text.toString(),
                               itemCategoryName: selectedValue,
                               itemSubcategoryName: radioSelectValue,
                               quantityInstructionController:

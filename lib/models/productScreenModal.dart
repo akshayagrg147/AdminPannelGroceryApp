@@ -16,6 +16,7 @@ class ProductScreenModal {
   String? image1;
   String? image2;
   String? image3;
+  String? pincode;
 
 
   ProductScreenModal(
@@ -34,7 +35,8 @@ class ProductScreenModal {
         this.quantityInstructionController,
       this.image1,
       this.image2,
-      this.image3});
+      this.image3,
+      this.pincode});
 
   ProductScreenModal.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
@@ -53,6 +55,7 @@ class ProductScreenModal {
     image1 = json['productImage1'];
     image2 = json['productImage2'];
     image3 = json['productImage3'];
+    pincode= json['pincode'];
 
   }
 
@@ -74,6 +77,8 @@ class ProductScreenModal {
     data['quantityInstructionController'] = this.quantityInstructionController;
     data['productImage2']=this.image2;
     data['productImage3']=this.image3;
+    data['pincode']=this.pincode;
+
 
     return data;
   }

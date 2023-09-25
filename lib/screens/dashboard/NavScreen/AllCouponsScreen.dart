@@ -12,6 +12,10 @@ import 'package:adminpannelgrocery/state/allCouponsState.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import '../../../controllers/DrawerController.dart';
+import '../../../state/delete_coupon_state.dart';
+import '../../main/main_screen.dart';
 import '../components/coupon_item.dart';
 import '../components/product_item.dart';
 
@@ -27,7 +31,6 @@ class AllCouponsScreenState extends State<AllCouponsScreen> {
 
   late DeleteCouponCubit CubitdeleteNewProuct;
 
-
   List<ItemDataa> listProducts = [];
 
   @override
@@ -36,91 +39,131 @@ class AllCouponsScreenState extends State<AllCouponsScreen> {
     Cubit = BlocProvider.of<AllCouponsCubit>(context);
     CubitdeleteNewProuct = BlocProvider.of<DeleteCouponCubit>(context);
 
-     // pCubit.clearCategory();
-
-
+    // pCubit.clearCategory();
   }
-
 
   @override
   void dispose() {
     super.dispose();
 
-
-
+    Cubit.reset();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-backgroundColor: Colors.white,
-          title: Text('All Coupons',style: TextStyle(
-            color: Colors.black, // Change this to your desired text color
-          ),),
+          backgroundColor: Colors.white,
+          title: Text(
+            'All Coupons',
+            style: TextStyle(
+              color: Colors.black, // Change this to your desired text color
+            ),
+          ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back,color: Colors.black,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
-              Navigator.pop(context); // Navigate back when the back arrow is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChangeNotifierProvider<DrawController>(
+                    create: (context) => DrawController(),
+                    child: const MainScreen(),
+                  ),
+                ),
+              ); // Navigate back when the back arrow is pressed
             },
           ),
         ),
         body: SingleChildScrollView(
-      child: Column(
-        children: [
-// if(listProducts?.isNotEmpty ?? true)
-          SizedBox(
-            height: 40,
-          ),
-
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              Expanded(
-                flex: 5,
-                child: SafeArea(
-                  child: BlocConsumer<AllCouponsCubit, AllCouponsState>(
-                    listener: (context, state) {
-                      if (state is AllCouponsErrorState) {
-                        SnackBar snackBar = SnackBar(
-                          content: Text(state.error),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    builder: (context, state) {
-                      print(state);
-                      if (state is AllCouponsLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is AllCouponsLoadedState) {
-                        log(state.products.runtimeType.toString());
-                        var obj = state.products;
-                        listProducts = obj.itemData??[];
-                        log("AllCouponsLoadedState is ${listProducts.length.toString()}");
-                        return CouponsItems(listProducts, CubitdeleteNewProuct,
-                            (val) {
+              BlocConsumer<DeleteCouponCubit, DeleteCouponState>(
+                  listener: (context, state) {
+                if (state is DeleteCouponErrorState) {
+                  SnackBar snackBar = SnackBar(
+                    content: Text(state.error),
+                    backgroundColor: Colors.red,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                } else if (state is DeleteCouponLoadedState) {
+                  log(state.products.runtimeType.toString());
+                  var obj = state.products;
+                  if (obj.statusCode == 200) {
+                    Cubit.fetchAllCoupons();
+                    SnackBar snackBar = const SnackBar(
+                      content: Text('Success'),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    SnackBar snackBar = const SnackBar(
+                      content: Text('Failure'),
+                      backgroundColor: Colors.redAccent,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                }
+              }, builder: (context, state) {
+                return Container();
+              }),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: SafeArea(
+                      child: BlocConsumer<AllCouponsCubit, AllCouponsState>(
+                        listener: (context, state) {
+                          if (state is AllCouponsErrorState) {
+                            SnackBar snackBar = SnackBar(
+                              content: Text(state.error),
+                              backgroundColor: Colors.red,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        },
+                        builder: (context, state) {
+                          print(state);
+                          if (state is AllCouponsLoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is AllCouponsLoadedState) {
+                            log(state.products.runtimeType.toString());
+                            var obj = state.products;
+                            listProducts = obj.itemData ?? [];
+                            log("AllCouponsLoadedState is ${listProducts.length.toString()}");
+                            return CouponsItems(
+                                listProducts, (deleted) {
+                              if (deleted) {
 
-                        });
-                        //   return Text("${obj.message}");
-                      } else if (state is AllCouponsErrorState) {
-                        return Center(
-                          child: Text(state.error),
-                        );
-                      }
+                              }
+                            }, (val) {});
+                            //   return Text("${obj.message}");
+                          } else if (state is AllCouponsErrorState) {
+                            return Center(
+                              child: Text(state.error),
+                            );
+                          }
 
-                      return Container();
-                    },
+                          return Container();
+                        },
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 }
 
@@ -236,7 +279,3 @@ backgroundColor: Colors.white,
 //       ),
 //     );
 //   }
-
-
-
-

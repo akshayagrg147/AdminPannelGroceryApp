@@ -9,6 +9,8 @@ import 'package:adminpannelgrocery/repositories/Modal/add_bannercategory_modal.d
 import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
+import '../../models/request_modal.dart';
+import '../../sharedpreference/PreferencesUtil.dart';
 import '../Modal/CouponFormData.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/add_category_modal.dart';
@@ -33,7 +35,8 @@ class ProductRepository {
       //   'imageUrl':image,
       //  ' subCategoryList':list
       // };
-      final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category,imageUrl: image, subCategoryList:list ));
+      String? pincode = await PreferencesUtil.getString('pincode');
+      final response = await _dio?.post("/Admin/AddItemCategory",data: AddCategoryModal(category: category,imageUrl: image, subCategoryList:list,pincode: pincode));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;
@@ -52,7 +55,9 @@ class ProductRepository {
       //   'imageUrl':image,
       //  ' subCategoryList':list
       // };
-      final response = await _dio?.post("/Admin/AddBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ));
+      String? pincode = await PreferencesUtil.getString('pincode');
+
+      final response = await _dio?.post("/Admin/AddBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ,pincode: pincode));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;
@@ -71,7 +76,9 @@ class ProductRepository {
       //   'imageUrl':image,
       //  ' subCategoryList':list
       // };
-      final response = await _dio?.post("/Admin/UpdateBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ));
+      String? pincode = await PreferencesUtil.getString('pincode');
+
+      final response = await _dio?.post("/Admin/UpdateBannerCategory",data: AddBannerCategoryModal(banner1: banner1,imageUrl1: image1,banner2: banner2,imageUrl2: imag2,banner3: banner3,imageUrl3: imag3, subCategoryList:list ,pincode: pincode));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps = AddProductResponse.fromJson(response?.data);
         return postMaps;
@@ -83,20 +90,22 @@ class ProductRepository {
     }
     return AddProductResponse();
   }
-  Future<LoginResponse> login(String email,String password) async {
+  Future<LoginResponse> login( RequestLoginBody request) async {
     try {
-      final Map<String, String> mp = {
-        'email': email,
-        'password': password,
-      };
-      final response = await _dio?.post("/Admin/Login",data: mp);
+
+      final response = await _dio?.post("/Admin/Login",data:request );
       if (response?.statusCode == 200) {
-        LoginResponse postMaps = LoginResponse.fromJson(response?.data);
+        LoginResponse postMaps =  LoginResponse.fromJson(response?.data);
         return postMaps;
       } else {
-        print(response?.statusCode);
+        print("HTTP Error ak - Status Code: ${response?.statusCode}");
+        throw DioError(
+          requestOptions: RequestOptions(path: "/Admin/Login"),
+          response: response,
+        );
       }
     } catch (ex) {
+      print("Exception during login request: $ex");
       rethrow;
     }
     return LoginResponse();
@@ -104,6 +113,8 @@ class ProductRepository {
 
   Future<AddProductResponse> addProduct(ProductScreenModal object) async {
     try {
+      String? pincode = await PreferencesUtil.getString('pincode');
+      object.pincode=pincode;
       final response = await _dio?.post("/Admin/AddProduct",data: object);
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
@@ -202,9 +213,13 @@ class ProductRepository {
     return AddProductResponse();
   }
 
-  Future<AllProducts> fetchPosts() async {
+  Future<AllProducts> fetchProducts() async {
     try {
-      final response = await _dio?.get("/Admin/allProducts");
+      String? pincode = await PreferencesUtil.getString('pincode');
+      final response = await _dio?.get("/Admin/allProducts",queryParameters:{
+        "pincode":pincode
+      });
+
       print("sucess error");
       print(response?.statusMessage);
 
@@ -223,7 +238,10 @@ class ProductRepository {
   }
   Future<ProductCategoryModal> fetchCategory() async {
     try {
-      final response = await _dio?.get("/Admin/getProductCategory");
+      String? pincode = await PreferencesUtil.getString('pincode');
+      final response = await _dio?.get("/Admin/getProductCategory",queryParameters:{
+        "pincode":pincode
+      });
       print("sucess error");
       print(response?.statusMessage);
 
@@ -242,7 +260,12 @@ class ProductRepository {
   }
   Future<BannerCategoryModal> fetchBannerCategory() async {
     try {
-      final response = await _dio?.get("/Admin/getBannerCategory");
+
+      String? pincode = await PreferencesUtil.getString('pincode');
+      final response = await _dio?.get("/Admin/getBannerCategory",queryParameters:{
+        "pincode":pincode
+      });
+
       print("sucess error");
       print(response?.statusMessage);
 
@@ -261,7 +284,11 @@ class ProductRepository {
   }
   Future<allCouponsResponse> fetchAllCoupons() async {
     try {
-      final response = await _dio?.post("/Admin/allCoupons");
+      String? pincode = await PreferencesUtil.getString('pincode');
+
+       final response = await _dio?.get("/Admin/allCoupons",queryParameters:{
+        "pincode":pincode
+      });
       print("sucess error");
       print(response?.statusMessage);
 
@@ -281,7 +308,10 @@ class ProductRepository {
   Future<AllOrders> fetchOrders(int page,int limit) async {
     try {
       print("skip_order ${page}  $limit");
-      final response = await _dio?.get("/Admin/AllOrdersByPages", queryParameters: {"skip": page,"limit": limit});
+      String? pincode = await PreferencesUtil.getString('pincode');
+
+
+      final response = await _dio?.get("/Admin/AllOrdersByPages", queryParameters: {"skip": page,"limit": limit,"pincode":pincode});
 
       print(response?.statusMessage);
 
@@ -300,8 +330,11 @@ class ProductRepository {
   }
   Future<RecentOrderCountResponse> fetchRecentOrderCount() async {
     try {
-      final response = await _dio?.get("/Admin/RecentOrderCount");
-      print("sucess print");
+      String? pincode = await PreferencesUtil.getString('pincode');
+      final response = await _dio?.get("/Admin/RecentOrderCount",queryParameters:{
+        "pincode":pincode
+      });
+      print("request_print $pincode");
       print(response?.statusMessage);
 
       if (response?.statusCode == 200) {
@@ -339,7 +372,8 @@ class ProductRepository {
   }
   Future<AddProductResponse> updateProduct( ProductScreenModal obj) async {
     try {
-
+      String? pincode = await PreferencesUtil.getString('pincode');
+      obj.pincode=pincode??"";
       final response = await _dio?.post("/Admin/updateProduct",data: obj);
       print("sucess error");
       print(response?.statusMessage);
@@ -361,6 +395,8 @@ class ProductRepository {
   Future<AddProductResponse> addCoupons( CouponFormData obj) async {
     try {
 
+      String? pincode = await PreferencesUtil.getString('pincode');
+      obj.pincode=pincode??"";
       final response = await _dio?.post("/Admin/AddCoupon",data: obj.toJson());
       print("sucess error");
       print(response?.statusMessage);

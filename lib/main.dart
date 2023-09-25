@@ -102,10 +102,7 @@ class MyApp extends StatelessWidget {
                 canvasColor: secondaryColor,
               ),
               home: FutureBuilder<bool?>(
-                // Use FutureBuilder to wait for the shared preferences value
-                future: PreferencesUtil.getString("login_save"),
-                // Make sure the method name matches
-                builder: (context, snapshot) {
+                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // While waiting for the data, you can show a loading indicator or placeholder
                     return CircularProgressIndicator();

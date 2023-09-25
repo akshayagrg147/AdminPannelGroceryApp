@@ -23,7 +23,7 @@ class AllProductCubit extends Cubit<AllProductState> {
 
   void fetchProducts() async {
     try {
-      AllProducts posts = await postRepository.fetchPosts();
+      AllProducts posts = await postRepository.fetchProducts();
       emit(AllProductLoadedState(posts));
     } on DioError catch (ex) {
       if (ex.type == DioErrorType.other) {

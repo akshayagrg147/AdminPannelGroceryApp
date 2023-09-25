@@ -58,27 +58,7 @@ class _OrderItemsState extends State<OrderItems> {
                 return Container();
               },
             ),
-            BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
-              listener: (context, state) {
-                if (state is AddOrderLoadedState) {
-                  SnackBar snackBar = const SnackBar(
-                    content: Text('status updated'),
-                    backgroundColor: Colors.green,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                } else if (state is AddOrderErrorState) {
-                  SnackBar snackBar = SnackBar(
-                    content: Text("${state.error.toString()}"),
-                    backgroundColor: Colors.green,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              builder: (context, state) {
-                print("updated_value ${state}");
-                return Container();
-              },
-            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -87,19 +67,7 @@ class _OrderItemsState extends State<OrderItems> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    // Handle the click action here
-                    _selectDate(context);
-                  },
-                  child: Text(
-                    'Filter',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
+
               ],
             ),
             SizedBox(

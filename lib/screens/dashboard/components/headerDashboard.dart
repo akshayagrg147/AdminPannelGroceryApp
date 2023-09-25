@@ -38,24 +38,28 @@ class DashboardHeader extends StatelessWidget {
 
 
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Column(
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Column(
 
-          children: [
+
+            children: [
 if(imageUrl.isNotEmpty)
-            CircleAvatar(
-              radius: 30.0,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
-            SizedBox(height: 8.0),
-            if(imageUrl.isNotEmpty)
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+              CircleAvatar(
+                radius: 30.0,
+                backgroundImage: NetworkImage(imageUrl),
               ),
-            ),
-          ],
+              SizedBox(height: 8.0),
+              if(imageUrl.isNotEmpty)
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart';
 import '../../../models/AllOrders.dart';
+import '../../../repositories/cubit/UpdateOrderStatusCubit.dart';
+import '../../../state/add_order_state.dart';
 import '../components/header.dart';
 import '../components/headerDashboard.dart';
 import '../components/my_fields.dart';
@@ -45,8 +47,9 @@ class OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
+   // Cubit.resetState();
   //  setupScrollController(context);
-    BlocProvider.of<AllOrderCubit>(context).loadOrders();
+    Cubit.loadOrders();
   }
 
   @override
@@ -71,6 +74,38 @@ class OrderScreenState extends State<OrderScreen> {
                     DashboardHeader(
                       imageUrl:  "",
                       name:  "null", title: "Orders",),
+                    BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
+                      listener: (context, state) {
+                        if (state is AddOrderLoadedState) {
+                          if(state.products.statusCode==200){
+                            SnackBar snackBar = const SnackBar(
+                              content: Text('status updated'),
+                              backgroundColor: Colors.green,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                          else{
+                            SnackBar snackBar = const SnackBar(
+                              content: Text('something went wrong'),
+                              backgroundColor: Colors.redAccent,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+
+
+                      } else if (state is AddOrderErrorState) {
+                        SnackBar snackBar = SnackBar(
+                        content: Text("${state.error.toString()}"),
+                        backgroundColor: Colors.green,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      builder: (context, state) {
+                        print("updated_value ${state}");
+                        return Container();
+                      },
+                    ),
                     BlocConsumer<AllOrderCubit, AllOrderState>(
                       listener: (context, state) {
                         if (state is AllOrderErrorState) {

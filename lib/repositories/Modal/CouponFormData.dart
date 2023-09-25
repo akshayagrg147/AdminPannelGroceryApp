@@ -8,6 +8,7 @@ class CouponFormData {
   String? minimumPurchase;
   String? startDate;
   String? expireDate;
+  String? pincode;
 
   CouponFormData(
       {this.couponTitle,
@@ -17,7 +18,8 @@ class CouponFormData {
         this.discountedAmount,
         this.minimumPurchase,
         this.startDate,
-        this.expireDate});
+        this.expireDate
+      ,this.pincode});
 
   CouponFormData.fromJson(Map<String, dynamic> json) {
     couponTitle = json['couponTitle'];
@@ -28,6 +30,7 @@ class CouponFormData {
     minimumPurchase = json['minimumPurchase'];
     startDate = json['startDate'];
     expireDate = json['expireDate'];
+    pincode = json['pincode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +43,7 @@ class CouponFormData {
     data['minimumPurchase'] = this.minimumPurchase;
     data['startDate'] = this.startDate;
     data['expireDate'] = this.expireDate;
+    data['pincode'] = this.pincode;
     return data;
   }
 }

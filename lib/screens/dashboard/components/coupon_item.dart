@@ -16,34 +16,16 @@ import '../../../state/delete_product_state.dart';
 
 class CouponsItems extends StatelessWidget {
   final List<ItemDataa>? itemData;
-  final DeleteCouponCubit Cubit;
+  final  Function(bool) deleteStatus;
   final  Function(ItemDataa) editClick;
-  const CouponsItems( this.itemData,this.Cubit,this.editClick ,{
+
+  const CouponsItems( this.itemData,this.deleteStatus,this.editClick ,{
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DeleteCouponCubit, DeleteCouponState>(
-        listener: (context, state) {
-          if (state is DeleteCouponErrorState) {
-            SnackBar snackBar = SnackBar(
-              content: Text(state.error),
-              backgroundColor: Colors.red,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          } else if (state is DeleteCouponLoadedState) {
-            log(state.products.runtimeType.toString());
-            var obj = state.products;
-            SnackBar snackBar = const SnackBar(
-              content: Text('Success'),
-              backgroundColor: Colors.green,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
-        builder: (context, state) {
-          return Container(
+    return Container(
             padding: const EdgeInsets.all(defaultPadding),
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -80,7 +62,10 @@ class CouponsItems extends StatelessWidget {
                     rows: List.generate(
                       itemData!.length,
                           (index) {
-                        return productItemRow(itemData![index], Cubit); // Replace 'Cubit' with the actual instance of your Cubit class
+                        return productItemRow(itemData![index],(couponCode){
+                          BlocProvider.of<DeleteCouponCubit>(context).deleteCoupon(couponCode.toString());
+
+                        }); // Replace 'Cubit' with the actual instance of your Cubit class
                       },
                     ),
                   ),
@@ -90,11 +75,11 @@ class CouponsItems extends StatelessWidget {
           );
 
 
-    });
+
   }
 }
 
-DataRow productItemRow(ItemDataa data, DeleteCouponCubit cubit) {
+DataRow productItemRow(ItemDataa data,Function(String) couponCode) {
 
   return DataRow(
       cells: [
@@ -109,9 +94,9 @@ DataRow productItemRow(ItemDataa data, DeleteCouponCubit cubit) {
                 IconButton(
                   icon: Icon(Icons.delete,color: Colors.black,),
                   onPressed: () {
-
+                    couponCode(data.couponCode.toString());
                     // cubit.deleteCoupon(data.couponCode!);
-                     cubit.deleteCoupon(data.couponCode.toString());
+
                     // Perform delete operation
                   },
                 )

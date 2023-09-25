@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/AllOrders.dart';
 import '../../models/productScreenModal.dart';
+import '../../sharedpreference/PreferencesUtil.dart';
 import '../../state/add_coupon_state.dart';
 import '../../state/add_order_state.dart';
 import '../../state/add_product_state.dart';
@@ -24,7 +25,7 @@ class UpdateOrderStatusCubit extends Cubit<AddOrderState> {
 
 void updateOrderStatus(OrderData formData) async {
   try {
-
+    formData.pincode = await PreferencesUtil.getString('pincode');
     AddProductResponse posts = await postRepository.updateStatus(formData);
     emit(AddOrderLoadedState(posts));
   }

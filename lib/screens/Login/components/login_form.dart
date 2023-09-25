@@ -29,94 +29,91 @@ class LoginForm extends StatelessWidget {
             'assets/images/logo.png',
             width: 200,
             height: 200,
-
           ),
           Text(
             "Login Screen",
-
             style: TextStyle(
               fontSize: 26,
-              fontFamily: 'YourFontFamily', // Replace with your desired font family
+              fontFamily: 'YourFontFamily',
+              // Replace with your desired font family
               fontWeight: FontWeight.bold, // Set the font weight to bold
             ),
           ),
-           SizedBox(height: 20,),
-
-           commonTextFieldWidget(
+          SizedBox(
+            height: 20,
+          ),
+          commonTextFieldWidget(
             secondaryColor: Colors.white,
             type: TextInputType.text,
             controller: username,
-             keyboardType: TextInputType.emailAddress,
-             textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
             hintText: "Your email",
-icon: Icons.mail,
-
+            icon: Icons.mail,
             labelText: "Enter your email",
             onChanged: (val) {},
           ),
-
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-            child:
-            commonTextFieldWidget(
-              secondaryColor: Colors.white,
-              type: TextInputType.text,
-              controller: password,
-              icon: Icons.lock,
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.done,
-              hintText: "Your password",
-
-
-              labelText: "Enter your password",
-              onChanged: (val) {},
-            )
-
-
-
-          ),
+              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+              child: commonTextFieldWidget(
+                secondaryColor: Colors.white,
+                type: TextInputType.text,
+                controller: password,
+                icon: Icons.lock,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                hintText: "Your password",
+                labelText: "Enter your password",
+                onChanged: (val) {},
+              )),
           const SizedBox(height: defaultPadding),
-          BlocBuilder<LoginResponseCubit, LoginResponseState>(
+          BlocConsumer<LoginResponseCubit, LoginResponseState>(
               builder: (context, state) {
             if (state is LoginResponseLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is LoginResponseLoadedState) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
-                ),
-              );
-            } else if (state is LoginResponseErrorState) {
-              return Center(
-                child: Text(state.error),
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
-            return Container();
-          }),
-          Hero(
-            tag: "login_btn",
-            child: ElevatedButton(
-              onPressed: () async {
-                await PreferencesUtil.saveString('login_save',  true);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider<DrawController>(
-                      create: (context) => DrawController(),
-                      child: const MainScreen(),
-                    ),
-                  ),
-                );
-                //  BlocProvider.of<LoginResponseCubit>(context).submitlogin(username.text, password.text);
-              },
-              child: Text(
-                "Login".toUpperCase(),
+            return Hero(
+              tag: "login_btn",
+              child: ElevatedButton(
+                onPressed: () async {
+                  BlocProvider.of<LoginResponseCubit>(context)
+                      .submitlogin(username.text, password.text);
+                },
+                child: Text(
+                  "Login".toUpperCase(),
+                ),
               ),
-            ),
-          ),
+            );
+          }, listener: (context, state) {
+            if (state is LoginResponseErrorState) {
+              SnackBar snackBar = SnackBar(
+                content: Text(state.error),
+                backgroundColor: Colors.red,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            } else if (state is LoginResponseLoadedState) {
+              callingMainScreen(context,state.response.response?.pincode,state.response.response?.email,state.response.response?.name);
+            }
+          }),
           const SizedBox(height: defaultPadding),
         ],
+      ),
+    );
+  }
+
+  Future<void> callingMainScreen(BuildContext context, String? pincode, String? email, String? name) async {
+    await PreferencesUtil.saveString('pincode', pincode??"");
+    await PreferencesUtil.saveString('email', email??"");
+    await PreferencesUtil.saveString('name', name??"");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChangeNotifierProvider<DrawController>(
+          create: (context) => DrawController(),
+          child: const MainScreen(),
+        ),
       ),
     );
   }

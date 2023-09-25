@@ -213,12 +213,12 @@ class ProductRepository {
     return AddProductResponse();
   }
 
-  Future<AllProducts> fetchProducts() async {
+  Future<AllProducts> fetchProducts(int page,int limit) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
-      final response = await _dio?.get("/Admin/allProducts",queryParameters:{
-        "pincode":pincode
-      });
+        final response = await _dio?.get("/Admin/allProducts", queryParameters: {"skip": page,"limit": limit,"pincode":pincode});
+
+
 
       print("sucess error");
       print(response?.statusMessage);

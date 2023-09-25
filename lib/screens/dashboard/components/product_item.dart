@@ -122,7 +122,7 @@ class ProductItems extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            height:  1200,
+            height:  600,
             child: DataTable2(
               dividerThickness: 2.0,
               columnSpacing: 25.0,
@@ -155,6 +155,17 @@ class ProductItems extends StatelessWidget {
               ),
             ),
           ),
+          GestureDetector(
+            onTap: (){
+              BlocProvider.of<AllProductCubit>(context).loadProducts();
+            },
+            child:  const Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("next page>>",textAlign: TextAlign.right,),
+              ],
+            )  ,
+          )
         ],
       ),
     );

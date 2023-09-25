@@ -60,7 +60,7 @@ class ProductScreenState extends State<ProductScreen> {
     CubitdeleteNewProuct = BlocProvider.of<DeleteProductCubit>(context);
     checkBoxCubit = BlocProvider.of<BestSellingCheckBoxCubit>(context);
     exclusiveCheckBoxCubit = BlocProvider.of<ExclusiveCheckBoxCubit>(context);
-    Cubit.fetchProducts();
+    Cubit.loadProducts();
     // pCubit.clearCategory();
   }
 
@@ -115,6 +115,8 @@ class ProductScreenState extends State<ProductScreen> {
                             } else {
                               Cubit.passFilterData(items ?? <ItemData>[]);
                             }
+
+
                           } else {
                             setState(() {
                               listProducts = listProductsIfEmpty;
@@ -144,16 +146,39 @@ class ProductScreenState extends State<ProductScreen> {
                                   }
                                 },
                                 builder: (context, state) {
-                                  print(state);
+                                  print("state_is ${state}");
                                   if (state is AllProductLoadingState) {
                                     return const Center(
                                       child: CircularProgressIndicator(),
                                     );
-                                  } else if (state is AllProductLoadedState) {
+                                  }
+                                  else if (state is AllProductMoreState) {
+
+                                    print("itemcountis ${state.productItems.length}");
+                                    log(state.productItems.runtimeType.toString());
+                                    var obj = state.productItems;
+                                    listProducts = obj;
+                                    listProductsIfEmpty = obj;
+                                    return ProductItems(
+                                        listProducts,
+                                        CubitdeleteNewProuct,
+                                        checkBoxCubit,
+                                        exclusiveCheckBoxCubit, (val) {
+                                      openAlert(context, CubitAddNewProuct,
+                                          pCubit, true, val, (String data) {
+                                            if (data == "added")
+                                              Cubit.loadProducts();
+                                          });
+                                    });
+                                  }
+
+
+                                  else if (state is AllProductLoadedState) {
+                                    print("itemcountis ${state.products.length}");
                                     log(state.products.runtimeType.toString());
                                     var obj = state.products;
-                                    listProducts = obj.itemData;
-                                    listProductsIfEmpty = obj.itemData;
+                                    listProducts = obj;
+                                    listProductsIfEmpty = obj;
                                     return ProductItems(
                                         listProducts,
                                         CubitdeleteNewProuct,
@@ -162,7 +187,7 @@ class ProductScreenState extends State<ProductScreen> {
                                       openAlert(context, CubitAddNewProuct,
                                           pCubit, true, val, (String data) {
                                         if (data == "added")
-                                          Cubit.fetchProducts();
+                                          Cubit.loadProducts();
                                       });
                                     });
                                     //   return Text("${obj.message}");
@@ -344,7 +369,7 @@ class _ProductHeaderState extends State<ProductHeader> {
                       openAlert(context, widget.addNewProductCubit,
                           widget.cubit1, false, ItemData(), (String data) {
                         if (data == "added") {
-                          widget.allProductCubit.fetchProducts();
+                          widget.allProductCubit.loadProducts();
                         }
                       });
                     }

@@ -1,6 +1,3 @@
-
-
-
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
 import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
@@ -21,31 +18,24 @@ import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
-
 class UpdateDeliveryCubit extends Cubit<DeliveryAmountState> {
-  UpdateDeliveryCubit() : super( DeliveryAmountInitialState() );
+  UpdateDeliveryCubit() : super(DeliveryAmountInitialState());
 
   ProductRepository postRepository = ProductRepository();
 
-
-
   void submitFreeDeliveryAmount(String amount) async {
     try {
-      AddProductResponse orders = await postRepository.updateDeliveryAmount(amount);
+      AddProductResponse orders =
+          await postRepository.updateDeliveryAmount(amount);
       emit(DeliveryAmountLoadedState(orders));
-    }
-    on DioError catch(ex) {
-      print("corsage"+ex.message);
-      if(ex.type == DioErrorType.other) {
-        emit( DeliveryAmountErrorState("Can't fetch posts, please check your internet connection!") );
-      }
-      else {
-        emit( DeliveryAmountErrorState(ex.type.toString()) );
+    } on DioError catch (ex) {
+      print("corsage" + ex.message);
+      if (ex.type == DioErrorType.other) {
+        emit(DeliveryAmountErrorState(
+            "Can't fetch posts, please check your internet connection!"));
+      } else {
+        emit(DeliveryAmountErrorState(ex.type.toString()));
       }
     }
   }
-
-
-
-
 }

@@ -14,7 +14,7 @@ import '../../../state/SelectionState.dart';
 import '../../../state/add_order_state.dart';
 
 class OrderItems extends StatefulWidget {
-    List<OrderData>? itemData;
+  List<OrderData>? itemData;
   final ScrollController scrollController;
 
   OrderItems(this.itemData, {Key? key, required this.scrollController})
@@ -32,9 +32,10 @@ class _OrderItemsState extends State<OrderItems> {
   void initState() {
     super.initState();
     cubit = BlocProvider.of<SelectionCubit>(context);
-    orderStatus=BlocProvider.of<UpdateOrderStatusCubit>(context);
+    orderStatus = BlocProvider.of<UpdateOrderStatusCubit>(context);
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -48,9 +49,7 @@ class _OrderItemsState extends State<OrderItems> {
           children: [
             BlocBuilder<SelectionCubit, SelectionState>(
               builder: (context, state) {
-                print("updated_value 1 ${state}");
                 if (state is SelectionUpdated) {
-                  print("updated_value 2 ${state.selectedItem} ${state.data} ${state.data.orderStatus}");
                   state.data.orderStatus = state.selectedItem;
                   orderStatus.updateOrderStatus(state.data);
                   return Container();
@@ -58,7 +57,6 @@ class _OrderItemsState extends State<OrderItems> {
                 return Container();
               },
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -67,7 +65,6 @@ class _OrderItemsState extends State<OrderItems> {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
-
               ],
             ),
             SizedBox(
@@ -107,32 +104,31 @@ class _OrderItemsState extends State<OrderItems> {
                 ],
                 rows: List.generate(
                   widget.itemData?.length ?? 0,
-                      (index) {
-                   print("productitemlist ${ widget.itemData?.length} ");
+                  (index) {
                     return productItemRow(widget.itemData![index], cubit);
                   },
                 ),
               ),
             ),
-
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 BlocProvider.of<AllOrderCubit>(context).loadOrders();
               },
-              child:  const Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("next page>>",textAlign: TextAlign.right,),
+                  Text(
+                    "next page>>",
+                    textAlign: TextAlign.right,
+                  ),
                 ],
-              )  ,
+              ),
             )
-
           ],
         ),
       ),
     );
   }
-
 
   DateTime selectedDate = DateTime.now(); // Initialize with the current date
 
@@ -149,7 +145,7 @@ class _OrderItemsState extends State<OrderItems> {
         selectedDate = pickedDate;
 
         print("${selectedDate.day}/${selectedDate.month}/${selectedDate.year}");
-        widget.itemData=[];
+        widget.itemData = [];
       });
     }
   }
@@ -157,31 +153,29 @@ class _OrderItemsState extends State<OrderItems> {
 
 DataRow productItemRow(OrderData data, SelectionCubit cubit) {
   // Function(OrderData) fnData;
-  String selectedSpinnerValue = data.orderStatus??"Ordered";
+  String selectedSpinnerValue = data.orderStatus ?? "Ordered";
   // SizedBox(height: 16.0);
   return DataRow(cells: [
-    DataCell(
-  Row(
-  children: [
-  Expanded(
-      child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-  child: Image.network(
-  data.mobilenumber.toString(),
-  width: 100,
-  height: 100,
-  fit: BoxFit.cover,
-  errorBuilder: (ctx, obj, stack) {
-  return Image.asset(
-  'assets/images/logo.png',
-  width: 100,
-  height: 100,
-  fit: BoxFit.cover,
-  );
-  },
-  ),
-  ),
-  ),
+    DataCell(Row(children: [
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+          child: Image.network(
+            data.mobilenumber.toString(),
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, obj, stack) {
+              return Image.asset(
+                'assets/images/logo.png',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              );
+            },
+          ),
+        ),
+      ),
     ])),
     DataCell(Text(data.orderId!)),
     DataCell(ListView.builder(
@@ -199,31 +193,28 @@ DataRow productItemRow(OrderData data, SelectionCubit cubit) {
     DataCell(Text(data.createdDate.toString())),
     DataCell(Text("₹${data.totalOrderValue.toString()}")),
     DataCell(StatefulBuilder(
-  builder: (context, setState) {
-    return SpinnerWidget(
+      builder: (context, setState) {
+        return SpinnerWidget(
+          items: const ['Ordered', 'Delivered', 'Cancelled'],
+          onChanged: (value, index) {
+            setState(() {
+              selectedSpinnerValue = value;
+            });
 
-      items: const ['Ordered', 'Delivered', 'Cancelled'],
-      onChanged: (value, index) {
-        setState((){
-          selectedSpinnerValue=value;
-        });
-        print("value changed $value");
-       cubit.selectItem(value, data);
-        sendEmail();
+            cubit.selectItem(value, data);
+            sendEmail();
 
-        // Handle the selected value
+            // Handle the selected value
+          },
+          selectedValue:
+              selectedSpinnerValue, // Provide the initial selected value
+        );
       },
-      selectedValue:
-          selectedSpinnerValue, // Provide the initial selected value
-    );
-  },
     ))
   ]);
 }
 
-
 sendEmail() async {
-
   String username = 'akshaygarg147@gmail.com';
   String password = '7973434833';
 
@@ -249,5 +240,4 @@ sendEmail() async {
     }
   }
   // DONE
-
 }

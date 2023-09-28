@@ -27,7 +27,7 @@ class OrderScreen extends StatefulWidget {
 class OrderScreenState extends State<OrderScreen> {
   late AllOrderCubit Cubit;
   final scrollController = ScrollController();
-  List<OrderData>?  listProducts=[];
+  List<OrderData>? listProducts = [];
 
   // void setupScrollController(context) {
   //   scrollController.addListener(() {
@@ -42,22 +42,19 @@ class OrderScreenState extends State<OrderScreen> {
   //   });
   // }
 
-
   @override
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
-   // Cubit.resetState();
-  //  setupScrollController(context);
+    // Cubit.resetState();
+    //  setupScrollController(context);
     Cubit.loadOrders();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         drawer: const SideMenu(false),
-
         body: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,41 +65,40 @@ class OrderScreenState extends State<OrderScreen> {
             Expanded(
               flex: 5,
               child: SingleChildScrollView(
-
                 child: Column(
                   children: [
                     DashboardHeader(
-                      imageUrl:  "",
-                      name:  "null", title: "Orders",),
+                      imageUrl: "",
+                      name: "null",
+                      title: "Orders",
+                    ),
                     BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
                       listener: (context, state) {
                         if (state is AddOrderLoadedState) {
-                          if(state.products.statusCode==200){
+                          if (state.products.statusCode == 200) {
                             SnackBar snackBar = const SnackBar(
                               content: Text('status updated'),
                               backgroundColor: Colors.green,
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          }
-                          else{
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {
                             SnackBar snackBar = const SnackBar(
                               content: Text('something went wrong'),
                               backgroundColor: Colors.redAccent,
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
-
-
-                      } else if (state is AddOrderErrorState) {
-                        SnackBar snackBar = SnackBar(
-                        content: Text("${state.error.toString()}"),
-                        backgroundColor: Colors.green,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else if (state is AddOrderErrorState) {
+                          SnackBar snackBar = SnackBar(
+                            content: Text("${state.error.toString()}"),
+                            backgroundColor: Colors.green,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       },
                       builder: (context, state) {
-                        print("updated_value ${state}");
                         return Container();
                       },
                     ),
@@ -113,33 +109,29 @@ class OrderScreenState extends State<OrderScreen> {
                             content: Text(state.error),
                             backgroundColor: Colors.red,
                           );
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackBar);
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           Cubit.resetState();
-
                         }
-
                       },
                       builder: (context, state) {
-
-                        if (state is AllLoadingMoreState && state.isFirstFetch) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                       else if (state is AllOrderLoadingState) {
-                         //  return const Center(
-                         //    child: CircularProgressIndicator(),
-                         // );
-                        }
-                       else if (state is AllLoadingMoreState) {
-
+                        if (state is AllLoadingMoreState &&
+                            state.isFirstFetch) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (state is AllOrderLoadingState) {
+                          //  return const Center(
+                          //    child: CircularProgressIndicator(),
+                          // );
+                        } else if (state is AllLoadingMoreState) {
                           //   return Text("${obj.message}");
-                        }
-                        else if (state is AllOrderLoadedState) {
-                          listProducts=state.itemData;
-                          return OrderItems(state.itemData, scrollController: scrollController,);
+                        } else if (state is AllOrderLoadedState) {
+                          listProducts = state.itemData;
+                          return OrderItems(
+                            state.itemData,
+                            scrollController: scrollController,
+                          );
                           //   return Text("${obj.message}");
-                        }
-                        else if (state is AllOrderErrorState) {
+                        } else if (state is AllOrderErrorState) {
                           return Center(
                             child: Text(state.error),
                           );
@@ -156,13 +148,3 @@ class OrderScreenState extends State<OrderScreen> {
         ));
   }
 }
-
-
-
-
-
-
-
-
-
-

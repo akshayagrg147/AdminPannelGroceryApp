@@ -29,35 +29,32 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<DrawController>(
-      builder: (_,consumer,__) {
-       var x=  consumer.navigationItem;
-        return Scaffold(
-
-          drawer: SideMenu(false),
-          body: buildPages(x),);
-      }
-    );
-  }
-  void navigateToLoginScreen(BuildContext context) {
-    Future.delayed(Duration.zero, () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    return Consumer<DrawController>(builder: (_, consumer, __) {
+      var x = consumer.navigationItem;
+      return Scaffold(
+        drawer: SideMenu(false),
+        body: buildPages(x),
+      );
     });
   }
 
+  void navigateToLoginScreen(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    });
+  }
 
   buildPages(var navigationItem) {
     switch (navigationItem) {
       case NavigationItem.home:
-        return  HomeScreen();
+        return HomeScreen();
       case NavigationItem.category:
         return const CategoryScreen();
       case NavigationItem.logout:
-          navigateToLoginScreen(context);
+        navigateToLoginScreen(context);
         return SizedBox();
       case NavigationItem.banner:
         return const BannerScreen();
@@ -70,8 +67,6 @@ class _MainScreenState extends State<MainScreen> {
         return OrderScreen();
       case NavigationItem.coupons:
         return CouponScreen();
-
     }
   }
-
 }

@@ -16,11 +16,10 @@ import '../api/ProductRepository.dart';
 
 class AllProductCubit extends Cubit<AllProductState> {
   int skip = 0;
+
   AllProductCubit() : super(AllProductLoadingState());
 
   ProductRepository postRepository = ProductRepository();
-
-
 
   void loadProducts() {
     if (state is AllProductMoreState) return;
@@ -34,7 +33,7 @@ class AllProductCubit extends Cubit<AllProductState> {
     emit(AllProductMoreState(oldOrders, isFirstFetch: skip == 0));
 
     postRepository.fetchProducts(skip, 10).then((newOrders) {
-      skip=skip+10;
+      skip = skip + 10;
 
       final List<ItemData> orders = List.from(oldOrders);
       orders.addAll(newOrders.itemData!);
@@ -44,22 +43,20 @@ class AllProductCubit extends Cubit<AllProductState> {
     });
   }
 
-
-  void callProductSearch(String query)async {
+  void callProductSearch(String query) async {
     try {
       emit(AllProductLoadingState());
       AllProducts products = await postRepository.fetchSearchProductWise(query);
       print('category wise data success ${products.itemData}');
-      emit(AllProductLoadedState(products.itemData??[]));
-    }
-    on DioError catch(ex) {
+      emit(AllProductLoadedState(products.itemData ?? []));
+    } on DioError catch (ex) {
       print('category wise data __ ${ex.message}');
-      if(ex.type == DioErrorType.other) {
-        emit( AllProductErrorState("Can't fetch posts, please check your internet connection!") );
-      }
-      else {
+      if (ex.type == DioErrorType.other) {
+        emit(AllProductErrorState(
+            "Can't fetch posts, please check your internet connection!"));
+      } else {
         print('category wise data __ ${ex.message}');
-        emit( AllProductErrorState(ex.type.toString()) );
+        emit(AllProductErrorState(ex.type.toString()));
       }
     }
   }
@@ -79,11 +76,11 @@ class AllProductCubit extends Cubit<AllProductState> {
   // }
 
   void passFilterData(List<ItemData>? list) {
-    emit(AllProductLoadedState(
-        list!));
+    emit(AllProductLoadedState(list!));
   }
+
   void clearProducts() {
-    skip=0;
+    skip = 0;
     emit(AllProductLoadingState());
   }
 }

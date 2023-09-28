@@ -40,12 +40,12 @@ class OrderData {
 
   OrderData(
       {this.orderList,
-        this.totalOrderValue,
-        this.paymentmode,
-        this.address,
-        this.mobilenumber,
-        this.createdDate,
-        this.orderId,
+      this.totalOrderValue,
+      this.paymentmode,
+      this.address,
+      this.mobilenumber,
+      this.createdDate,
+      this.orderId,
       this.orderStatus,
       this.pincode});
 
@@ -62,8 +62,8 @@ class OrderData {
     mobilenumber = json['mobilenumber'];
     createdDate = json['createdDate'];
     orderId = json['orderId'];
-    orderStatus=json['orderStatus'];
-    pincode=json['pincode'];
+    orderStatus = json['orderStatus'];
+    pincode = json['pincode'];
   }
 
   Map<String, dynamic> toJson() {

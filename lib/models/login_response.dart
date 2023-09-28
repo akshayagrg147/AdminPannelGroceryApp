@@ -30,8 +30,17 @@ class ResponseLogin {
   String? password;
   String? pincode;
   String? freeDeliveryAmount;
+  String? privatekey;
+  String? publickey;
 
-  ResponseLogin({this.email,this.name, this.password, this.pincode,this.freeDeliveryAmount});
+  ResponseLogin(
+      {this.email,
+      this.name,
+      this.password,
+      this.pincode,
+      this.freeDeliveryAmount,
+      privatekey,
+      publickey});
 
   ResponseLogin.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -39,6 +48,8 @@ class ResponseLogin {
     pincode = json['pincode'];
     name = json['name'];
     freeDeliveryAmount = json['price'];
+    privatekey = json['privatekey'];
+    publickey = json['publickey'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +59,8 @@ class ResponseLogin {
     data['password'] = this.password;
     data['pincode'] = this.pincode;
     data['price'] = this.freeDeliveryAmount;
+    data['privatekey'] = this.privatekey;
+    data['publickey'] = this.publickey;
     return data;
   }
 }

@@ -15,19 +15,16 @@ import 'components/recent_orders.dart';
 import 'components/storage_details.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
-
-
 
 class _HomeScreenState extends State<HomeScreen> {
   late RecentOrderCubit cubit;
 
   String? name;
   String? pincode;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,11 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-
                     SafeArea(
-                      child: BlocConsumer<
-                          RecentOrderCubit,
-                          RecentOrderCountState>(
+                      child:
+                          BlocConsumer<RecentOrderCubit, RecentOrderCountState>(
                         listener: (context, state) {
                           if (state is RecentOrderCountErrorState) {
                             SnackBar snackBar = SnackBar(
@@ -67,15 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           } else if (state is RecentOrderCountLoadedState) {
                             var obj = state.response;
-                            print('print my fields1 ${obj.countResponse
-                                ?.length}');
+
                             return Column(
-
                               children: [
-
                                 DashboardHeader(
                                   imageUrl: state.response.image ?? "",
-                                  name:" $name\n $pincode"?? "null", title: "Dashboard",),
+                                  name: " $name\n $pincode" ?? "null",
+                                  title: "Dashboard",
+                                ),
                                 SizedBox(height: defaultPadding),
                                 CardViewCount(obj.countResponse),
                                 const SizedBox(height: defaultPadding),
@@ -85,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (Responsive.isMobile(context))
                                   const StarageDetails()
                               ],
-
                             );
                           } else if (state is RecentOrderCountErrorState) {
                             return Center(
@@ -118,14 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchData();
     cubit = BlocProvider.of<RecentOrderCubit>(context);
     cubit.fetchAllOrderCount();
-
-
-
-
   }
+
   Future<void> fetchData() async {
     name = await PreferencesUtil.getString('name');
-    pincode= await PreferencesUtil.getString('pincode');
+    pincode = await PreferencesUtil.getString('pincode');
     // After fetching the value, trigger a rebuild
     setState(() {});
   }

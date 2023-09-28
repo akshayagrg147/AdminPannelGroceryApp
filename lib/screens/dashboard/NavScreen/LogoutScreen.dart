@@ -13,8 +13,6 @@ class Logoutscreen extends StatefulWidget {
 class _LogoutscreenState extends State<Logoutscreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-        body: HomeScreen());
+    return Scaffold(body: HomeScreen());
   }
 }

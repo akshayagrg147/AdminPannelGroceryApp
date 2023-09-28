@@ -141,11 +141,8 @@ class AllCouponsScreenState extends State<AllCouponsScreen> {
                             var obj = state.products;
                             listProducts = obj.itemData ?? [];
                             log("AllCouponsLoadedState is ${listProducts.length.toString()}");
-                            return CouponsItems(
-                                listProducts, (deleted) {
-                              if (deleted) {
-
-                              }
+                            return CouponsItems(listProducts, (deleted) {
+                              if (deleted) {}
                             }, (val) {});
                             //   return Text("${obj.message}");
                           } else if (state is AllCouponsErrorState) {

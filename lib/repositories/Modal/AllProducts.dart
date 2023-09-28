@@ -1,10 +1,12 @@
-
 class AllProducts {
   List<ItemData>? itemData;
   int? statusCode;
   String? message;
 
-  AllProducts({required this.itemData,required this.statusCode, required this.message});
+  AllProducts(
+      {required this.itemData,
+      required this.statusCode,
+      required this.message});
 
   AllProducts.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {
@@ -28,47 +30,46 @@ class AllProducts {
   }
 }
 
-  class ItemData {
-    String? productName;
-    String? selling_price;
-    String? quantity;
-    String? productImage1;
-    String? productImage2;
-    String? productImage3;
-    String? productId;
-    String? productDescription;
-    String? orignal_price;
-    bool? dashboardDisplay;
-    String? category;
-    bool ? bestSellingCheckBox;
-    bool ? exclusiveSellingCheckBox;
-    List<Rating>? rating;
-    String? item_category_name;
-    String? item_subcategory_name
-    ;
-
+class ItemData {
+  String? productName;
+  String? selling_price;
+  String? quantity;
+  String? productImage1;
+  String? productImage2;
+  String? productImage3;
+  String? productId;
+  String? productDescription;
+  String? orignal_price;
+  bool? dashboardDisplay;
+  String? category;
+  bool? bestSellingCheckBox;
+  bool? exclusiveSellingCheckBox;
+  List<Rating>? rating;
+  String? item_category_name;
+  String? item_subcategory_name;
 
   ItemData(
       {this.productName,
-        this.selling_price,
-        this.quantity,
-        this.productImage1,
-        this.productImage2,
-        this.productImage3,
-        this.productId,
-        this.productDescription,
-        this.orignal_price,
-        this.dashboardDisplay,
-        this.category,
-        this. bestSellingCheckBox,
-        this.  exclusiveSellingCheckBox,
-        this.rating,
-        this.item_category_name,
-        this.item_subcategory_name});
-    @override
-    String toString() {
-      return 'ItemData{productName: $productName, selling_price: $selling_price, quantity: $quantity, productImage1: $productImage1, productImage2: $productImage2, productImage3: $productImage3, productId: $productId, productDescription: $productDescription, orignal_price: $orignal_price, dashboardDisplay: $dashboardDisplay, category: $category, bestSellingCheckBox: $bestSellingCheckBox, exclusiveSellingCheckBox: $exclusiveSellingCheckBox, rating: $rating, item_category_name: $item_category_name, item_subcategory_name: $item_subcategory_name}';
-    }
+      this.selling_price,
+      this.quantity,
+      this.productImage1,
+      this.productImage2,
+      this.productImage3,
+      this.productId,
+      this.productDescription,
+      this.orignal_price,
+      this.dashboardDisplay,
+      this.category,
+      this.bestSellingCheckBox,
+      this.exclusiveSellingCheckBox,
+      this.rating,
+      this.item_category_name,
+      this.item_subcategory_name});
+
+  @override
+  String toString() {
+    return 'ItemData{productName: $productName, selling_price: $selling_price, quantity: $quantity, productImage1: $productImage1, productImage2: $productImage2, productImage3: $productImage3, productId: $productId, productDescription: $productDescription, orignal_price: $orignal_price, dashboardDisplay: $dashboardDisplay, category: $category, bestSellingCheckBox: $bestSellingCheckBox, exclusiveSellingCheckBox: $exclusiveSellingCheckBox, rating: $rating, item_category_name: $item_category_name, item_subcategory_name: $item_subcategory_name}';
+  }
 
   ItemData.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];

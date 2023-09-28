@@ -20,53 +20,51 @@ class _OfferscreenState extends State<Offerscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         body: SafeArea(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Expanded(
-                flex: 5,
-                child: SingleChildScrollView(
-                  primary: false,
-                  padding: EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                          width: double.infinity,
-                          child: Text("Offers",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ))),
-                      Text(
-                        "Add, edit, remove and list offers here",
-                        style: Theme.of(context).textTheme.subtitle1,
-                        textDirection: TextDirection.ltr,
-                      ),
-                      ProductHeader(),
-                      SizedBox(height: defaultPadding),
-                      const Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: [
-                                ProductList(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 5,
+            child: SingleChildScrollView(
+              primary: false,
+              padding: EdgeInsets.all(defaultPadding),
+              child: Column(
+                children: [
+                  const SizedBox(
+                      width: double.infinity,
+                      child: Text("Offers",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ))),
+                  Text(
+                    "Add, edit, remove and list offers here",
+                    style: Theme.of(context).textTheme.subtitle1,
+                    textDirection: TextDirection.ltr,
                   ),
-                ),
+                  ProductHeader(),
+                  SizedBox(height: defaultPadding),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            ProductList(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            ],
+            ),
           ),
-        ));
+        ],
+      ),
+    ));
   }
 }
 
@@ -161,9 +159,9 @@ class ProductHeader extends StatefulWidget {
 class _ProductHeaderState extends State<ProductHeader> {
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [ AddCard1()],
+      children: [AddCard1()],
     );
   }
 }
@@ -401,7 +399,9 @@ class AddCard1 extends StatelessWidget {
             ]),
       ),
     );
-    showDialog(context: context,barrierDismissible: false,
+    showDialog(
+        context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) => dialog);
   }
 }

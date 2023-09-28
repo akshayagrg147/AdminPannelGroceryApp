@@ -9,15 +9,13 @@ import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../repositories/cubit/SelectionCubit.dart';
 
-
-
-
 class RecentOrders extends StatefulWidget {
   final List<RecentOrders1>? itemData;
 
-
-  const RecentOrders(this.itemData, {Key? key,})
-      : super(key: key);
+  const RecentOrders(
+    this.itemData, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<RecentOrders> createState() => _RecentOrdersState();
@@ -25,12 +23,13 @@ class RecentOrders extends StatefulWidget {
 
 class _RecentOrdersState extends State<RecentOrders> {
   late SelectionCubit cubit;
+
   @override
   void initState() {
     super.initState();
     cubit = BlocProvider.of<SelectionCubit>(context);
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +52,6 @@ class _RecentOrdersState extends State<RecentOrders> {
               child: DataTable2(
                 columnSpacing: defaultPadding,
                 minWidth: 1300,
-
                 columns: const [
                   DataColumn(label: Text("Product Image")),
                   DataColumn(
@@ -62,7 +60,6 @@ class _RecentOrdersState extends State<RecentOrders> {
                   DataColumn(
                     label: Text("Product"),
                   ),
-
                   DataColumn(
                     label: Text("Mobile Number"),
                   ),
@@ -80,8 +77,8 @@ class _RecentOrdersState extends State<RecentOrders> {
                   ),
                 ],
                 rows: List.generate(
-                  widget.itemData?.length??0,
-                      (index) => productItemRow(widget.itemData![index],cubit),
+                  widget.itemData?.length ?? 0,
+                  (index) => productItemRow(widget.itemData![index], cubit),
                 ),
               ),
             ),
@@ -92,8 +89,7 @@ class _RecentOrdersState extends State<RecentOrders> {
   }
 }
 
-DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
-
+DataRow productItemRow(RecentOrders1 data, SelectionCubit cubit) {
   String selectedSpinnerValue = 'Ordered';
   return DataRow(cells: [
     DataCell(
@@ -134,7 +130,6 @@ DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
         );
       },
     )),
-
     DataCell(Text(data.mobilenumber.toString())),
     DataCell(Text(data.address.toString())),
     DataCell(Text(data.paymentmode.toString())),
@@ -142,4 +137,3 @@ DataRow productItemRow(RecentOrders1 data,SelectionCubit cubit) {
     DataCell(Text("Ordered"))
   ]);
 }
-

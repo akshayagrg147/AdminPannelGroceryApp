@@ -1,33 +1,32 @@
-
 class HomeProducts {
   String? productName;
-  String ?price;
-  String ?quantity;
+  String? price;
+  String? quantity;
   String? productImage1;
-  String ?productImage2;
-  String ?productImage3;
-  String ?productId;
-  String ?productDescription;
-  String ?actual_price;
-  bool ?dashboardDisplay;
-  String ?category;
+  String? productImage2;
+  String? productImage3;
+  String? productId;
+  String? productDescription;
+  String? actual_price;
+  bool? dashboardDisplay;
+  String? category;
 
-  String ?itemCategoryId;
+  String? itemCategoryId;
   int? categoryType;
 
-
-  HomeProducts({this.productName,
-    this.price,
-    this.quantity,
-    this.productImage1,
-    this.productImage2
-    , this.productImage3,
-    this.productId,
-    this.productDescription,
-    this.actual_price,
-    this.category,
-    this.itemCategoryId,
-    this.categoryType});
+  HomeProducts(
+      {this.productName,
+      this.price,
+      this.quantity,
+      this.productImage1,
+      this.productImage2,
+      this.productImage3,
+      this.productId,
+      this.productDescription,
+      this.actual_price,
+      this.category,
+      this.itemCategoryId,
+      this.categoryType});
 
   HomeProducts.fromJson(Map<String, dynamic> json) {
     productName = json['productName'];
@@ -58,7 +57,6 @@ class HomeProducts {
     data['category'] = category;
     data['itemCategoryId'] = itemCategoryId;
     data['categoryType'] = categoryType;
-
 
     return data;
   }

@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
                 canvasColor: secondaryColor,
               ),
               home: FutureBuilder<bool?>(
-                 builder: (context, snapshot) {
+                builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // While waiting for the data, you can show a loading indicator or placeholder
                     return CircularProgressIndicator();
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
                     final bool loginSave = snapshot.data ??
                         false; // Use a default value if data is null
                     //if (!loginSave) {
-                      return LoginScreen();
+                    return LoginScreen();
                     // } else {
                     //   return HomeScreen();
                     // }

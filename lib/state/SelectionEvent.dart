@@ -1,4 +1,3 @@
-
 abstract class SelectionEvent {}
 
 class UpdateSelectionEvent extends SelectionEvent {

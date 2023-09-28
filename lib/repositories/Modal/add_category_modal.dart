@@ -1,15 +1,16 @@
 class AddCategoryModal {
   String? category;
-    String? imageUrl;
-    String? pincode;
+  String? imageUrl;
+  String? pincode;
   List<SubCategoryListData>? subCategoryList;
 
-  AddCategoryModal({this.category, this.imageUrl,this.pincode, this.subCategoryList});
+  AddCategoryModal(
+      {this.category, this.imageUrl, this.pincode, this.subCategoryList});
 
   AddCategoryModal.fromJson(Map<String, dynamic> json) {
     category = json['category'];
     imageUrl = json['imageUrl'];
-    pincode= json['pincode'];
+    pincode = json['pincode'];
     if (json['subCategoryList'] != null) {
       subCategoryList = <SubCategoryListData>[];
       json['subCategoryList'].forEach((v) {

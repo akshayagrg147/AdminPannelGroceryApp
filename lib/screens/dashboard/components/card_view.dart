@@ -6,11 +6,8 @@ import '../../../constants.dart';
 import '../../../repositories/Modal/RecentOrderCountResponse.dart';
 
 class CardView extends StatelessWidget {
-  const CardView({
-    Key? key,
-    required this.info,
-    required this.performClick
-  }) : super(key: key);
+  const CardView({Key? key, required this.info, required this.performClick})
+      : super(key: key);
 
   final CountResponse info;
   final String? Function() performClick;
@@ -18,7 +15,7 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         performClick();
       },
       child: Container(
@@ -38,20 +35,18 @@ class CardView extends StatelessWidget {
                   padding: const EdgeInsets.all(defaultPadding * 0.75),
                   height: 45,
                   width: 45,
-
                   child: ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                      Colors.white, // Replace with your desired tint color
-                      BlendMode.srcIn), // Blend mode for the tint color
+                        Colors.white, // Replace with your desired tint color
+                        BlendMode.srcIn), // Blend mode for the tint color
 
                     child: Image.network(
-
-
-                      info.image.toString(), // Replace with your actual image URL
-                      fit: BoxFit.cover, // How the image should be fitted within the container
+                      info.image.toString(),
+                      // Replace with your actual image URL
+                      fit: BoxFit
+                          .cover, // How the image should be fitted within the container
                     ),
                   ),
-
                 ),
               ],
             ),

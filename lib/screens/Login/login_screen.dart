@@ -1,7 +1,6 @@
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:flutter/material.dart';
 
-
 import '../../components/background.dart';
 import 'components/login_form.dart';
 import 'components/login_screen_top_image.dart';
@@ -23,7 +22,7 @@ class LoginScreen extends StatelessWidget {
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
+                  children: [
                     SizedBox(
                       width: 450,
                       child: LoginForm(),
@@ -51,7 +50,7 @@ class MobileLoginScreen extends StatelessWidget {
       children: <Widget>[
         const LoginScreenTopImage(),
         Row(
-          children:  [
+          children: [
             Spacer(),
             Expanded(
               flex: 8,

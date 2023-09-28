@@ -4,7 +4,8 @@ class BannerCategoryModal {
   String? message;
   bool? status;
 
-  BannerCategoryModal({this.itemData, this.statusCode, this.message,this.status});
+  BannerCategoryModal(
+      {this.itemData, this.statusCode, this.message, this.status});
 
   BannerCategoryModal.fromJson(Map<String, dynamic> json) {
     if (json['itemData'] != null) {
@@ -15,7 +16,7 @@ class BannerCategoryModal {
     }
     statusCode = json['statusCode'];
     message = json['message'];
-    status= json['status'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,7 +40,14 @@ class ItemBannerCategory {
   String? imageUrl3;
   List<SubCategoryList>? subCategoryList;
 
-  ItemBannerCategory({this.bannercategory1, this.imageUrl1,this.bannercategory2, this.imageUrl2,this.bannercategory3, this.imageUrl3, this.subCategoryList});
+  ItemBannerCategory(
+      {this.bannercategory1,
+      this.imageUrl1,
+      this.bannercategory2,
+      this.imageUrl2,
+      this.bannercategory3,
+      this.imageUrl3,
+      this.subCategoryList});
 
   ItemBannerCategory.fromJson(Map<String, dynamic> json) {
     bannercategory1 = json['bannercategory1'];

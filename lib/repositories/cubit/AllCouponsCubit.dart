@@ -12,14 +12,12 @@ import '../../state/add_product_state.dart';
 import '../Modal/AddedItemResponse.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/AllProducts.dart';
-import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 class AllCouponsCubit extends Cubit<AllCouponsState> {
   AllCouponsCubit() : super(AllCouponsInitialState()) {
     fetchAllCoupons();
-
   }
 
   ProductRepository postRepository = ProductRepository();
@@ -38,9 +36,7 @@ class AllCouponsCubit extends Cubit<AllCouponsState> {
     }
   }
 
-  void reset(){
+  void reset() {
     emit(AllCouponsInitialState());
   }
-
-
 }

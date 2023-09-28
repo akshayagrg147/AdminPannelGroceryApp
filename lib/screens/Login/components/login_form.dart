@@ -94,7 +94,15 @@ class LoginForm extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             } else if (state is LoginResponseLoadedState) {
-              callingMainScreen(context,state.response.response?.pincode,state.response.response?.email,state.response.response?.name,state.response.response?.password,state.response.response?.freeDeliveryAmount);
+              callingMainScreen(
+                  context,
+                  state.response.response?.pincode,
+                  state.response.response?.email,
+                  state.response.response?.name,
+                  state.response.response?.password,
+                  state.response.response?.freeDeliveryAmount,
+                  state.response.response?.privatekey ?? "",
+                  state.response.response?.publickey ?? "");
             }
           }),
           const SizedBox(height: defaultPadding),
@@ -103,13 +111,23 @@ class LoginForm extends StatelessWidget {
     );
   }
 
-  Future<void> callingMainScreen(BuildContext context, String? pincode, String? email, String? name, String? password,String? amount) async {
-    await PreferencesUtil.saveString('pincode', pincode??"");
-    await PreferencesUtil.saveString('email', email??"");
-    await PreferencesUtil.saveString('name', name??"");
-    await PreferencesUtil.saveString('password', password??"");
-    await PreferencesUtil.saveString('price', amount??"");
-    
+  Future<void> callingMainScreen(
+      BuildContext context,
+      String? pincode,
+      String? email,
+      String? name,
+      String? password,
+      String? amount,
+      String privatekey,
+      String publickey) async {
+    await PreferencesUtil.saveString('pincode', pincode ?? "");
+    await PreferencesUtil.saveString('email', email ?? "");
+    await PreferencesUtil.saveString('name', name ?? "");
+    await PreferencesUtil.saveString('password', password ?? "");
+    await PreferencesUtil.saveString('price', amount ?? "");
+    await PreferencesUtil.saveString('privatekey', privatekey ?? "");
+    await PreferencesUtil.saveString('publickey', publickey ?? "");
+
     Navigator.push(
       context,
       MaterialPageRoute(

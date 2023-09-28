@@ -1,6 +1,3 @@
-
-
-
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/models/AllOrders.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
@@ -19,43 +16,33 @@ import '../Modal/AllProducts.dart';
 import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
-
 class ProductCategoryCubit extends Cubit<AllCategoryState> {
-  ProductCategoryCubit() : super( AllCategoryLoadingState() );
+  ProductCategoryCubit() : super(AllCategoryLoadingState());
 
   ProductRepository postRepository = ProductRepository();
 
-  void selectCatgory(String value,int indexValue) {
-    emit(SelectedCategoryValue(value,indexValue));
+  void selectCatgory(String value, int indexValue) {
+    emit(SelectedCategoryValue(value, indexValue));
   }
-
-
 
   void fetchCategory() async {
     try {
       ProductCategoryModal posts = await postRepository.fetchCategory();
       print('category wise data ${posts.itemData}');
       emit(AllCategoryLoadedState(posts));
-    }
-    on DioError catch(ex) {
+    } on DioError catch (ex) {
       print('category wise data ${ex.message}');
-      if(ex.type == DioErrorType.other) {
-        emit( AllCategoryErrorState("Can't fetch posts, please check your internet connection!") );
-      }
-      else {
+      if (ex.type == DioErrorType.other) {
+        emit(AllCategoryErrorState(
+            "Can't fetch posts, please check your internet connection!"));
+      } else {
         print('category wise data ${ex.message}');
-        emit( AllCategoryErrorState(ex.type.toString()) );
+        emit(AllCategoryErrorState(ex.type.toString()));
       }
     }
   }
-
 
   void clearCategory() {
     emit(AllCategoryLoadingState());
   }
-
-
-
-
-
 }

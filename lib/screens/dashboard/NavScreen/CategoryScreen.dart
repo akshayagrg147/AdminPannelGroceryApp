@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-
-
 import 'package:http/http.dart' as http;
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
@@ -42,7 +40,6 @@ class CategoryScreenState extends State<CategoryScreen> {
   late DeleteProductCubit cubitdeleteNewProuct;
   List<ItemDataCategory>? listProducts = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -55,99 +52,71 @@ class CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: const SideMenu(false),
-        body: Row(
-            children:[
-              if (Responsive.isDesktop(context))
-                Expanded(
-                  child: SideMenu(true),
-                ),
+        body: Row(children: [
+          if (Responsive.isDesktop(context))
+            Expanded(
+              child: SideMenu(true),
+            ),
+          Expanded(
+            flex: 5,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  DashboardHeader(
+                    imageUrl: "",
+                    name: "null",
+                    title: "Category Screen",
+                  ),
+                  BlocConsumer<ProductCategoryCubit, AllCategoryState>(
+                    listener: (context, state) {
+                      if (state is AllCategoryErrorState) {
+                        SnackBar snackBar = SnackBar(
+                          content: Text(state.error),
+                          backgroundColor: Colors.red,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    builder: (context, state) {
+                      print(state);
+                      if (state is AllCategoryLoadingState) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (state is AllCategoryLoadedState) {
+                        print(
+                            'category Items ${state.category.itemData?.length.toString()}');
+                        log(state.category.runtimeType.toString());
+                        var obj = state.category;
+                        listProducts = obj.itemData ?? [];
+                        return CategoryItems(Cubit, listProducts, (delete) {
+                          Cubit.fetchCategory();
+                        });
+                        //   return Text("${obj.message}");
+                      } else if (state is AllCategoryErrorState) {
+                        print('category fetch error ${state.error.toString()}');
+                        return Center(
+                          child: Text(state.error),
+                        );
+                      }
 
-              Expanded(
-                flex: 5,
-                child: SingleChildScrollView(
-                  child:Column(
-                  children: [
-                    DashboardHeader(
-                      imageUrl:  "",
-                      name:  "null", title: "Category Screen",),
-                    BlocConsumer<ProductCategoryCubit, AllCategoryState>(
-                      listener: (context, state) {
-                        if (state is AllCategoryErrorState) {
-                          SnackBar snackBar = SnackBar(
-                            content: Text(state.error),
-                            backgroundColor: Colors.red,
-                          );
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackBar);
-                        }
-                      },
-                      builder: (context, state) {
-                        print(state);
-                        if (state is AllCategoryLoadingState) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        else if (state is AllCategoryLoadedState) {
-                          print(
-                              'category Items ${state.category.itemData?.length.toString()}');
-                          log(state.category.runtimeType.toString());
-                          var obj = state.category;
-                          listProducts = obj.itemData ?? [];
-                          return CategoryItems(Cubit,listProducts, (delete) {
-                            Cubit.fetchCategory();
-                          });
-                          //   return Text("${obj.message}");
-                        }
-                        else if (state is AllCategoryErrorState) {
-                          print(
-                              'category fetch error ${state.error.toString()}');
-                          return Center(
-                            child: Text(state.error),
-                          );
-                        }
-
-                        return Container();
-                      },
-                    ),
-
-                  ],
-                  )
-                  ,
-                ),
-              ),]
-        ));
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ]));
   }
 }
 
-
-
-
-
 class ImageKitRequest {
-  String ?imageUrl;
-  String ?imageId;
-  ImageKitRequest(this.imageUrl,this.imageId);
+  String? imageUrl;
+  String? imageId;
+
+  ImageKitRequest(this.imageUrl, this.imageId);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 List<SubCategoryListData> getDataFromControllers(
     List<TextEditingController> controllers) {
@@ -157,7 +126,5 @@ List<SubCategoryListData> getDataFromControllers(
   }
   return data;
 }
-
-
 
 enum State1 { yes, no }

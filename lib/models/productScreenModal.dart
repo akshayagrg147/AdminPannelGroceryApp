@@ -1,4 +1,3 @@
-
 class ProductScreenModal {
   String? productName;
   String? orignalPrice;
@@ -10,29 +9,28 @@ class ProductScreenModal {
   int? categoryType;
   String? itemCategoryName;
   String? itemSubcategoryName;
-  bool ? bestSellingCheckBox;
-  bool ? exclusiveSellingCheckBox;
-  String ? quantityInstructionController;
+  bool? bestSellingCheckBox;
+  bool? exclusiveSellingCheckBox;
+  String? quantityInstructionController;
   String? image1;
   String? image2;
   String? image3;
   String? pincode;
 
-
   ProductScreenModal(
       {this.productName,
-        this.orignalPrice,
-        this.sellingPrice,
-        this.quantity,
-        this.productId,
-        this.productDescription,
-        this.dashboardDisplay,
-        this.categoryType,
-        this.itemCategoryName,
-        this.itemSubcategoryName,
-        this. bestSellingCheckBox,
-        this.  exclusiveSellingCheckBox,
-        this.quantityInstructionController,
+      this.orignalPrice,
+      this.sellingPrice,
+      this.quantity,
+      this.productId,
+      this.productDescription,
+      this.dashboardDisplay,
+      this.categoryType,
+      this.itemCategoryName,
+      this.itemSubcategoryName,
+      this.bestSellingCheckBox,
+      this.exclusiveSellingCheckBox,
+      this.quantityInstructionController,
       this.image1,
       this.image2,
       this.image3,
@@ -43,7 +41,7 @@ class ProductScreenModal {
     orignalPrice = json['orignal_price'];
     sellingPrice = json['selling_price'];
     quantity = json['quantity'];
-                productId = json['productId'];
+    productId = json['productId'];
     bestSellingCheckBox = json['productBestSelling'];
     exclusiveSellingCheckBox = json['productExclusiveSelling'];
     productDescription = json['productDescription'];
@@ -51,12 +49,11 @@ class ProductScreenModal {
     categoryType = json['categoryType'];
     itemCategoryName = json['item_category_name'];
     itemSubcategoryName = json['item_subcategory_name'];
-    quantityInstructionController= json['quantityInstructionController'];
+    quantityInstructionController = json['quantityInstructionController'];
     image1 = json['productImage1'];
     image2 = json['productImage2'];
     image3 = json['productImage3'];
-    pincode= json['pincode'];
-
+    pincode = json['pincode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,14 +68,13 @@ class ProductScreenModal {
     data['categoryType'] = this.categoryType;
     data['item_category_name'] = this.itemCategoryName;
     data['item_subcategory_name'] = this.itemSubcategoryName;
-    data['productImage1']=this.image1;
+    data['productImage1'] = this.image1;
     data['productBestSelling'] = this.bestSellingCheckBox;
     data['productExclusiveSelling'] = this.exclusiveSellingCheckBox;
     data['quantityInstructionController'] = this.quantityInstructionController;
-    data['productImage2']=this.image2;
-    data['productImage3']=this.image3;
-    data['pincode']=this.pincode;
-
+    data['productImage2'] = this.image2;
+    data['productImage3'] = this.image3;
+    data['pincode'] = this.pincode;
 
     return data;
   }

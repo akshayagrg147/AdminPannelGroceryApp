@@ -1,4 +1,3 @@
-
 class CouponFormData {
   String? couponTitle;
   String? couponCode;
@@ -12,14 +11,14 @@ class CouponFormData {
 
   CouponFormData(
       {this.couponTitle,
-        this.couponCode,
-        this.couponType,
-        this.discountPercentage,
-        this.discountedAmount,
-        this.minimumPurchase,
-        this.startDate,
-        this.expireDate
-      ,this.pincode});
+      this.couponCode,
+      this.couponType,
+      this.discountPercentage,
+      this.discountedAmount,
+      this.minimumPurchase,
+      this.startDate,
+      this.expireDate,
+      this.pincode});
 
   CouponFormData.fromJson(Map<String, dynamic> json) {
     couponTitle = json['couponTitle'];

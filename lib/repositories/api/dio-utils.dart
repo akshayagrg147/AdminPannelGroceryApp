@@ -11,12 +11,14 @@ import 'dart:developer';
 // import 'package:chefkart/src/presentation/widgets/onboarded-user-widgets/alertBoxSpeakerOn.dart';
 // import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
+
 // import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DioUtil {
   Dio? _instance;
+
 //method for getting dio instance
   Dio? getInstance() {
     if (_instance == null) {
@@ -32,7 +34,7 @@ class DioUtil {
     return dio
       ..interceptors
           .add(InterceptorsWrapper(onRequest: (options, handler) async {
-            log(options.toString());
+        log(options.toString());
         // options.headers["Authorization"] = "Bearer " + accessToken;
         //     'Content-type': 'application/json'
         options.headers["Content-type"] = "application/json";

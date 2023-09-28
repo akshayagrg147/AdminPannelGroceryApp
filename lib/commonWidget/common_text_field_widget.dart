@@ -19,90 +19,82 @@ class commonTextFieldWidget extends StatelessWidget {
   final TextInputType type;
   final IconData icon;
 
-
   commonTextFieldWidget({
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.secondaryColor,
     required this.type,
-    this.defaultPadding=16.0,
+    this.defaultPadding = 16.0,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
-     required this.onChanged,
+    required this.onChanged,
     this.padding = 1.0,
     this.margin = 10.0,
     this.decoration = const BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
     ),
-    this.icon=Icons.ac_unit_sharp,
-
-
+    this.icon = Icons.ac_unit_sharp,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
+        child: TextField(
+          controller: controller,
 
+          obscureText: obscureText,
+          keyboardType: type,
+          textInputAction: textInputAction,
+          cursorColor: kPrimaryColor,
+          onChanged: onChanged,
+          maxLines: null,
+          // Unlimited lines
 
-      child: TextField(
-        controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            labelText: labelText,
+            //fillColor: Colors.white,
+            fillColor: secondaryColor,
 
-        obscureText: obscureText,
-        keyboardType: type,
-        textInputAction: textInputAction,
-        cursorColor: kPrimaryColor,
-        onChanged: onChanged,
-        maxLines: null, // Unlimited lines
-
-
-        decoration: InputDecoration(
-          hintText: hintText,
-          labelText: labelText,
-          //fillColor: Colors.white,
-          fillColor: secondaryColor,
-
-          filled: true
-          , border: OutlineInputBorder(
-      /*    borderSide: BorderSide(color: Colors.black),
+            filled: true,
+            border: OutlineInputBorder(
+                /*    borderSide: BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(10.0),*/
-          // Set the border color to grey
-        ),
-          prefixIcon: InkWell(
-            onTap: () {},
-            child: Container(
-              padding:  EdgeInsets.all(defaultPadding * 0.75),
-              margin:  EdgeInsets.symmetric(
-                  horizontal: defaultPadding / 2),
-              decoration:  BoxDecoration(
-                //color: Colors.black,
-
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child:  ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.black, // Change this to your desired tint color
-                  BlendMode.srcIn,
+                // Set the border color to grey
                 ),
-                child:Icon(icon,
+            prefixIcon: InkWell(
+              onTap: () {},
+              child: Container(
+                padding: EdgeInsets.all(defaultPadding * 0.75),
+                margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                decoration: BoxDecoration(
+                  //color: Colors.black,
 
-              )),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      Colors.black, // Change this to your desired tint color
+                      BlendMode.srcIn,
+                    ),
+                    child: Icon(
+                      icon,
+                    )),
+              ),
             ),
+            labelStyle: TextStyle(color: Colors.black),
+            // Change label text color
+            hintStyle: TextStyle(color: Colors.black),
           ),
-          labelStyle: TextStyle(color: Colors.black), // Change label text color
-          hintStyle: TextStyle(color: Colors.black),
         ),
-      ),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey, // Set the border color
-            width: 1.0,          // Set the border width
+            width: 1.0, // Set the border width
           ),
-        )
-
-    );
+        ));
   }
 }

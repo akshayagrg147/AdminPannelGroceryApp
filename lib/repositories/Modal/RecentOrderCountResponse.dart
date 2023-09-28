@@ -6,9 +6,13 @@ class RecentOrderCountResponse {
   String? image;
   String? name;
 
-
   RecentOrderCountResponse(
-      {this.recentOrders, this.countResponse, this.statusCode, this.message,this.image, this.name});
+      {this.recentOrders,
+      this.countResponse,
+      this.statusCode,
+      this.message,
+      this.image,
+      this.name});
 
   RecentOrderCountResponse.fromJson(Map<String, dynamic> json) {
     if (json['recentOrders'] != null) {
@@ -57,12 +61,12 @@ class RecentOrders1 {
 
   RecentOrders1(
       {this.orderList,
-        this.totalOrderValue,
-        this.paymentmode,
-        this.address,
-        this.mobilenumber,
-        this.createdDate,
-        this.orderId});
+      this.totalOrderValue,
+      this.paymentmode,
+      this.address,
+      this.mobilenumber,
+      this.createdDate,
+      this.orderId});
 
   RecentOrders1.fromJson(Map<String, dynamic> json) {
     if (json['orderList'] != null) {
@@ -126,7 +130,7 @@ class CountResponse {
   CountResponse.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     count = json['count'];
-    image=json['image'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {

@@ -1,4 +1,3 @@
-
 import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
@@ -16,7 +15,9 @@ import 'card_view.dart';
 class CardViewCount extends StatefulWidget {
   String? price;
   final List<CountResponse>? responseCount;
-    CardViewCount(this.responseCount, {
+
+  CardViewCount(
+    this.responseCount, {
     Key? key,
   }) : super(key: key);
 
@@ -25,52 +26,45 @@ class CardViewCount extends StatefulWidget {
 }
 
 class _CardViewCountState extends State<CardViewCount> {
-
   @override
   void initState() {
     super.initState();
-
   }
+
   Future<void> initializeData() async {
     widget.price = await getPrice();
     setState(() {});
     // Update the UI with the fetched price
   }
+
   @override
-  Widget build(BuildContext context)  {
+  Widget build(BuildContext context) {
     initializeData();
     print('printmyfields ${widget.price}');
     final Size _size = MediaQuery.of(context).size;
     final TextEditingController _textController = TextEditingController();
 
-
-    _textController.text="₹ ${widget.price}";
-
+    _textController.text = "₹ ${widget.price}";
 
     String labelText = "Free Delivery";
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: Column(
         children: [
-          BlocConsumer<
-              UpdateDeliveryCubit,
-              DeliveryAmountState>(
+          BlocConsumer<UpdateDeliveryCubit, DeliveryAmountState>(
             listener: (context, state) {
               if (state is DeliveryAmountErrorState) {
                 SnackBar snackBar = SnackBar(
                   content: Text(state.error),
                   backgroundColor: Colors.red,
                 );
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackBar);
-              }
-              else  if (state is DeliveryAmountLoadedState) {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (state is DeliveryAmountLoadedState) {
                 SnackBar snackBar = SnackBar(
-                  content: Text(state.products.message??""),
+                  content: Text(state.products.message ?? ""),
                   backgroundColor: Colors.green,
                 );
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackBar);
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
             builder: (context, state) {
@@ -83,7 +77,6 @@ class _CardViewCountState extends State<CardViewCount> {
               return Container();
             },
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,19 +87,19 @@ class _CardViewCountState extends State<CardViewCount> {
               Row(
                 children: [
                   ElevatedButton.icon(
-
                     onPressed: () {
-                      _showDialog(context,(value){
-                        BlocProvider.of<UpdateDeliveryCubit>(context).submitFreeDeliveryAmount(value);
+                      _showDialog(context, (value) {
+                        BlocProvider.of<UpdateDeliveryCubit>(context)
+                            .submitFreeDeliveryAmount(value);
                         print("valueAtFreeDelivery ${value}");
-                        _textController.text="₹ $value";
+                        _textController.text = "₹ $value";
                       });
                     },
                     icon: Icon(Icons.account_balance_wallet),
                     label: Text(labelText),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10,bottom: 15),
+                    padding: const EdgeInsets.only(left: 10, bottom: 15),
                     child: SizedBox(
                       width: 50, // Set the desired width
                       height: 50,
@@ -121,17 +114,19 @@ class _CardViewCountState extends State<CardViewCount> {
                   ),
                 ],
               )
-
             ],
           ),
           SizedBox(height: defaultPadding),
           Responsive(
-            mobile: FileInfoCardGridView(widget.responseCount,
+            mobile: FileInfoCardGridView(
+              widget.responseCount,
               crossAxisCount: _size.width < 650 ? 2 : 4,
-              childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
+              childAspectRatio:
+                  _size.width < 650 && _size.width > 350 ? 1.3 : 1,
             ),
             tablet: FileInfoCardGridView(widget.responseCount),
-            desktop: FileInfoCardGridView(widget.responseCount,
+            desktop: FileInfoCardGridView(
+              widget.responseCount,
               childAspectRatio: _size.width < 1400 ? 2 : 1.1,
             ),
           ),
@@ -145,7 +140,6 @@ class _CardViewCountState extends State<CardViewCount> {
 
     showDialog(
       barrierDismissible: false,
-
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -153,7 +147,7 @@ class _CardViewCountState extends State<CardViewCount> {
           title: Text('Get Free Delivery'),
           content: Container(
             color: Colors.grey, // Set the background color to white
-            child:  commonTextFieldWidget(
+            child: commonTextFieldWidget(
               type: TextInputType.number,
               controller: textController,
               hintText: "",
@@ -182,18 +176,18 @@ class _CardViewCountState extends State<CardViewCount> {
       },
     );
   }
-
 }
-
 
 Future<String> getPrice() async {
   final price = await PreferencesUtil.getString('price');
   return price!;
 }
-class FileInfoCardGridView extends StatelessWidget {
 
+class FileInfoCardGridView extends StatelessWidget {
   final List<CountResponse>? countResponse;
-   FileInfoCardGridView(this.countResponse, {
+
+  FileInfoCardGridView(
+    this.countResponse, {
     Key? key,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
@@ -215,21 +209,20 @@ class FileInfoCardGridView extends StatelessWidget {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) =>
-          CardView(info: countResponse![index],performClick: (){
-        if(index==0) {
-        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
-        }
-        else if(index==1) {
-        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
-        }
-        else if(index==2) {
-         // navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
-        }
-        else{
-        //  navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
-        }
-      },),
+      itemBuilder: (context, index) => CardView(
+        info: countResponse![index],
+        performClick: () {
+          if (index == 0) {
+            //  navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
+          } else if (index == 1) {
+            //  navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+          } else if (index == 2) {
+            // navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
+          } else {
+            //  navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
+          }
+        },
+      ),
     );
   }
 }

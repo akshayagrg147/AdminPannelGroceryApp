@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-
-
-
 import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart';
 import 'package:adminpannelgrocery/repositories/Modal/product_category_modal.dart';
 import 'package:adminpannelgrocery/repositories/cubit/BannerCategoryCubit.dart';
@@ -47,7 +44,6 @@ class BannerScreenState extends State<BannerScreen> {
   late DeleteBannerCubit deletecubit;
   List<ItemBannerCategory>? listProducts = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -60,98 +56,63 @@ class BannerScreenState extends State<BannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: const SideMenu(false),
-        body: Row(
-            children:[
-              if (Responsive.isDesktop(context))
-                Expanded(
-                  child: SideMenu(true),
+        body: Row(children: [
+          if (Responsive.isDesktop(context))
+            Expanded(
+              child: SideMenu(true),
+            ),
+          Expanded(
+            flex: 5,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    DashboardHeader(
+                      imageUrl: "",
+                      name: "null",
+                      title: "Banner Screen",
+                    ),
+                    BlocConsumer<BannerCategoryCubit, AllBannerState>(
+                      listener: (context, state) {
+                        if (state is AllBannerErrorState) {
+                          SnackBar snackBar = SnackBar(
+                            content: Text(state.error),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is AllBannerLoadingState) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is AllBannerLoadedState) {
+                          log(state.category.runtimeType.toString());
+                          var obj = state.category;
+                          listProducts = obj.itemData ?? [];
+                          return BannerItems(Cubit, listProducts, (delete) {
+                            Cubit.fetchBannerCategory();
+                          });
+                          //   return Text("${obj.message}");
+                        } else if (state is AllBannerErrorState) {
+                          return Center(
+                            child: Text(state.error),
+                          );
+                        }
+
+                        return Container();
+                      },
+                    ),
+                  ],
                 ),
-
-              Expanded(
-                flex: 5,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: SingleChildScrollView(
-                    child:Column(
-
-                    children: [
-                      DashboardHeader(
-                        imageUrl:  "",
-                        name:  "null", title: "Banner Screen",),
-                      BlocConsumer<BannerCategoryCubit, AllBannerState>(
-                        listener: (context, state) {
-                          if (state is AllBannerErrorState) {
-                            SnackBar snackBar = SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.red,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                        builder: (context, state) {
-                          print(state);
-                          if (state is AllBannerLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          else if (state is AllBannerLoadedState) {
-                            print(
-                                'category Items ${state.category.itemData?.length.toString()}');
-                            log(state.category.runtimeType.toString());
-                            var obj = state.category;
-                            listProducts = obj.itemData ?? [];
-                            return BannerItems(Cubit,listProducts, (delete) {
-                              Cubit.fetchBannerCategory();
-                            });
-                            //   return Text("${obj.message}");
-                          }
-                          else if (state is AllBannerErrorState) {
-                            print(
-                                'category fetch error ${state.error.toString()}');
-                            return Center(
-                              child: Text(state.error),
-                            );
-                          }
-
-                          return Container();
-                        },
-                      ),
-
-                    ],
-                    )
-                    ,
-                  ),
-                ),
-              ),]
-        ));
+              ),
+            ),
+          ),
+        ]));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 List<SubCategoryListData> getDataFromControllers(
     List<TextEditingController> controllers) {
@@ -161,7 +122,5 @@ List<SubCategoryListData> getDataFromControllers(
   }
   return data;
 }
-
-
 
 enum State1 { yes, no }

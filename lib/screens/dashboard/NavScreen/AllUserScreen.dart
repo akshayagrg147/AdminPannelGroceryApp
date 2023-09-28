@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart';
-import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart' hide ItemData;
+import 'package:adminpannelgrocery/repositories/Modal/AllProducts.dart'
+    hide ItemData;
 import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 
 import '../../../responsive.dart';
@@ -19,8 +20,6 @@ import '../../main/components/side_menu.dart';
 import '../components/user_item.dart';
 
 class AllUserScreen extends StatefulWidget {
-
-
   const AllUserScreen({Key? key}) : super(key: key);
 
   @override
@@ -29,18 +28,15 @@ class AllUserScreen extends StatefulWidget {
 
 class ProductScreenState extends State<AllUserScreen> {
   late UserResponseCubit Cubit;
- 
-
 
   @override
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<UserResponseCubit>(context);
-  
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         drawer: const SideMenu(false),
         body: Row(
@@ -52,9 +48,7 @@ class ProductScreenState extends State<AllUserScreen> {
             Expanded(
               flex: 5,
               child: SingleChildScrollView(
-
                 child: Column(
-
                   children: [
                     const SizedBox(height: 26.0),
                     Text(
@@ -66,42 +60,43 @@ class ProductScreenState extends State<AllUserScreen> {
                       children: [
                         Expanded(
                           flex: 5,
-                       child: SafeArea(
-                          child: BlocConsumer<UserResponseCubit, AllUserState>(
-                            listener: (context, state) {
-                              if (state is AllUserErrorState) {
-                                SnackBar snackBar = SnackBar(
-                                  content: Text(state.error),
-                                  backgroundColor: Colors.red,
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is AllUserLoadingState) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else if (state is AllUserLoadedState) {
-                                log(state.products.runtimeType.toString());
-                                var obj = state.products;
-                                return Container(
-                                 // Replace 300 with your desired width
+                          child: SafeArea(
+                            child:
+                                BlocConsumer<UserResponseCubit, AllUserState>(
+                              listener: (context, state) {
+                                if (state is AllUserErrorState) {
+                                  SnackBar snackBar = SnackBar(
+                                    content: Text(state.error),
+                                    backgroundColor: Colors.red,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is AllUserLoadingState) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (state is AllUserLoadedState) {
+                                  log(state.products.runtimeType.toString());
+                                  var obj = state.products;
+                                  return Container(
+                                    // Replace 300 with your desired width
 
-                                  child: UserItem(obj.userData),
-                                );
-                             //   return Text("${obj.message}");
-                              } else if (state is AllUserErrorState) {
-                                return Center(
-                                  child: Text(state.error),
-                                );
-                              }
+                                    child: UserItem(obj.userData),
+                                  );
+                                  //   return Text("${obj.message}");
+                                } else if (state is AllUserErrorState) {
+                                  return Center(
+                                    child: Text(state.error),
+                                  );
+                                }
 
-                              return Container();
-                            },
+                                return Container();
+                              },
+                            ),
                           ),
-                        ),
                         )
                       ],
                     ),
@@ -113,13 +108,5 @@ class ProductScreenState extends State<AllUserScreen> {
         ));
   }
 }
-
-
-
-
-
-
-
-
 
 enum State1 { yes, no }

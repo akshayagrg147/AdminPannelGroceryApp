@@ -1,148 +1,155 @@
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../repositories/cubit/BannerCategoryCubit.dart';
+import '../sharedpreference/PreferencesUtil.dart';
 
 class CustomTextfield extends StatefulWidget {
   const CustomTextfield(
       {super.key,
-        required this.label,
-        required this.controller,
-        this.obsecureText,
-        this.errorText,
-        this.suffixIcon,
-        this.validator});
+      required this.label,
+      required this.controller,
+      this.obsecureText,
+      this.errorText,
+      this.suffixIcon,
+      this.validator});
+
   final String label;
   final TextEditingController controller;
   final bool? obsecureText;
   final Widget? suffixIcon;
   final String? errorText;
   final String? Function(String?)? validator;
-  @override  State<CustomTextfield> createState() => _CustomTextfieldState();
+
+  @override
+  State<CustomTextfield> createState() => _CustomTextfieldState();
 }
+
 class _CustomTextfieldState extends State<CustomTextfield> {
   bool showPassword = true;
-  @override  Widget build(BuildContext context) {
-    return widget.obsecureText ?? false        ? SizedBox(
-      width: SizeConfig.widthMultiplier! * 384,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.label,
-          ),
-          SizedBox(
-            height: SizeConfig.heightMultiplier! * 10,
-          ),
-          Container(
-            height: SizeConfig.heightMultiplier! * 73,
-            width: SizeConfig.widthMultiplier! * 384,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
 
-                    width: 1)),
-            child: Center(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: widget.controller,
-                      obscureText: showPassword,
-                      validator: widget.validator,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                              left: SizeConfig.widthMultiplier! * 20),
-                          border: InputBorder.none),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        right: SizeConfig.widthMultiplier! * 20),
-                    child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showPassword = !showPassword;
-                          });
-                        },
+  @override
+  Widget build(BuildContext context) {
+    return widget.obsecureText ?? false
+        ? SizedBox(
+            width: SizeConfig.widthMultiplier! * 384,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.label,
+                ),
+                SizedBox(
+                  height: SizeConfig.heightMultiplier! * 10,
+                ),
+                Container(
+                  height: SizeConfig.heightMultiplier! * 73,
+                  width: SizeConfig.widthMultiplier! * 384,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(width: 1)),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: widget.controller,
+                            obscureText: showPassword,
+                            validator: widget.validator,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(
+                                    left: SizeConfig.widthMultiplier! * 20),
+                                border: InputBorder.none),
+                          ),
                         ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          widget.errorText != null                    ? Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: SizeConfig.widthMultiplier! * 20,
-                ),
-                Text(
-                  widget.errorText.toString(),
-
-                )
-              ],
-            ),
-          )
-              : const SizedBox()
-        ],
-      ),
-    )
-        : SizedBox(
-      width: SizeConfig.widthMultiplier! * 384,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.label,
-         ),
-          SizedBox(
-            height: SizeConfig.heightMultiplier! * 10,
-          ),
-          Container(
-            height: SizeConfig.heightMultiplier! * 73,
-            width: SizeConfig.widthMultiplier! * 384,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                    width: 1)),
-            child: Center(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      validator: widget.validator,
-                      controller: widget.controller,
-                      obscureText: widget.obsecureText ?? false,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                              left: SizeConfig.widthMultiplier! * 20),
-                          border: InputBorder.none),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              right: SizeConfig.widthMultiplier! * 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showPassword = !showPassword;
+                              });
+                            },
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          widget.errorText != null                    ? Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: SizeConfig.widthMultiplier! * 20,
                 ),
-                Text(
-                  widget.errorText.toString(),
-                )
+                widget.errorText != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: SizeConfig.widthMultiplier! * 20,
+                            ),
+                            Text(
+                              widget.errorText.toString(),
+                            )
+                          ],
+                        ),
+                      )
+                    : const SizedBox()
               ],
             ),
           )
-              : const SizedBox()
-        ],
-      ),
-    );
+        : SizedBox(
+            width: SizeConfig.widthMultiplier! * 384,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.label,
+                ),
+                SizedBox(
+                  height: SizeConfig.heightMultiplier! * 10,
+                ),
+                Container(
+                  height: SizeConfig.heightMultiplier! * 73,
+                  width: SizeConfig.widthMultiplier! * 384,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(width: 1)),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            validator: widget.validator,
+                            controller: widget.controller,
+                            obscureText: widget.obsecureText ?? false,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(
+                                    left: SizeConfig.widthMultiplier! * 20),
+                                border: InputBorder.none),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                widget.errorText != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: SizeConfig.widthMultiplier! * 20,
+                            ),
+                            Text(
+                              widget.errorText.toString(),
+                            )
+                          ],
+                        ),
+                      )
+                    : const SizedBox()
+              ],
+            ),
+          );
   }
 }
 
@@ -157,6 +164,7 @@ class SizeConfig {
   static double? widthMultiplier;
   static bool isPortrait = true;
   static bool isMobilePortrait = false;
+
   void init(BoxConstraints constraints, Orientation orientation) {
     if (orientation == Orientation.portrait) {
       _screenWidth = constraints.maxWidth;
@@ -183,7 +191,63 @@ class SizeConfig {
     widthMultiplier = 1;
   }
 }
-Future<void> deleteImage(BuildContext context,String publicKey, String privateKey, String fileId) async {
-  print("deleteimage ${publicKey} ${privateKey} ${fileId}");
+
+Future<void> deleteImage(BuildContext context, String publicKey,
+    String privateKey, String fileId) async {
   BlocProvider.of<BannerCategoryCubit>(context).deleteImage(fileId);
 }
+
+Future<void> uploadImage(Function(String, String) fn, String category) async {
+  var headers = {
+    'Authorization':
+        'Basic cHJpdmF0ZV9tdHVMdjFGa0YrVE9YbFV5SC9ZbEIvQkpndVE9Og=='
+  };
+
+  var url = 'https://upload.imagekit.io/api/v1/files/upload';
+
+  // Select an image using ImagePicker
+  final picker = ImagePicker();
+  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedImage != null) {
+    var imageFile = await pickedImage.readAsBytes();
+
+    try {
+      var dio = Dio();
+      var timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      var formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(
+          imageFile,
+          filename: pickedImage.path.split('/').last,
+        ),
+        'fileName': 'image_$timestamp.png',
+        'folder': category,
+      });
+
+      var response = await dio.post(
+        url,
+        data: formData,
+        options: Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = response.data;
+        var responseData = jsonResponse["url"].toString();
+        fn(responseData, jsonResponse["fileId"].toString());
+      } else {
+        print('Failed to upload image: ${response.statusMessage}');
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+    }
+  } else {
+    print('No image selected.');
+  }
+}
+// Future<String> getPublicPrivateKey(Function(String, String) fn) async {
+//   final publickey = await PreferencesUtil.getString('publickey');
+//   final privatekey = await PreferencesUtil.getString('privatekey');
+//   fn(publickey??"",privatekey??"")!;
+//   return "";
+// }

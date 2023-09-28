@@ -6,11 +6,10 @@ import 'package:adminpannelgrocery/screens/dashboard/NavScreen/ProductScreen.dar
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
-
-class NavigationBloc extends Cubit<NavigationEvent>{
+class NavigationBloc extends Cubit<NavigationEvent> {
   final BuildContext context;
-  NavigationBloc(this.context) : super(NavigationEvent.navigateToAllUser);
 
+  NavigationBloc(this.context) : super(NavigationEvent.navigateToAllUser);
 
   void navigateToScreen(NavigationEvent event, BuildContext _context) {
     switch (event) {
@@ -44,12 +43,11 @@ class NavigationBloc extends Cubit<NavigationEvent>{
           MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
         break;
-    // Handle more navigation events and navigate to corresponding screens
+      // Handle more navigation events and navigate to corresponding screens
     }
   }
-
-
 }
+
 enum NavigationEvent {
   navigateToAllUser,
   navigateToOrder,

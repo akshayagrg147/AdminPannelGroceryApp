@@ -1,5 +1,3 @@
-
-
 class RequestLoginBody {
   String? email;
   String? password;

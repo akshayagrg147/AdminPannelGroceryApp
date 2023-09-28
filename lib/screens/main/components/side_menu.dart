@@ -7,7 +7,9 @@ import '../../../navigationPackage/NavigationItem.dart';
 
 class SideMenu extends StatefulWidget {
   final isDesktop;
-  const SideMenu(this.isDesktop, {
+
+  const SideMenu(
+    this.isDesktop, {
     Key? key,
   }) : super(key: key);
 
@@ -39,66 +41,57 @@ class _SideMenuState extends State<SideMenu> {
           DrawerListTile(
             title: "Home",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
-             provider.setNavigationItem(NavigationItem.home);
+              if (!widget.isDesktop) Navigator.pop(context);
+              provider.setNavigationItem(NavigationItem.home);
             },
-
           ),
           DrawerListTile(
             title: "Products",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
-             provider.setNavigationItem(NavigationItem.product);
+              if (!widget.isDesktop) Navigator.pop(context);
+              provider.setNavigationItem(NavigationItem.product);
             },
           ),
           DrawerListTile(
             title: "Category",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
-              selectItem(context, NavigationItem.category,provider);
+              if (!widget.isDesktop) Navigator.pop(context);
+              selectItem(context, NavigationItem.category, provider);
             },
           ),
           DrawerListTile(
             title: "Order",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
+              if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.order, provider);
             },
           ),
           DrawerListTile(
             title: "Add Banner",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
-              selectItem(context, NavigationItem.banner,provider);
+              if (!widget.isDesktop) Navigator.pop(context);
+              selectItem(context, NavigationItem.banner, provider);
             },
           ),
           DrawerListTile(
             title: "Users",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
+              if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.users, provider);
             },
           ),
           DrawerListTile(
             title: "Coupons",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
+              if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.coupons, provider);
             },
           ),
           DrawerListTile(
             title: "Log out",
             press: () {
-              if(!widget.isDesktop)
-              Navigator.pop(context);
-              selectItem(context, NavigationItem.logout,provider);
+              if (!widget.isDesktop) Navigator.pop(context);
+              selectItem(context, NavigationItem.logout, provider);
             },
           ),
         ],

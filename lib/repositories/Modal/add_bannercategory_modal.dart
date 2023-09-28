@@ -1,6 +1,6 @@
 class AddBannerCategoryModal {
   String? banner1;
-    String? imageUrl1;
+  String? imageUrl1;
   String? banner2;
   String? imageUrl2;
   String? banner3;
@@ -8,8 +8,15 @@ class AddBannerCategoryModal {
   List<SubBannerCategoryList>? subCategoryList;
   String? pincode;
 
-  AddBannerCategoryModal({this.banner1, this.imageUrl1, this.banner2, this.imageUrl2,this.banner3, this.imageUrl3,this.subCategoryList,this.pincode});
-
+  AddBannerCategoryModal(
+      {this.banner1,
+      this.imageUrl1,
+      this.banner2,
+      this.imageUrl2,
+      this.banner3,
+      this.imageUrl3,
+      this.subCategoryList,
+      this.pincode});
 
   AddBannerCategoryModal.fromJson(Map<String, dynamic> json) {
     banner1 = json['bannercategory1'];
@@ -18,7 +25,7 @@ class AddBannerCategoryModal {
     imageUrl2 = json['imageUrl2'];
     banner3 = json['bannercategory3'];
     imageUrl3 = json['imageUrl3'];
-    pincode= json['pincode'];
+    pincode = json['pincode'];
     if (json['subCategoryList'] != null) {
       subCategoryList = <SubBannerCategoryList>[];
       json['subCategoryList'].forEach((v) {

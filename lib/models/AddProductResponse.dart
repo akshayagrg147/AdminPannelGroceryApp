@@ -1,4 +1,3 @@
-
 class AddProductResponse {
   String? message;
   bool? status;

@@ -35,9 +35,9 @@ class _CommonCheckboxState extends State<CommonCheckbox> {
               ),
               child: widget.value
                   ? Icon(
-                Icons.check,
-                color: Colors.black,
-              )
+                      Icons.check,
+                      color: Colors.black,
+                    )
                   : null,
             ),
             SizedBox(width: 8.0),

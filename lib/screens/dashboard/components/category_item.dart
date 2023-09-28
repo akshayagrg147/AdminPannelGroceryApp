@@ -6,8 +6,6 @@ import 'package:adminpannelgrocery/repositories/cubit/DeleteCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/header.dart';
 import 'package:data_table_2/data_table_2.dart';
-import 'package:adminpannelgrocery/models/RecentOrder.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,87 +38,78 @@ class CategoryItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return
-       SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 28.0),
-                  child: SizedBox(
-                    width: 220,
-                    child: AddCard("Add new Category", onTap: (tap) {
-                      print("Add new Category $tap");
-                      if (tap) {
-                        openAlert(context, false, ItemData(),
-                            (s) => {if (s == "added") cubit.fetchCategory()});
-                      }
-                    }),
-                  ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 28.0),
+                child: SizedBox(
+                  width: 220,
+                  child: AddCard("Add new Category", onTap: (tap) {
+                    print("Add new Category $tap");
+                    if (tap) {
+                      openAlert(context, false, ItemData(),
+                          (s) => {if (s == "added") cubit.fetchCategory()});
+                    }
+                  }),
                 ),
               ),
-    BlocConsumer<DeleteCategoryCubit, DeleteProductState>(
-    listener: (context, state) {
-    if (state is DeleteProductErrorState) {
-    SnackBar snackBar = SnackBar(
-    content: Text(state.error),
-    backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    BlocProvider.of<DeleteCategoryCubit>(context)
-        .resetState();
-    }
-    else if(state is DeleteProductLoadedState){
-      SnackBar snackBar = const SnackBar(
-        content: Text('Deleted category Sucessfully'),
-        backgroundColor: Colors.green,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      BlocProvider.of<DeleteCategoryCubit>(context)
-          .resetState();
-    }
-    },
-        builder: (context, state) {
-    if (state is DeleteProductLoadingState) {
-    return Container();
-    }
-  else if (state is DeleteProductErrorState) {
-    return Center(
-    child: Text(state.error),
-    );
-    }
+            ),
+            BlocConsumer<DeleteCategoryCubit, DeleteProductState>(
+                listener: (context, state) {
+              if (state is DeleteProductErrorState) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                BlocProvider.of<DeleteCategoryCubit>(context).resetState();
+              } else if (state is DeleteProductLoadedState) {
+                SnackBar snackBar = const SnackBar(
+                  content: Text('Deleted category Sucessfully'),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                BlocProvider.of<DeleteCategoryCubit>(context).resetState();
+              }
+            }, builder: (context, state) {
+              if (state is DeleteProductLoadingState) {
+                return Container();
+              } else if (state is DeleteProductErrorState) {
+                return Center(
+                  child: Text(state.error),
+                );
+              }
 
-  return  ListView.builder(
+              return ListView.builder(
                 shrinkWrap: true,
                 itemCount: itemData!.length,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   var data = itemData![index];
 
-                  return productItemRow(data, context,(value){
+                  return productItemRow(data, context, (value) {
                     BlocProvider.of<DeleteCategoryCubit>(context)
                         .deleteCategory(value);
-
                   });
                 },
               );
-    })
-            ],
-          ),
+            })
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
+}
 
-
-Widget productItemRow(ItemDataCategory data, BuildContext context,Function(String) itemPass) {
+Widget productItemRow(
+    ItemDataCategory data, BuildContext context, Function(String) itemPass) {
   bool isSnackBarShown = false;
   return Padding(
     key: UniqueKey(),
@@ -134,10 +123,12 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Expanded(
           child: Text(data.category.toString(),
-
               textAlign: TextAlign.start,
-
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black,)),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              )),
         ),
         Expanded(
           child: Image.network(
@@ -167,26 +158,29 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
                 final item = data.subCategoryList![index];
                 return Text(
                   item.name ?? "null",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black,),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
                 );
               },
             ),
           ),
         ),
         Expanded(
-             child: IconButton(
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                itemPass(data.category!);
+          child: IconButton(
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              itemPass(data.category!);
 
-                // Perform delete operation
-              },
-
-             ),
-           )
+              // Perform delete operation
+            },
+          ),
+        )
       ]),
     ),
   );
@@ -194,7 +188,7 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
 
 void openAlert(BuildContext context, bool editButton, ItemData data,
     final Function(String) addedCategory) {
-  List<String> fieldIdList=[];
+  List<String> fieldIdList = [];
   double dialogWidth = Responsive.isMobile(context) ? 300.0 : 600.0;
   TextEditingController categoryName = TextEditingController();
   TextEditingController subCategory1 = TextEditingController();
@@ -215,7 +209,6 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
   showDialog(
     context: context,
     barrierDismissible: false,
-
     builder: (BuildContext context) {
       return Dialog(
         insetPadding: const EdgeInsets.all(16.0),
@@ -283,7 +276,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                 isLoading = true;
                               });
 
-                              _uploadImage((imageFile, imageId) {
+                              uploadImage((imageFile, imageId) {
                                 fieldIdList.add(imageId);
                                 if (imageFile != null) {
                                   setState(() {
@@ -296,7 +289,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                   print(
                                       'Error occurred while picking or reading the image file');
                                 }
-                              });
+                              }, "category");
                             },
                             buttonText: "Upload category",
                             selectedImagePath:
@@ -305,7 +298,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     : imageupload[0],
                             deleteImage: (ob) {
                               fieldIdList.remove(ob.imageId);
-                              deleteImage(context,
+                              deleteImage(
+                                  context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   ob.imageId);
@@ -330,14 +324,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                           CommonImageButton(
                             onPressed: () {
                               print(pressCount);
-                              _uploadImage((imageFile, imageId) {
+                              uploadImage((imageFile, imageId) {
                                 print('Image uploaded! ${imageFile}');
                                 fieldIdList.add(imageId);
                                 setState(() {
                                   imageupload[1] =
                                       (ImageKitRequest(imageFile, imageId));
                                 });
-                              });
+                              }, "category");
                             },
                             buttonText: "Upload sub category",
                             selectedImagePath:
@@ -346,12 +340,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     : imageupload[1],
                             deleteImage: (obj) {
                               fieldIdList.remove(obj.imageId);
-                              deleteImage(context,
+                              deleteImage(
+                                  context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   obj.imageId);
                               setState(() {
-                                imageupload[1] = (ImageKitRequest("null", null));
+                                imageupload[1] =
+                                    (ImageKitRequest("null", null));
                               });
                             },
                           ),
@@ -372,14 +368,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                           CommonImageButton(
                             onPressed: () {
                               print(pressCount);
-                              _uploadImage((imageFile, imageId) {
+                              uploadImage((imageFile, imageId) {
                                 fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[2] =
                                       (ImageKitRequest(imageFile, imageId));
                                 });
-                              });
+                              }, "category");
                             },
                             buttonText: "Upload sub category",
                             selectedImagePath:
@@ -388,12 +384,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     : imageupload[2],
                             deleteImage: (obj) {
                               fieldIdList.remove(obj.imageId);
-                              deleteImage(context,
+                              deleteImage(
+                                  context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   obj.imageId);
                               setState(() {
-                                imageupload[2] = (ImageKitRequest("null", null));
+                                imageupload[2] =
+                                    (ImageKitRequest("null", null));
                               });
                             },
                           ),
@@ -415,14 +413,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                           CommonImageButton(
                             onPressed: () {
                               print(pressCount);
-                              _uploadImage((imageFile, imageId) {
+                              uploadImage((imageFile, imageId) {
                                 fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[3] =
                                       (ImageKitRequest(imageFile, imageId));
                                 });
-                              });
+                              }, "category");
                             },
                             buttonText: "Upload sub category",
                             selectedImagePath:
@@ -431,12 +429,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     : imageupload[3],
                             deleteImage: (obj) {
                               fieldIdList.remove(obj.imageId);
-                              deleteImage(context,
+                              deleteImage(
+                                  context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   obj.imageId);
                               setState(() {
-                                imageupload[3] = (ImageKitRequest(null, "null"));
+                                imageupload[3] =
+                                    (ImageKitRequest(null, "null"));
                               });
                             },
                           ),
@@ -455,14 +455,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                           CommonImageButton(
                             onPressed: () {
                               print(pressCount);
-                              _uploadImage((imageFile, imageId) {
+                              uploadImage((imageFile, imageId) {
                                 fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[4] =
                                       (ImageKitRequest(imageFile, imageId));
                                 });
-                              });
+                              }, "category");
                             },
                             buttonText: "Upload sub category",
                             selectedImagePath:
@@ -471,12 +471,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     : imageupload[4],
                             deleteImage: (obj) {
                               fieldIdList.remove(obj.imageId);
-                              deleteImage(context,
+                              deleteImage(
+                                  context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   obj.imageId);
                               setState(() {
-                                imageupload[4] = (ImageKitRequest(null, "null"));
+                                imageupload[4] =
+                                    (ImageKitRequest(null, "null"));
                               });
                             },
                           ),
@@ -518,8 +520,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                             .contains("null"))) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Please upload categoryName Url'),
+                                      content: Text(
+                                          'Please upload categoryName Url'),
                                     ),
                                   );
                                   return;
@@ -534,8 +536,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                             .contains("null"))) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Please upload subCategory1 Url'),
+                                      content: Text(
+                                          'Please upload subCategory1 Url'),
                                     ),
                                   );
                                   return;
@@ -550,7 +552,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                             .contains("null"))) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Please upload subCategory2'),
+                                      content:
+                                          Text('Please upload subCategory2'),
                                     ),
                                   );
                                   return;
@@ -565,8 +568,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                             .contains("null"))) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Please upload subCategory3 Url'),
+                                      content: Text(
+                                          'Please upload subCategory3 Url'),
                                     ),
                                   );
                                   return;
@@ -581,14 +584,15 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                             .contains("null"))) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text('Please upload subCategory4 Url'),
+                                      content: Text(
+                                          'Please upload subCategory4 Url'),
                                     ),
                                   );
                                   return;
                                 }
 
-                                print('imageupload_0 ${imageupload[0].imageUrl}');
+                                print(
+                                    'imageupload_0 ${imageupload[0].imageUrl}');
                                 BlocProvider.of<AddCategoryCubit>(context)
                                     .addCategory(list, categoryName.text,
                                         imageupload[0].imageUrl!);
@@ -609,13 +613,15 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     const TextStyle(fontSize: 15)),
                               ),
                               onPressed: () {
-                                for(String id in fieldIdList){
-                                  deleteImage(context,
+                                for (String id in fieldIdList) {
+                                  deleteImage(
+                                      context,
                                       "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                       "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                       id);
                                 }
-                                Navigator.pop(context);},
+                                Navigator.pop(context);
+                              },
                               child: const Text('Cancel!'),
                             ),
                           ),
@@ -631,54 +637,4 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
       );
     },
   );
-}
-
-Future<void> _uploadImage(Function(String, String) fn) async {
-  var headers = {
-    'Authorization':
-        'Basic cHJpdmF0ZV9tdHVMdjFGa0YrVE9YbFV5SC9ZbEIvQkpndVE9Og=='
-  };
-
-  var url = 'https://upload.imagekit.io/api/v1/files/upload';
-
-  // Select an image using ImagePicker
-  final picker = ImagePicker();
-  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-  if (pickedImage != null) {
-    var imageFile = await pickedImage.readAsBytes();
-
-    try {
-      var dio = Dio();
-      var timestamp = DateTime.now().millisecondsSinceEpoch;
-
-      var formData = FormData.fromMap({
-        'file': MultipartFile.fromBytes(
-          imageFile,
-          filename: pickedImage.path.split('/').last,
-        ),
-        'fileName': 'image_$timestamp.png',
-        'folder': 'category',
-      });
-
-      var response = await dio.post(
-        url,
-        data: formData,
-        options: Options(headers: headers),
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonResponse = response.data;
-        var responseData = jsonResponse["url"].toString();
-        fn(responseData, jsonResponse["fileId"].toString());
-        print('Image uploaded! ${responseData}   @@${jsonResponse["fileId"].toString()}');
-      } else {
-        print('Failed to upload image: ${response.statusMessage}');
-      }
-    } catch (error) {
-      print('Error uploading image: $error');
-    }
-  } else {
-    print('No image selected.');
-  }
 }

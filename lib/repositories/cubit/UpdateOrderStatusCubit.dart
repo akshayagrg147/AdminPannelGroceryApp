@@ -1,6 +1,3 @@
-
-
-
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/CouponFormData.dart';
 import 'package:adminpannelgrocery/state/add_category_state.dart';
@@ -18,29 +15,22 @@ import '../Modal/add_category_modal.dart';
 import '../api/ProductRepository.dart';
 
 class UpdateOrderStatusCubit extends Cubit<AddOrderState> {
-  UpdateOrderStatusCubit() : super( AddOrderInitialState() );
+  UpdateOrderStatusCubit() : super(AddOrderInitialState());
 
   ProductRepository postRepository = ProductRepository();
 
-
-void updateOrderStatus(OrderData formData) async {
-  try {
-    formData.pincode = await PreferencesUtil.getString('pincode');
-    AddProductResponse posts = await postRepository.updateStatus(formData);
-    emit(AddOrderLoadedState(posts));
-  }
-  on DioError catch(ex) {
-    if(ex.type == DioErrorType.other) {
-      emit( AddOrderErrorState("Can't fetch posts, please check your internet connection!") );
-    }
-    else {
-      emit( AddOrderErrorState(ex.type.toString()) );
+  void updateOrderStatus(OrderData formData) async {
+    try {
+      formData.pincode = await PreferencesUtil.getString('pincode');
+      AddProductResponse posts = await postRepository.updateStatus(formData);
+      emit(AddOrderLoadedState(posts));
+    } on DioError catch (ex) {
+      if (ex.type == DioErrorType.other) {
+        emit(AddOrderErrorState(
+            "Can't fetch posts, please check your internet connection!"));
+      } else {
+        emit(AddOrderErrorState(ex.type.toString()));
+      }
     }
   }
 }
-
-}
-
-
-
-

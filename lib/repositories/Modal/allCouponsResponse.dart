@@ -1,4 +1,3 @@
-
 class allCouponsResponse {
   List<ItemDataa>? itemData;
   int? statusCode;
@@ -39,12 +38,12 @@ class ItemDataa {
 
   ItemDataa(
       {this.couponTitle,
-        this.couponCode,
-        this.discountPercentage,
-        this.discountedAmount,
-        this.minimumPurchase,
-        this.startDate,
-        this.expireDate});
+      this.couponCode,
+      this.discountPercentage,
+      this.discountedAmount,
+      this.minimumPurchase,
+      this.startDate,
+      this.expireDate});
 
   ItemDataa.fromJson(Map<String, dynamic> json) {
     couponTitle = json['couponTitle'];

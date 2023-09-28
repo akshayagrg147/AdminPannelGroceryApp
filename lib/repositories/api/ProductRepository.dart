@@ -236,6 +236,30 @@ class ProductRepository {
     }
     return AllProducts(itemData: [],statusCode: 200,message: "true");
   }
+  Future<AllProducts> fetchSearchProductWise(String query) async{
+    try {
+      String? pincode = await PreferencesUtil.getString('pincode');
+
+      final response = await _dio?.get("/Admin/SearchAllProducts",queryParameters:{
+        "pincode":pincode,
+        "query":query
+      });
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        AllProducts res = AllProducts.fromJson(response?.data);
+        return res;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return AllProducts(itemData: [], statusCode: 400, message: 'something went wrong');
+  }
   Future<ProductCategoryModal> fetchCategory() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
@@ -264,6 +288,29 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       final response = await _dio?.get("/Admin/getBannerCategory",queryParameters:{
         "pincode":pincode
+      });
+
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        BannerCategoryModal res = BannerCategoryModal.fromJson(response?.data);
+        return res;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return BannerCategoryModal();
+  }
+  Future<BannerCategoryModal> deleteImageKit(String fileId) async {
+    try {
+
+      final response = await _dio?.get("/Admin/deleteImageIoFile",queryParameters:{
+        "fileId":fileId
       });
 
       print("sucess error");
@@ -375,6 +422,30 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       obj.pincode=pincode??"";
       final response = await _dio?.post("/Admin/updateProduct",data: obj);
+      print("sucess error");
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200 ) {
+        AddProductResponse products = AddProductResponse.fromJson(response?.data);
+        return products;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return AddProductResponse();
+  }
+  Future<AddProductResponse> updateDeliveryAmount( String amount) async {
+    try {
+      String? pincode = await PreferencesUtil.getString('pincode');
+      String? name = await PreferencesUtil.getString('name');
+      String? email = await PreferencesUtil.getString('email');
+      String? password = await PreferencesUtil.getString('password');
+
+      final response = await _dio?.post("/Admin/freeDelivery",data: ResponseLogin(email: email,password: password,pincode: pincode,name:name,freeDeliveryAmount:amount ));
       print("sucess error");
       print(response?.statusMessage);
 

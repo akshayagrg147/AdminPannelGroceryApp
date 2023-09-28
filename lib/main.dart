@@ -16,6 +16,7 @@ import 'package:adminpannelgrocery/repositories/cubit/DeleteProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/ProductCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/RecentOrderCountCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/SelectionCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/UpdateDeliveryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/UpdateOrderStatusCubit.dart';
 
 import 'package:adminpannelgrocery/repositories/cubit/UserResponseCubit.dart';
@@ -89,7 +90,9 @@ class MyApp extends StatelessWidget {
               BlocProvider<DeleteBannerCubit>(
                   create: (context) => DeleteBannerCubit()),
               BlocProvider<AddBannerCubit>(
-                  create: (context) => AddBannerCubit())
+                  create: (context) => AddBannerCubit()),
+              BlocProvider<UpdateDeliveryCubit>(
+                  create: (context) => UpdateDeliveryCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

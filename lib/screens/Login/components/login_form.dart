@@ -94,7 +94,7 @@ class LoginForm extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             } else if (state is LoginResponseLoadedState) {
-              callingMainScreen(context,state.response.response?.pincode,state.response.response?.email,state.response.response?.name);
+              callingMainScreen(context,state.response.response?.pincode,state.response.response?.email,state.response.response?.name,state.response.response?.password,state.response.response?.freeDeliveryAmount);
             }
           }),
           const SizedBox(height: defaultPadding),
@@ -103,10 +103,13 @@ class LoginForm extends StatelessWidget {
     );
   }
 
-  Future<void> callingMainScreen(BuildContext context, String? pincode, String? email, String? name) async {
+  Future<void> callingMainScreen(BuildContext context, String? pincode, String? email, String? name, String? password,String? amount) async {
     await PreferencesUtil.saveString('pincode', pincode??"");
     await PreferencesUtil.saveString('email', email??"");
     await PreferencesUtil.saveString('name', name??"");
+    await PreferencesUtil.saveString('password', password??"");
+    await PreferencesUtil.saveString('price', amount??"");
+    
     Navigator.push(
       context,
       MaterialPageRoute(

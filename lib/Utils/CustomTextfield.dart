@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../repositories/cubit/BannerCategoryCubit.dart';
 
 class CustomTextfield extends StatefulWidget {
   const CustomTextfield(
@@ -179,4 +182,8 @@ class SizeConfig {
     heightMultiplier = 1;
     widthMultiplier = 1;
   }
+}
+Future<void> deleteImage(BuildContext context,String publicKey, String privateKey, String fileId) async {
+  print("deleteimage ${publicKey} ${privateKey} ${fileId}");
+  BlocProvider.of<BannerCategoryCubit>(context).deleteImage(fileId);
 }

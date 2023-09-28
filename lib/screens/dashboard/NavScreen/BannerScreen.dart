@@ -136,30 +136,7 @@ class BannerScreenState extends State<BannerScreen> {
 
 
 
-Future<void> deleteImage(String publicKey, String privateKey, String imageId) async {
-  final authString = '$publicKey:$privateKey';
-  final encodedAuth = base64.encode(utf8.encode(authString));
 
-  final dio = Dio();
-  dio.options.headers['Authorization'] = 'Basic $encodedAuth';
-
-  final url = 'https://api.imagekit.io/v1/files/$imageId';
-
-  try {
-    final response = await dio.delete(url);
-
-    if (response.statusCode == 204) {
-      // Image deleted successfully
-      print('Image deleted successfully');
-    } else {
-      // Error deleting image
-      print('Error deleting image: ${response.data}');
-    }
-  } catch (error) {
-    // Error handling
-    print('Error deleting image: $error');
-  }
-}
 
 
 

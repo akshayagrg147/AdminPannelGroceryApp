@@ -44,8 +44,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
   void navigateToLoginScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    Future.delayed(Duration.zero, () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    });
   }
+
 
   buildPages(var navigationItem) {
     switch (navigationItem) {

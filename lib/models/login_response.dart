@@ -1,5 +1,5 @@
 class LoginResponse {
-  Response? response;
+  ResponseLogin? response;
   int? statusCode;
   String? message;
 
@@ -7,7 +7,7 @@ class LoginResponse {
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     response = json['response'] != null
-        ? new Response.fromJson(json['response'])
+        ? new ResponseLogin.fromJson(json['response'])
         : null;
     statusCode = json['statusCode'];
     message = json['message'];
@@ -24,19 +24,21 @@ class LoginResponse {
   }
 }
 
-class Response {
+class ResponseLogin {
   String? email;
   String? name;
   String? password;
   String? pincode;
+  String? freeDeliveryAmount;
 
-  Response({this.email, this.password, this.pincode});
+  ResponseLogin({this.email,this.name, this.password, this.pincode,this.freeDeliveryAmount});
 
-  Response.fromJson(Map<String, dynamic> json) {
+  ResponseLogin.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     password = json['password'];
     pincode = json['pincode'];
     name = json['name'];
+    freeDeliveryAmount = json['price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,7 @@ class Response {
     data['name'] = this.name;
     data['password'] = this.password;
     data['pincode'] = this.pincode;
+    data['price'] = this.freeDeliveryAmount;
     return data;
   }
 }

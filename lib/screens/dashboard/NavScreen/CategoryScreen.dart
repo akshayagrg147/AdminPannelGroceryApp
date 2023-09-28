@@ -24,6 +24,7 @@ import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../constants.dart';
 import '../../../repositories/Modal/add_category_modal.dart';
 import '../../../repositories/cubit/AddCategoryCubit.dart';
+import '../../../repositories/cubit/BannerCategoryCubit.dart';
 import '../components/category_item.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -131,27 +132,7 @@ class ImageKitRequest {
 
 
 
-Future<void> deleteImage(String publicKey, String privateKey, String fileId) async {
-  print("deleteimage ${publicKey} ${privateKey} ${fileId}");
-  var headers = {
-    'Authorization': 'Basic private_mtuLv1FkF+TOXlUyH/YlB/BJguQ='
-  };
-  var dio = Dio();
-  var response = await dio.request(
-    'https://api.imagekit.io/v1/files/6508539f88c257da33a7a9f8',
-    options: Options(
-      method: 'DELETE',
-      headers: headers,
-    ),
-  );
 
-  if (response.statusCode == 200) {
-    print(json.encode(response.data));
-  }
-  else {
-    print(response.statusMessage);
-  }
-}
 
 
 

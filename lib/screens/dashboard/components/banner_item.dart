@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../Utils/CustomTextfield.dart';
 import '../../../commonWidget/common_elevted_Button.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../constants.dart';
@@ -31,6 +32,7 @@ import '../../../repositories/cubit/DeleteProductCubit.dart';
 import '../../../responsive.dart';
 
 import '../../../state/delete_product_state.dart';
+import '../NavScreen/BannerScreen.dart';
 import '../NavScreen/CategoryScreen.dart';
 
 class BannerItems extends StatelessWidget {
@@ -121,7 +123,7 @@ class BannerItems extends StatelessWidget {
         itemBuilder: (context, index) {
           var data = itemData![index];
 
-          return productItemRow(data, context, ((value) {
+          return bannerItemRow(data, context, ((value) {
             BlocProvider.of<DeleteBannerCubit>(context)
                 .deleteBannerCategory(value);
           }),(editclick){
@@ -137,106 +139,165 @@ class BannerItems extends StatelessWidget {
   }
 
 }
-
-Widget productItemRow(
-    ItemBannerCategory data, BuildContext context, Function(String) itemPass, Function(bool) editClick,) {
-  bool isSnackBarShown = false;
+Widget bannerItemRow(
+    ItemBannerCategory data,
+    BuildContext context,
+    Function(String) itemPass,
+    Function(bool) editClick,
+    ) {
   return Padding(
     key: UniqueKey(),
     padding: const EdgeInsets.only(left: 10.0, top: 20.0),
     child: Container(
-      // padding: const EdgeInsets.all(30),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Expanded(
-          child: Text(data.bannercategory1.toString(),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              )),
-        ),
-        Expanded(
-          child: Image.network(
-            data.imageUrl1.toString(),
-            width: 100,
-            height: 100,
-            fit: BoxFit.fill,
-            errorBuilder: (ctx, obj, stack) {
-              return Image.asset(
-                'assets/images/logo.png',
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-              );
-              ;
-            },
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: ListView.builder(
-              itemCount: data.subCategoryList!.length,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final item = data.subCategoryList![index];
-                return Text(
-                  item.name ?? "null",
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  data.bannercategory1.toString(),
+                  textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
-                );
-              },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0), // Add space around the ListView
+                  child: ListView.builder(
+                    itemCount: data.subCategoryList!.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final item = data.subCategoryList![index];
+                      return Text(
+                        item.name ?? "null",
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                // Image.network(
+                //   data.imageUrl1.toString(),
+                //   width: 80,
+                //   height: 80,
+                //   fit: BoxFit.fill,
+                //   errorBuilder: (ctx, obj, stack) {
+                //     return Image.asset(
+                //       'assets/images/logo.png',
+                //       width: 100,
+                //       height: 100,
+                //       fit: BoxFit.cover,
+                //     );
+                //   },
+                // ),
+              ],
             ),
           ),
-        ),
-        Expanded(
-          child:Row(
-  children: [
-    IconButton(
-      icon: Icon(Icons.edit,color: Colors.black,),
-      onPressed: () {
-         editClick(true);
-
-
-        // Perform delete operation
-      },
-    ),
-    IconButton(
-      icon: const Icon(
-        Icons.delete,
-        color: Colors.black,
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  data.bannercategory2.toString(),
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                Image.network(
+                  data.imageUrl2.toString(),
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.fill,
+                  errorBuilder: (ctx, obj, stack) {
+                    return Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  data.bannercategory3.toString(),
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                Image.network(
+                  data.imageUrl3.toString(),
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.fill,
+                  errorBuilder: (ctx, obj, stack) {
+                    return Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit, color: Colors.black),
+                  onPressed: () {
+                    editClick(true);
+                    // Perform edit operation
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    if (data.bannercategory1?.isNotEmpty == true)
+                      itemPass(data.bannercategory1! + "__bannercategory1");
+                    else {
+                      itemPass(data.bannercategory2! + "__bannercategory1");
+                    }
+                    // Perform delete operation
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      onPressed: () {
-        if(data.bannercategory1?.isNotEmpty==true)
-          itemPass(data.bannercategory1!+"__bannercategory1");
-        else
-        {
-          itemPass(data.bannercategory2!+"__bannercategory1");
-        }
-
-        // Perform delete operation
-      },
-    ),
-  ],
-  )
-          
-        )
-      ]),
     ),
   );
 }
 
 void openAlert(BuildContext context, bool editButton, ItemBannerCategory data,
     final Function(String) addedCategory) {
+  List<String> fieldIdList=[];
   int? dashboardDisplay = 2;
   double dialogWidth = Responsive.isMobile(context) ? 300.0 : 600.0;
   TextEditingController bannerCategoryTitle = TextEditingController();
@@ -281,9 +342,11 @@ print("itemcategory $editButton");
 
   }
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return Dialog(
+
         insetPadding: const EdgeInsets.all(16.0),
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
@@ -299,7 +362,8 @@ print("itemcategory $editButton");
                       backgroundColor: Colors.red,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  } else if (state is AddBannerLoadedState) {
+                  }
+                  else if (state is AddBannerLoadedState) {
                     if(state.category.statusCode==200){
                       addedCategory("added");
                       SnackBar snackBar = const SnackBar(
@@ -307,6 +371,8 @@ print("itemcategory $editButton");
                         backgroundColor: Colors.green,
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      BannerScreen();
+                      Navigator.of(context).pop();
                     }
                     else{
                       SnackBar snackBar = const SnackBar(
@@ -323,12 +389,6 @@ print("itemcategory $editButton");
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (state is AddBannerLoadedState) {
-                    var response = state.category;
-                    if (response.statusCode == 200) {
-                      CategoryScreen();
-                      Navigator.of(context).pop();
-                    }
                   }
                   return Container(
                     width: Responsive.isMobile(context) ? 250.0 : 400.0,
@@ -415,6 +475,7 @@ print("itemcategory $editButton");
                                       });
 
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         if (imageFile != null) {
                                           setState(() {
                                             isLoading = false;
@@ -435,8 +496,9 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[0],
                                     deleteImage: (ob) {
+                                      fieldIdList.remove(ob.imageId);
                                       print("delete image clicked at 0 ");
-                                      deleteImage(
+                                      deleteImage(context,
                                           "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                           "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                           ob.imageId);
@@ -466,6 +528,7 @@ print("itemcategory $editButton");
                                     onPressed: () {
                                       print(pressCount);
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         print('Image uploaded! ${imageFile}');
                                         setState(() {
                                           imageupload[1] = (ImageKitRequest(
@@ -480,6 +543,7 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[1],
                                     deleteImage: (obj) {
+                                      fieldIdList.remove(obj.imageId);
                                       print('Image uploaded image! ${obj}');
                                       setState(() {
                                         imageupload[1] =
@@ -505,6 +569,7 @@ print("itemcategory $editButton");
                                     onPressed: () {
                                       print(pressCount);
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         print('Image uploaded! ${imageFile}');
                                         setState(() {
                                           imageupload[2] = (ImageKitRequest(
@@ -519,6 +584,11 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[2],
                                     deleteImage: (obj) {
+                                      fieldIdList.remove(obj.imageId);
+                                      deleteImage(context,
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          obj.imageId);
                                       setState(() {
                                         imageupload[2] =
                                         (ImageKitRequest("null", null));
@@ -544,6 +614,7 @@ print("itemcategory $editButton");
                                     onPressed: () {
                                       print(pressCount);
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         print('Image uploaded! ${imageFile}');
                                         setState(() {
                                           imageupload[3] = (ImageKitRequest(
@@ -558,6 +629,11 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[3],
                                     deleteImage: (obj) {
+                                      fieldIdList.remove(obj.imageId);
+                                      deleteImage(context,
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          obj.imageId);
                                       setState(() {
                                         imageupload[3] =
                                         (ImageKitRequest( "null",null));
@@ -579,6 +655,7 @@ print("itemcategory $editButton");
                                     onPressed: () {
                                       print(pressCount);
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         print('Image uploaded! ${imageFile}');
                                         setState(() {
                                           imageupload[4] = (ImageKitRequest(
@@ -593,6 +670,11 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[4],
                                     deleteImage: (obj) {
+                                      fieldIdList.remove(obj.imageId);
+                                      deleteImage(context,
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          obj.imageId);
                                       setState(() {
                                         imageupload[4] =
                                         (ImageKitRequest( "null",null));
@@ -625,6 +707,7 @@ print("itemcategory $editButton");
                                       });
 
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         if (imageFile != null) {
                                           setState(() {
                                             isLoading = false;
@@ -645,10 +728,11 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[5],
                                     deleteImage: (ob) {
-                                      // deleteImage(
-                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                      //     ob.imageId);
+                                      fieldIdList.remove(ob.imageId);
+                                      deleteImage(context,
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          ob.imageId);
                                           setState(() {
                                         imageupload[5] =
                                         (ImageKitRequest("null", null));
@@ -673,6 +757,7 @@ print("itemcategory $editButton");
                                       });
 
                                       _uploadImage((imageFile, imageId) {
+                                        fieldIdList.add(imageId);
                                         if (imageFile != null) {
                                           setState(() {
                                             isLoading = false;
@@ -693,10 +778,11 @@ print("itemcategory $editButton");
                                         ? ImageKitRequest(null, null)
                                         : imageupload[6],
                                     deleteImage: (ob) {
-                                      // deleteImage(
-                                      //     "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
-                                      //     "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
-                                      //     ob.imageId);
+                                      fieldIdList.remove(ob.imageId);
+                                      deleteImage(context,
+                                          "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                          "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                          ob.imageId);
                                           setState(() {
                                         imageupload[6] =
                                         (ImageKitRequest("null", null));
@@ -983,7 +1069,15 @@ print("itemcategory $editButton");
                                 textStyle: MaterialStateProperty.all(
                                     const TextStyle(fontSize: 15)),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                for(String id in fieldIdList){
+                                  deleteImage(context,
+                                      "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                      "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                      id);
+                                }
+                                Navigator.pop(context);
+                              },
                               child: const Text('Cancel!'),
                             ),
                           ),
@@ -1039,7 +1133,7 @@ Future<void> _uploadImage(Function(String, String) fn) async {
         Map<String, dynamic> jsonResponse = response.data;
         var responseData = jsonResponse["url"].toString();
         fn(responseData, jsonResponse["fileId"].toString());
-        print('Image uploaded! ${responseData}');
+        print('Image uploaded! ${responseData}  ${jsonResponse["fileId"].toString()}');
       } else {
         print('Failed to upload image: ${response.statusMessage}');
       }

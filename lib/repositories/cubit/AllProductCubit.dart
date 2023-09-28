@@ -20,26 +20,48 @@ class AllProductCubit extends Cubit<AllProductState> {
 
   ProductRepository postRepository = ProductRepository();
 
-  void loadProducts() {
 
+
+  void loadProducts() {
     if (state is AllProductMoreState) return;
     final currentState = state;
-    List<ItemData> products = [];
-    print("stateis from cubit ${currentState}");
+    List<ItemData> oldOrders = [];
+
     if (currentState is AllProductLoadedState) {
-      products = List.from(currentState.products ?? []);
+      oldOrders = List.from(currentState.products ?? []);
     }
-    print("itemcountis from cubit ${products.length}");
-   emit(AllProductMoreState(products, isFirstFetch: skip == 0));
+
+    emit(AllProductMoreState(oldOrders, isFirstFetch: skip == 0));
 
     postRepository.fetchProducts(skip, 10).then((newOrders) {
       skip=skip+10;
 
-      final List<ItemData> product = List.from(products);
-      product.addAll(newOrders.itemData!);
+      final List<ItemData> orders = List.from(oldOrders);
+      orders.addAll(newOrders.itemData!);
+      print("order_lengt_is ${orders.length}");
 
-      emit(AllProductLoadedState(product));
+      emit(AllProductLoadedState(orders));
     });
+  }
+
+
+  void callProductSearch(String query)async {
+    try {
+      emit(AllProductLoadingState());
+      AllProducts products = await postRepository.fetchSearchProductWise(query);
+      print('category wise data success ${products.itemData}');
+      emit(AllProductLoadedState(products.itemData??[]));
+    }
+    on DioError catch(ex) {
+      print('category wise data __ ${ex.message}');
+      if(ex.type == DioErrorType.other) {
+        emit( AllProductErrorState("Can't fetch posts, please check your internet connection!") );
+      }
+      else {
+        print('category wise data __ ${ex.message}');
+        emit( AllProductErrorState(ex.type.toString()) );
+      }
+    }
   }
 
   // void fetchProducts() async {
@@ -61,6 +83,7 @@ class AllProductCubit extends Cubit<AllProductState> {
         list!));
   }
   void clearProducts() {
+    skip=0;
     emit(AllProductLoadingState());
   }
 }

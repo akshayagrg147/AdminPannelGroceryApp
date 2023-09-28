@@ -19,11 +19,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../Utils/CustomTextfield.dart';
 import '../../../commonWidget/common_elevted_Button.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../commonWidget/sppiner.dart';
 import '../../../constants.dart';
 import '../../../models/productScreenModal.dart';
+import '../../../models/search_debouncer.dart';
 import '../../../repositories/Modal/banner_category_modal.dart';
 import '../../../state/add_product_state.dart';
 import '../../../state/all_banner_state.dart';
@@ -49,12 +51,16 @@ class ProductScreenState extends State<ProductScreen> {
   late ProductCategoryCubit pCubit;
 
   List<ItemData>? listProducts = [];
-  List<ItemData>? listProductsIfEmpty = [];
+
+  final _searchDebouncer =
+  SearchDebouncer(delay: const Duration(milliseconds: 1250));
 
   @override
   void initState() {
     super.initState();
+
     Cubit = BlocProvider.of<AllProductCubit>(context);
+    Cubit.clearProducts();
     CubitAddNewProuct = BlocProvider.of<AddProductCubit>(context);
     pCubit = BlocProvider.of<ProductCategoryCubit>(context);
     CubitdeleteNewProuct = BlocProvider.of<DeleteProductCubit>(context);
@@ -106,25 +112,14 @@ class ProductScreenState extends State<ProductScreen> {
                         onValueUpdate: (val) {
                           if (val.isNotEmpty) {
                             print('value get after search ${val}');
-                            List<ItemData>? items = listProducts
-                                ?.where((item) => item.productName!.contains(val))
-                                .toList();
-                            print('value get after search ${items?.length}');
-                            if (val.isEmpty) {
-                              Cubit.passFilterData(listProducts ?? <ItemData>[]);
-                            } else {
-                              Cubit.passFilterData(items ?? <ItemData>[]);
-                            }
+                            _searchDebouncer.call(() {
+                              Cubit.callProductSearch(val);
 
-
-                          } else {
-                            setState(() {
-                              listProducts = listProductsIfEmpty;
                             });
 
-                            print(
-                                'value get after empty ${listProducts}  ${listProductsIfEmpty?.length.toString()}');
-                          }
+                          } else {
+                            Cubit.callProductSearch("");
+                           }
                         },
                       ),
                       Row(
@@ -152,24 +147,13 @@ class ProductScreenState extends State<ProductScreen> {
                                       child: CircularProgressIndicator(),
                                     );
                                   }
+                                  else if (state is AllProductMoreState && state.isFirstFetch) {
+                                    return const Center(child: CircularProgressIndicator());
+
+                                  }
                                   else if (state is AllProductMoreState) {
 
-                                    print("itemcountis ${state.productItems.length}");
-                                    log(state.productItems.runtimeType.toString());
-                                    var obj = state.productItems;
-                                    listProducts = obj;
-                                    listProductsIfEmpty = obj;
-                                    return ProductItems(
-                                        listProducts,
-                                        CubitdeleteNewProuct,
-                                        checkBoxCubit,
-                                        exclusiveCheckBoxCubit, (val) {
-                                      openAlert(context, CubitAddNewProuct,
-                                          pCubit, true, val, (String data) {
-                                            if (data == "added")
-                                              Cubit.loadProducts();
-                                          });
-                                    });
+                                    //   return Text("${obj.message}");
                                   }
 
 
@@ -178,9 +162,8 @@ class ProductScreenState extends State<ProductScreen> {
                                     log(state.products.runtimeType.toString());
                                     var obj = state.products;
                                     listProducts = obj;
-                                    listProductsIfEmpty = obj;
                                     return ProductItems(
-                                        listProducts,
+                                        state.products,
                                         CubitdeleteNewProuct,
                                         checkBoxCubit,
                                         exclusiveCheckBoxCubit, (val) {
@@ -389,6 +372,7 @@ void openAlert(
     bool editButton,
     ItemData data,
     Function(String) dataCalled) {
+   List<String> fieldIdList=[];
   //BlocProvider.of<BannerCategoryCubit>(context).fetchBannerCategory();
 
   int? dashboardDisplay = 1;
@@ -573,6 +557,8 @@ void openAlert(
                 CommonImageButton(
                   onPressed: () {
                     _uploadImage((imageFile, imageId) {
+                      fieldIdList.add(imageId);
+
                       setState(() {
                         uploadImage1 = (ImageKitRequest(imageFile, imageId));
                       });
@@ -583,6 +569,11 @@ void openAlert(
                       ? ImageKitRequest(null, null)
                       : uploadImage1,
                   deleteImage: (obj) {
+                    fieldIdList.remove(obj.imageId);
+                    deleteImage(context,
+                        "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                        "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                        obj.imageId);
                     setState(() {
                       uploadImage1 = ImageKitRequest("null", null);
                     });
@@ -598,6 +589,7 @@ void openAlert(
                 CommonImageButton(
                   onPressed: () {
                     _uploadImage((imageFile, imageId) {
+                      fieldIdList.add(imageId);
                       print('Image uploaded! ${imageFile}');
                       setState(() {
                         uploadImage2 = (ImageKitRequest(imageFile, imageId));
@@ -609,6 +601,11 @@ void openAlert(
                       ? ImageKitRequest(null, null)
                       : uploadImage2,
                   deleteImage: (obj) {
+                    fieldIdList.remove(obj.imageId);
+                    deleteImage(context,
+                        "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                        "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                        obj.imageId);
                     setState(() {
                       uploadImage2 = ImageKitRequest("null", null);
                     });
@@ -623,6 +620,7 @@ void openAlert(
                 CommonImageButton(
                   onPressed: () {
                     _uploadImage((imageFile, imageId) {
+                      fieldIdList.add(imageId);
                       print('Image uploaded! ${imageFile}');
                       setState(() {
                         uploadImage3 = (ImageKitRequest(imageFile, imageId));
@@ -634,6 +632,11 @@ void openAlert(
                       ? ImageKitRequest(null, null)
                       : uploadImage3,
                   deleteImage: (obj) {
+                    fieldIdList.remove(obj.imageId);
+                    deleteImage(context,
+                        "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                        "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                        obj.imageId);
                     setState(() {
                       uploadImage3 = ImageKitRequest("null", null);
                     });
@@ -926,7 +929,17 @@ void openAlert(
                             MaterialStateProperty.all(const EdgeInsets.all(15)),
                         textStyle: MaterialStateProperty.all(
                             const TextStyle(fontSize: 15))),
-                    onPressed: () {},
+                    onPressed: () {
+
+                      for(String id in fieldIdList){
+                        deleteImage(context,
+                            "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                            "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                            id);
+                      }
+
+                      Navigator.pop(context);
+                      },
                     child: const Text('Cancel!'))
               ]);
         },
@@ -936,6 +949,8 @@ void openAlert(
 
   showDialog(
       context: context,
+      barrierDismissible: false,
+
       builder: (BuildContext context) {
         return Align(
           alignment: Alignment.center,

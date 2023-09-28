@@ -13,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../Utils/CustomTextfield.dart';
 import '../../../commonWidget/common_elevted_Button.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../constants.dart';
@@ -193,6 +194,7 @@ Widget productItemRow(ItemDataCategory data, BuildContext context,Function(Strin
 
 void openAlert(BuildContext context, bool editButton, ItemData data,
     final Function(String) addedCategory) {
+  List<String> fieldIdList=[];
   double dialogWidth = Responsive.isMobile(context) ? 300.0 : 600.0;
   TextEditingController categoryName = TextEditingController();
   TextEditingController subCategory1 = TextEditingController();
@@ -212,6 +214,8 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
 
   showDialog(
     context: context,
+    barrierDismissible: false,
+
     builder: (BuildContext context) {
       return Dialog(
         insetPadding: const EdgeInsets.all(16.0),
@@ -280,6 +284,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                               });
 
                               _uploadImage((imageFile, imageId) {
+                                fieldIdList.add(imageId);
                                 if (imageFile != null) {
                                   setState(() {
                                     isLoading = false;
@@ -299,10 +304,12 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     ? ImageKitRequest(null, null)
                                     : imageupload[0],
                             deleteImage: (ob) {
-                              deleteImage(
+                              fieldIdList.remove(ob.imageId);
+                              deleteImage(context,
                                   "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
                                   "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
                                   ob.imageId);
+
                               imageupload[0] = (ImageKitRequest("null", null));
                             },
                           ),
@@ -325,6 +332,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                               print(pressCount);
                               _uploadImage((imageFile, imageId) {
                                 print('Image uploaded! ${imageFile}');
+                                fieldIdList.add(imageId);
                                 setState(() {
                                   imageupload[1] =
                                       (ImageKitRequest(imageFile, imageId));
@@ -337,6 +345,11 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     ? ImageKitRequest(null, null)
                                     : imageupload[1],
                             deleteImage: (obj) {
+                              fieldIdList.remove(obj.imageId);
+                              deleteImage(context,
+                                  "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                  "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                  obj.imageId);
                               setState(() {
                                 imageupload[1] = (ImageKitRequest("null", null));
                               });
@@ -360,6 +373,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             onPressed: () {
                               print(pressCount);
                               _uploadImage((imageFile, imageId) {
+                                fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[2] =
@@ -373,6 +387,11 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     ? ImageKitRequest(null, null)
                                     : imageupload[2],
                             deleteImage: (obj) {
+                              fieldIdList.remove(obj.imageId);
+                              deleteImage(context,
+                                  "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                  "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                  obj.imageId);
                               setState(() {
                                 imageupload[2] = (ImageKitRequest("null", null));
                               });
@@ -397,6 +416,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             onPressed: () {
                               print(pressCount);
                               _uploadImage((imageFile, imageId) {
+                                fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[3] =
@@ -410,6 +430,11 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     ? ImageKitRequest(null, null)
                                     : imageupload[3],
                             deleteImage: (obj) {
+                              fieldIdList.remove(obj.imageId);
+                              deleteImage(context,
+                                  "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                  "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                  obj.imageId);
                               setState(() {
                                 imageupload[3] = (ImageKitRequest(null, "null"));
                               });
@@ -431,6 +456,7 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                             onPressed: () {
                               print(pressCount);
                               _uploadImage((imageFile, imageId) {
+                                fieldIdList.add(imageId);
                                 print('Image uploaded! ${imageFile}');
                                 setState(() {
                                   imageupload[4] =
@@ -444,6 +470,11 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                     ? ImageKitRequest(null, null)
                                     : imageupload[4],
                             deleteImage: (obj) {
+                              fieldIdList.remove(obj.imageId);
+                              deleteImage(context,
+                                  "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                  "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                  obj.imageId);
                               setState(() {
                                 imageupload[4] = (ImageKitRequest(null, "null"));
                               });
@@ -577,7 +608,14 @@ void openAlert(BuildContext context, bool editButton, ItemData data,
                                 textStyle: MaterialStateProperty.all(
                                     const TextStyle(fontSize: 15)),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                for(String id in fieldIdList){
+                                  deleteImage(context,
+                                      "public_CNOvWRGNG5CloBTlee3SVVdDvYM=",
+                                      "private_mtuLv1FkF+TOXlUyH/YlB/BJguQ=",
+                                      id);
+                                }
+                                Navigator.pop(context);},
                               child: const Text('Cancel!'),
                             ),
                           ),

@@ -163,7 +163,7 @@ class _ProductHeaderState extends State<ProductHeader> {
   Widget build(BuildContext context) {
     return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [Sort(), Expanded(child: SearchField(textChanged: (value ) {  },)), AddCard1()],
+      children: [ AddCard1()],
     );
   }
 }
@@ -401,6 +401,7 @@ class AddCard1 extends StatelessWidget {
             ]),
       ),
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
+    showDialog(context: context,barrierDismissible: false,
+        builder: (BuildContext context) => dialog);
   }
 }

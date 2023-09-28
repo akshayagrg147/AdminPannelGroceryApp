@@ -22,26 +22,25 @@ import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 
-class RecentOrderCubit extends Cubit<RecentOrderCountState> {
-  RecentOrderCubit() : super( RecentOrderCountLoadingState() ) {
-
-  }
+class UpdateDeliveryCubit extends Cubit<DeliveryAmountState> {
+  UpdateDeliveryCubit() : super( DeliveryAmountInitialState() );
 
   ProductRepository postRepository = ProductRepository();
 
 
-  void fetchAllOrderCount() async {
+
+  void submitFreeDeliveryAmount(String amount) async {
     try {
-      RecentOrderCountResponse orders = await postRepository.fetchRecentOrderCount();
-      emit(RecentOrderCountLoadedState(orders));
+      AddProductResponse orders = await postRepository.updateDeliveryAmount(amount);
+      emit(DeliveryAmountLoadedState(orders));
     }
     on DioError catch(ex) {
       print("corsage"+ex.message);
       if(ex.type == DioErrorType.other) {
-        emit( RecentOrderCountErrorState("Can't fetch posts, please check your internet connection!") );
+        emit( DeliveryAmountErrorState("Can't fetch posts, please check your internet connection!") );
       }
       else {
-        emit( RecentOrderCountErrorState(ex.type.toString()) );
+        emit( DeliveryAmountErrorState(ex.type.toString()) );
       }
     }
   }

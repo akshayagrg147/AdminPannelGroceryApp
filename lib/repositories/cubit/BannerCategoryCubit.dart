@@ -58,6 +58,14 @@ class BannerCategoryCubit extends Cubit<AllBannerState> {
     emit(SelectBannerCategoryValue(value,indexValue));
   }
 
+  void deleteImage(String fileId) async {
+
+      await postRepository.deleteImageKit(fileId);
+
+
+
+  }
+
 
 
 

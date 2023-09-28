@@ -12,10 +12,10 @@ import '../../../repositories/cubit/UpdateOrderStatusCubit.dart';
 import '../../../state/add_order_state.dart';
 import '../components/header.dart';
 import '../components/headerDashboard.dart';
-import '../components/my_fields.dart';
+import '../components/card_view_count.dart';
 import '../components/order_item.dart';
 import '../components/product_item.dart';
-import '../components/recent_files.dart';
+import '../components/recent_orders.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({Key? key}) : super(key: key);
@@ -29,18 +29,18 @@ class OrderScreenState extends State<OrderScreen> {
   final scrollController = ScrollController();
   List<OrderData>?  listProducts=[];
 
-  void setupScrollController(context) {
-    scrollController.addListener(() {
-      print('scroll listenre');
-      if (scrollController.position.atEdge) {
-        if (scrollController.position.pixels != 0) {
-          print('scroll listenre');
-          BlocProvider.of<AllOrderCubit>(context).loadOrders();
-        }
-      }
-
-    });
-  }
+  // void setupScrollController(context) {
+  //   scrollController.addListener(() {
+  //     print('scroll listenre');
+  //     if (scrollController.position.atEdge) {
+  //       if (scrollController.position.pixels != 0) {
+  //         print('scroll listenre');
+  //         BlocProvider.of<AllOrderCubit>(context).loadOrders();
+  //       }
+  //     }
+  //
+  //   });
+  // }
 
 
   @override
@@ -121,8 +121,7 @@ class OrderScreenState extends State<OrderScreen> {
 
                       },
                       builder: (context, state) {
-                        List<OrderData> orders = [];
-                        bool isLoading = false;
+
                         if (state is AllLoadingMoreState && state.isFirstFetch) {
                           return const Center(child: CircularProgressIndicator());
                         }
@@ -132,8 +131,7 @@ class OrderScreenState extends State<OrderScreen> {
                          // );
                         }
                        else if (state is AllLoadingMoreState) {
-                          orders = state.oldPosts;
-                          isLoading = true;
+
                           //   return Text("${obj.message}");
                         }
                         else if (state is AllOrderLoadedState) {

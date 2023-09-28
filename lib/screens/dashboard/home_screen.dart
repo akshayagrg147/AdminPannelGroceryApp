@@ -1,6 +1,6 @@
 import 'package:adminpannelgrocery/repositories/cubit/RecentOrderCountCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
-import 'package:adminpannelgrocery/screens/dashboard/components/my_fields.dart';
+import 'package:adminpannelgrocery/screens/dashboard/components/card_view_count.dart';
 import 'package:adminpannelgrocery/state/recent_order_count_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +11,7 @@ import '../main/components/side_menu.dart';
 import 'components/header.dart';
 
 import 'components/headerDashboard.dart';
-import 'components/recent_files.dart';
+import 'components/recent_orders.dart';
 import 'components/storage_details.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late RecentOrderCubit cubit;
+
   String? name;
   String? pincode;
   @override
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                 DashboardHeader(
                                   imageUrl: state.response.image ?? "",
-                                  name:" $name\n$pincode"?? "null", title: "Dashboard",),
+                                  name:" $name\n $pincode"?? "null", title: "Dashboard",),
                                 SizedBox(height: defaultPadding),
                                 CardViewCount(obj.countResponse),
                                 const SizedBox(height: defaultPadding),
@@ -117,6 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchData();
     cubit = BlocProvider.of<RecentOrderCubit>(context);
     cubit.fetchAllOrderCount();
+
+
 
 
   }

@@ -7,77 +7,9 @@ import 'package:flutter/material.dart';
 import '../../../commonWidget/common_text_field_widget.dart';
 import '../../../constants.dart';
 
-class Header extends StatelessWidget {
-  const Header({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (!Responsive.isDesktop(context))
-          IconButton(
-            icon: const Icon(Icons.menu,color: Colors.black),
-            onPressed: (){
-              ScaffoldState? scaffoldState = Scaffold.of(context);
-              if (!scaffoldState.isDrawerOpen) {
-                scaffoldState.openDrawer();
-              }
-            }
-          ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Dashboard",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        if (!Responsive.isMobile(context))
-          Container(
-              color: Colors.grey,
-              child: Spacer(flex: Responsive.isDesktop(context) ? 2 : 1)),
-         Expanded(child: SearchField(textChanged: (value ) {  },)),
-        const ProfileCard()
-      ],
-    );
-  }
-}
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: defaultPadding),
-      padding: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
-      ),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/profile_pic.png",
-            height: 38,
-          ),
-          if (!Responsive.isMobile(context))
-            const Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
-            ),
-          const Icon(Icons.keyboard_arrow_down),
-        ],
-      ),
-    );
-  }
-}
 
 class AddCard extends StatelessWidget {
   final Function(bool) onTap;
@@ -117,40 +49,7 @@ class AddCard extends StatelessWidget {
   }
 }
 
-class Sort extends StatelessWidget {
-  const Sort({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
-      ),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/profile_pic.png",
-            height: 34,
-          ),
-          //Icon(Icons.filter_2),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            child: Text("Sort"),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class SearchField extends StatefulWidget {
   final String? Function(String?)? textChanged;
@@ -186,35 +85,4 @@ class _SearchFieldState extends State<SearchField> {
     );
   }
 }
-class HeaderModify extends StatelessWidget {
-  const HeaderModify({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        if (!Responsive.isDesktop(context))
-          IconButton(
-              icon: const Icon(Icons.menu,color: Colors.black),
-              onPressed: (){
-                ScaffoldState? scaffoldState = Scaffold.of(context);
-                if (!scaffoldState.isDrawerOpen) {
-                  scaffoldState.openDrawer();
-                }
-              }
-          ),
-        if (!Responsive.isMobile(context))
-          Text(
-            "Dashboard",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        if (!Responsive.isMobile(context))
-          Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField(textChanged: (value ) {  },)),
-
-      ],
-    );
-  }
-}

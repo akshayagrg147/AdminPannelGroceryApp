@@ -1,5 +1,4 @@
 import 'package:adminpannelgrocery/constants.dart';
-import 'package:adminpannelgrocery/controllers/DrawerController.dart';
 import 'package:adminpannelgrocery/repositories/api/ProductRepository.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddBannerCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AddCategoryCubit.dart';
@@ -24,23 +23,64 @@ import 'package:adminpannelgrocery/repositories/cubit/best_selling_checkbox_cubi
 import 'package:adminpannelgrocery/repositories/cubit/exclusive_selling_checkbox_cubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/login_response_cubit.dart';
 import 'package:adminpannelgrocery/screens/Login/login_screen.dart';
-import 'package:adminpannelgrocery/screens/dashboard/NavScreen/CouponScreen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/NavigationBloc.dart';
-import 'package:adminpannelgrocery/screens/dashboard/home_screen.dart';
-import 'package:adminpannelgrocery/screens/main/main_screen.dart';
-import 'package:adminpannelgrocery/sharedpreference/PreferencesUtil.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: 'AIzaSyCeE21bDpuy89r-XmSCm-Ke-brkuDvPXQo',
+        appId:'1:558459610565:web:14ffdb29a7fe0efa9097ac',
+        messagingSenderId: '558459610565',
+        projectId: 'mandixpress-d67a9',
+        storageBucket: "mandixpress-d67a9.appspot.com",
+      ),
+    );
+    runApp(MyApp());
+  } catch (e) {
+    print("Error initializing Firebase: $e");
+  }
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  void showFlutterNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    playSampleSound();
+  }
+
+  void playSampleSound() async {
+    final player = AudioPlayer();
+    await player.play(UrlSource('https://ik.imagekit.io/00itvcwwk/shopeefood_sound.mp3?updatedAt=1696573541986'));
+    // AudioService().playSound(AssetSource('sound/beep.mp3'));
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    super.initState();
+
+  } // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
@@ -110,8 +150,7 @@ class MyApp extends StatelessWidget {
                     // While waiting for the data, you can show a loading indicator or placeholder
                     return CircularProgressIndicator();
                   } else {
-                    final bool loginSave = snapshot.data ??
-                        false; // Use a default value if data is null
+                    false; // Use a default value if data is null
                     //if (!loginSave) {
                     return LoginScreen();
                     // } else {
@@ -121,5 +160,21 @@ class MyApp extends StatelessWidget {
                 },
               ),
             )));
+  }
+
+}
+
+class AudioService {
+
+  AudioService._();
+
+  static final AudioService _instance = AudioService._();
+
+  factory AudioService() {
+    return _instance;
+  }
+
+  void playSound(AssetSource assetSource) async{
+    AudioPlayer().play(assetSource, mode: PlayerMode.lowLatency); // faster play low latency eg for a game...
   }
 }

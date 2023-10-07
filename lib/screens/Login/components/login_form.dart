@@ -1,6 +1,7 @@
 import 'package:adminpannelgrocery/models/login_response.dart';
 import 'package:adminpannelgrocery/repositories/cubit/login_response_cubit.dart';
 import 'package:adminpannelgrocery/state/login_response_state.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +13,35 @@ import '../../../controllers/DrawerController.dart';
 import '../../../sharedpreference/PreferencesUtil.dart';
 import '../../main/main_screen.dart';
 
-class LoginForm extends StatelessWidget {
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+class LoginForm extends StatefulWidget {
 
   LoginForm({
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key){
+
+
+  }
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  TextEditingController username = TextEditingController();
+
+  TextEditingController password = TextEditingController();
+
+  String?  token="";
+
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeToken();
+  }
+
+  Future<void> _initializeToken() async {
+    token = await gettoken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +110,7 @@ class LoginForm extends StatelessWidget {
               ),
             );
           }, listener: (context, state) {
+
             if (state is LoginResponseErrorState) {
               SnackBar snackBar = SnackBar(
                 content: Text(state.error),
@@ -94,15 +118,19 @@ class LoginForm extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             } else if (state is LoginResponseLoadedState) {
+
               callingMainScreen(
                   context,
                   state.response.response?.pincode,
                   state.response.response?.email,
                   state.response.response?.name,
                   state.response.response?.password,
-                  state.response.response?.freeDeliveryAmount,
-                  state.response.response?.privatekey ?? "",
-                  state.response.response?.publickey ?? "");
+                  state.response.response?.city,
+                  state.response.response?.deliveryContactNumber,
+                token,
+                state.response.response?.price,
+
+                  );
             }
           }),
           const SizedBox(height: defaultPadding),
@@ -111,22 +139,40 @@ class LoginForm extends StatelessWidget {
     );
   }
 
+  Future<String?> gettoken() async {
+    print("Device token generation started");
+    try {
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      print("Device token: $deviceToken");
+      return deviceToken; // Return the device token
+    } catch (e) {
+      print("Error getting device token: $e");
+      return null; // Return null in case of an error
+    }
+  }
+
   Future<void> callingMainScreen(
       BuildContext context,
       String? pincode,
       String? email,
       String? name,
       String? password,
-      String? amount,
-      String privatekey,
-      String publickey) async {
+      String? city,
+      String? deliveryContactNumber,
+      String? fcm_token,
+      String? price
+
+    ) async {
     await PreferencesUtil.saveString('pincode', pincode ?? "");
     await PreferencesUtil.saveString('email', email ?? "");
     await PreferencesUtil.saveString('name', name ?? "");
     await PreferencesUtil.saveString('password', password ?? "");
-    await PreferencesUtil.saveString('price', amount ?? "");
-    await PreferencesUtil.saveString('privatekey', privatekey ?? "");
-    await PreferencesUtil.saveString('publickey', publickey ?? "");
+    await PreferencesUtil.saveString('city', city ?? "");
+    await PreferencesUtil.saveString('deliveryContactNumber', deliveryContactNumber ?? "");
+    await PreferencesUtil.saveString('fcm_token', fcm_token ?? "");
+    await PreferencesUtil.saveString('price', price ?? "");
+
+
 
     Navigator.push(
       context,

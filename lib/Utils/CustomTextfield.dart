@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../repositories/cubit/BannerCategoryCubit.dart';
-import '../sharedpreference/PreferencesUtil.dart';
 
 class CustomTextfield extends StatefulWidget {
   const CustomTextfield(
@@ -155,9 +154,6 @@ class _CustomTextfieldState extends State<CustomTextfield> {
 
 class SizeConfig {
   static double? _screenWidth;
-  static double? _screenHeight;
-  static double _blockSizeHorizontal = 0;
-  static double _blockSizeVertical = 0;
   static double? textMultiplier;
   static double? imageSizeMultiplier;
   static double? heightMultiplier;
@@ -168,19 +164,17 @@ class SizeConfig {
   void init(BoxConstraints constraints, Orientation orientation) {
     if (orientation == Orientation.portrait) {
       _screenWidth = constraints.maxWidth;
-      _screenHeight = constraints.maxHeight;
+
       isPortrait = true;
       if (_screenWidth! < 450) {
         isMobilePortrait = true;
       }
     } else {
       _screenWidth = constraints.maxHeight;
-      _screenHeight = constraints.maxWidth;
+
       isPortrait = false;
       isMobilePortrait = false;
     }
-    _blockSizeHorizontal = _screenWidth! / 100;
-    _blockSizeVertical = _screenHeight! / 100;
     // textMultiplier = _blockSizeVertical / 6.4;
     // imageSizeMultiplier = _blockSizeHorizontal / 3.6;
     // heightMultiplier = _blockSizeVertical / 6.4;

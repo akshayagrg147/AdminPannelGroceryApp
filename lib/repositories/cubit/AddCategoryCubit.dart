@@ -3,9 +3,6 @@ import 'package:adminpannelgrocery/state/add_category_state.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../models/productScreenModal.dart';
-import '../../state/add_product_state.dart';
 import '../Modal/add_category_modal.dart';
 import '../api/ProductRepository.dart';
 

@@ -17,7 +17,7 @@ class CardViewCount extends StatefulWidget {
   final List<CountResponse>? responseCount;
 
   CardViewCount(
-    this.responseCount, {
+    this.responseCount,this.price, {
     Key? key,
   }) : super(key: key);
 
@@ -26,20 +26,11 @@ class CardViewCount extends StatefulWidget {
 }
 
 class _CardViewCountState extends State<CardViewCount> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
-  Future<void> initializeData() async {
-    widget.price = await getPrice();
-    setState(() {});
-    // Update the UI with the fetched price
-  }
 
   @override
   Widget build(BuildContext context) {
-    initializeData();
+   // initializeData();
     print('printmyfields ${widget.price}');
     final Size _size = MediaQuery.of(context).size;
     final TextEditingController _textController = TextEditingController();

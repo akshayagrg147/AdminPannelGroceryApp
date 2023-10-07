@@ -1,21 +1,8 @@
-import 'package:adminpannelgrocery/models/AddProductResponse.dart';
-import 'package:adminpannelgrocery/models/AllOrders.dart';
-import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
-import 'package:adminpannelgrocery/state/all_orders_state.dart';
-import 'package:adminpannelgrocery/state/all_product_state.dart';
-import 'package:adminpannelgrocery/state/recent_order_count_state.dart';
 
+import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
+import 'package:adminpannelgrocery/state/recent_order_count_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../models/productScreenModal.dart';
-import '../../state/add_product_state.dart';
-import '../../state/delivery_amount_state.dart';
-import '../Modal/AddedItemResponse.dart';
-import '../Modal/AllProducts.dart';
-import '../Modal/AllProducts.dart';
-import '../Modal/AllProducts.dart';
-import '../Modal/HomeProduct.dart';
 import '../api/ProductRepository.dart';
 
 class RecentOrderCubit extends Cubit<RecentOrderCountState> {
@@ -37,5 +24,17 @@ class RecentOrderCubit extends Cubit<RecentOrderCountState> {
         emit(RecentOrderCountErrorState(ex.type.toString()));
       }
     }
+  }
+
+  void updatefcmtoken(String? name, String? pincode, String? email, String? password, String? city, String? deliveryContactNumber, String? fcm_token, String? price) async{
+    try {
+      print("update_fcm called");
+      await postRepository.updatefcmtokenRepo(name,pincode,email,password,city,deliveryContactNumber,fcm_token,price);
+      print("update_fcm called1");
+    } on DioError catch (ex) {
+      print("update_fcm called1${ex.message}");
+
+    }
+
   }
 }

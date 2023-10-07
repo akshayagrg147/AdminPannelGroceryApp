@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import '../responsive.dart';
 
 class commonTextFieldWidget extends StatelessWidget {
   final TextEditingController controller;

@@ -203,6 +203,7 @@ DataRow productItemRow(OrderData data, SelectionCubit cubit) {
 
             cubit.selectItem(value, data);
             sendEmail();
+            // sendNotification()
 
             // Handle the selected value
           },

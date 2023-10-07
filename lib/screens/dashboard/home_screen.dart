@@ -21,9 +21,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late RecentOrderCubit cubit;
-
+  String? priceDelivery;
   String? name;
   String? pincode;
+  String? email;
+  String? password;
+  String? price;
+  String? city;
+  String? deliveryContactNumber;
+  String? fcm_token;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   title: "Dashboard",
                                 ),
                                 SizedBox(height: defaultPadding),
-                                CardViewCount(obj.countResponse),
+                                CardViewCount(obj.countResponse,priceDelivery),
                                 const SizedBox(height: defaultPadding),
                                 RecentOrders(obj.recentOrders),
                                 if (Responsive.isMobile(context))
@@ -111,12 +117,36 @@ class _HomeScreenState extends State<HomeScreen> {
     fetchData();
     cubit = BlocProvider.of<RecentOrderCubit>(context);
     cubit.fetchAllOrderCount();
+    initializeData();
+
+  }
+  Future<void> initializeData() async {
+    priceDelivery = await getPrice();
+
+    // Update the UI with the fetched price
   }
 
   Future<void> fetchData() async {
     name = await PreferencesUtil.getString('name');
     pincode = await PreferencesUtil.getString('pincode');
+    email = await PreferencesUtil.getString('email');
+    password = await PreferencesUtil.getString('password');
+    city  = await PreferencesUtil.getString('city');
+    deliveryContactNumber = await PreferencesUtil.getString('deliveryContactNumber');
+    fcm_token  = await PreferencesUtil.getString('fcm_token');
+    price  = await PreferencesUtil.getString('price');
+    cubit.updatefcmtoken(name,
+        pincode,
+        email,
+        password,
+        city,
+        deliveryContactNumber,
+        fcm_token,
+        price
+    );
     // After fetching the value, trigger a rebuild
     setState(() {});
   }
 }
+
+

@@ -1,17 +1,15 @@
 import 'package:adminpannelgrocery/models/AddProductResponse.dart';
-import 'package:adminpannelgrocery/repositories/Modal/CouponFormData.dart';
-import 'package:adminpannelgrocery/state/add_category_state.dart';
+
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/AllOrders.dart';
-import '../../models/productScreenModal.dart';
+
 import '../../sharedpreference/PreferencesUtil.dart';
-import '../../state/add_coupon_state.dart';
+
 import '../../state/add_order_state.dart';
-import '../../state/add_product_state.dart';
-import '../Modal/add_category_modal.dart';
+
 import '../api/ProductRepository.dart';
 
 class UpdateOrderStatusCubit extends Cubit<AddOrderState> {

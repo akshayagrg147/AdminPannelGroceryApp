@@ -4,7 +4,6 @@ import 'package:adminpannelgrocery/models/login_response.dart';
 import 'package:adminpannelgrocery/repositories/Modal/RecentOrderCountResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/UserResponse.dart';
 import 'package:adminpannelgrocery/repositories/Modal/add_bannercategory_modal.dart';
-import 'package:adminpannelgrocery/repositories/Modal/add_item_category_response.dart';
 import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
 import '../../models/request_modal.dart';
@@ -14,10 +13,6 @@ import '../Modal/AllProducts.dart';
 import '../Modal/add_category_modal.dart';
 
 import '../../models/productScreenModal.dart';
-import '../Modal/AddedItemResponse.dart';
-import '../Modal/AllProducts.dart';
-import '../Modal/HomeProduct.dart';
-import '../Modal/add_category_modal.dart';
 import '../Modal/allCouponsResponse.dart';
 import '../Modal/banner_category_modal.dart';
 import '../Modal/product_category_modal.dart';
@@ -149,7 +144,7 @@ class ProductRepository {
       print("Exception during login request: $ex");
       rethrow;
     }
-    return LoginResponse();
+
   }
 
   Future<AddProductResponse> addProduct(ProductScreenModal object) async {
@@ -426,7 +421,7 @@ class ProductRepository {
     return AllOrders();
   }
 
-  Future<RecentOrderCountResponse> fetchRecentOrderCount() async {
+  Future<RecentOrderCountResponse>  fetchRecentOrderCount() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
       final response = await _dio?.get("/Admin/RecentOrderCount",
@@ -499,6 +494,9 @@ class ProductRepository {
       String? name = await PreferencesUtil.getString('name');
       String? email = await PreferencesUtil.getString('email');
       String? password = await PreferencesUtil.getString('password');
+      String?  city  = await PreferencesUtil.getString('city');
+      String?  deliveryContactNumber = await PreferencesUtil.getString('deliveryContactNumber');
+      String?  fcm_token  = await PreferencesUtil.getString('fcm_token');
 
       final response = await _dio?.post("/Admin/freeDelivery",
           data: ResponseLogin(
@@ -506,7 +504,12 @@ class ProductRepository {
               password: password,
               pincode: pincode,
               name: name,
-              freeDeliveryAmount: amount));
+              price: amount,
+          city: city,
+          deliveryContactNumber: deliveryContactNumber,
+          fcm_token: fcm_token,
+
+          ));
       print("sucess error");
       print(response?.statusMessage);
 
@@ -569,5 +572,10 @@ class ProductRepository {
       rethrow;
     }
     return AddProductResponse();
+  }
+
+  updatefcmtokenRepo(String? name, String? pincode, String? email, String? password, String? city, String? deliveryContactNumber, String? fcm_token, String? price)  {
+    ResponseLogin obj= ResponseLogin(name: name,pincode: pincode,email: email,password: password,city: city,deliveryContactNumber: deliveryContactNumber,fcm_token: fcm_token,price: price);
+     _dio?.post("/Admin/freeDelivery", data: obj.toJson());
   }
 }

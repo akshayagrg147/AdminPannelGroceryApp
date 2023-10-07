@@ -1,29 +1,15 @@
-import 'dart:convert';
-import 'dart:developer';
 
-// import 'package:chefkart/core/constants/app-text-style.dart';
-// import 'package:chefkart/core/constants/color_pallete.dart';
-// import 'package:chefkart/core/constants/tts-text.dart';
-// import 'package:chefkart/core/image-path/image-paths.dart';
-// import 'package:chefkart/core/responsive/size_config.dart';
-// import 'package:chefkart/feature/log-in-flow/services/remote_services.dart';
-// import 'package:chefkart/src/presentation/widgets/onboarded-user-widgets/alertBoxSpeakerOff.dart';
-// import 'package:chefkart/src/presentation/widgets/onboarded-user-widgets/alertBoxSpeakerOn.dart';
-// import 'package:chucker_flutter/chucker_flutter.dart';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 
-// import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 
 class DioUtil {
   Dio? _instance;
 
 //method for getting dio instance
   Dio? getInstance() {
-    if (_instance == null) {
-      _instance = createDioInstance();
-    }
+    _instance ??= createDioInstance();
     return _instance;
   }
 

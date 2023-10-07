@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class SpinnerWidget extends StatefulWidget {
   final List<String> items;
   final Function(String, int) onChanged;

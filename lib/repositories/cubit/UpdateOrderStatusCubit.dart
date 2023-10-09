@@ -31,4 +31,8 @@ class UpdateOrderStatusCubit extends Cubit<AddOrderState> {
       }
     }
   }
+  void resetState() {
+    print('state_is resetState AddOrderLoadedState');
+    emit(AddOrderInitialState());
+  }
 }

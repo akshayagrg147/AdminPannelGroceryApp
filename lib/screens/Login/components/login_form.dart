@@ -29,97 +29,119 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController username = TextEditingController();
 
   TextEditingController password = TextEditingController();
+  String? token;
+  String? savedemail;
+  String? savedpassword;
 
-  String?  token="";
-
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeToken();
-  }
 
   Future<void> _initializeToken() async {
     token = await gettoken();
+    savedemail = await PreferencesUtil.getString('email');
+    savedpassword = await PreferencesUtil.getString('password');
+    username.text=savedemail??"";
+    password.text=savedpassword??"";
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          Image.asset(
-            'assets/images/logo.png',
-            width: 200,
-            height: 200,
-          ),
-          Text(
-            "Login Screen",
-            style: TextStyle(
-              fontSize: 26,
-              fontFamily: 'YourFontFamily',
-              // Replace with your desired font family
-              fontWeight: FontWeight.bold, // Set the font weight to bold
+
+
+    return FutureBuilder<void>(
+        future: _initializeToken(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+    // Show a loading indicator while waiting for the token.
+    return const Center(
+      child: SizedBox(
+        width: 24.0, // Set the desired width
+        height: 24.0, // Set the desired height
+        child: CircularProgressIndicator(
+          strokeWidth: 2.0, // Adjust the strokeWidth as needed
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), // Customize the color
+        ),
+      ),
+    )
+    ;
+    } else if (snapshot.hasError) {
+    // Handle the error if token generation fails.
+    return Center(child: Text('Error: ${snapshot.error}'));
+    } else {
+      return Form(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 200,
+              height: 200,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          commonTextFieldWidget(
-            secondaryColor: Colors.white,
-            type: TextInputType.text,
-            controller: username,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            hintText: "Your email",
-            icon: Icons.mail,
-            labelText: "Enter your email",
-            onChanged: (val) {},
-          ),
-          Padding(
-              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-              child: commonTextFieldWidget(
-                secondaryColor: Colors.white,
-                type: TextInputType.text,
-                controller: password,
-                icon: Icons.lock,
-                keyboardType: TextInputType.visiblePassword,
-                textInputAction: TextInputAction.done,
-                hintText: "Your password",
-                labelText: "Enter your password",
-                onChanged: (val) {},
-              )),
-          const SizedBox(height: defaultPadding),
-          BlocConsumer<LoginResponseCubit, LoginResponseState>(
-              builder: (context, state) {
-            if (state is LoginResponseLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Hero(
-              tag: "login_btn",
-              child: ElevatedButton(
-                onPressed: () async {
-                  BlocProvider.of<LoginResponseCubit>(context)
-                      .submitlogin(username.text, password.text);
-                },
-                child: Text(
-                  "Login".toUpperCase(),
-                ),
+            Text(
+              "Login Screen",
+              style: TextStyle(
+                fontSize: 26,
+                fontFamily: 'YourFontFamily',
+                // Replace with your desired font family
+                fontWeight: FontWeight.bold, // Set the font weight to bold
               ),
-            );
-          }, listener: (context, state) {
-
-            if (state is LoginResponseErrorState) {
-              SnackBar snackBar = SnackBar(
-                content: Text(state.error),
-                backgroundColor: Colors.red,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else if (state is LoginResponseLoadedState) {
-
-              callingMainScreen(
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            commonTextFieldWidget(
+              secondaryColor: Colors.white,
+              type: TextInputType.text,
+              controller: username,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              hintText: "Your email",
+              icon: Icons.mail,
+              labelText: "Enter your email",
+              onChanged: (val) {},
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                child: commonTextFieldWidget(
+                  secondaryColor: Colors.white,
+                  type: TextInputType.text,
+                  controller: password,
+                  icon: Icons.lock,
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
+                  hintText: "Your password",
+                  labelText: "Enter your password",
+                  onChanged: (val) {},
+                )),
+            const SizedBox(height: defaultPadding),
+            BlocConsumer<LoginResponseCubit, LoginResponseState>(
+                builder: (context, state) {
+                  if (state is LoginResponseLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Hero(
+                    tag: "login_btn",
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        BlocProvider.of<LoginResponseCubit>(context)
+                            .submitlogin(username.text, password.text);
+                      },
+                      child: Text(
+                        "Login".toUpperCase(),
+                      ),
+                    ),
+                  );
+                }, listener: (context, state) {
+              if (state is LoginResponseErrorState) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else if (state is LoginResponseLoadedState) {
+                callingMainScreen(
                   context,
                   state.response.response?.pincode,
                   state.response.response?.email,
@@ -127,17 +149,18 @@ class _LoginFormState extends State<LoginForm> {
                   state.response.response?.password,
                   state.response.response?.city,
                   state.response.response?.deliveryContactNumber,
-                token,
-                state.response.response?.price,
+                  token,
+                  state.response.response?.price,
 
-                  );
-            }
-          }),
-          const SizedBox(height: defaultPadding),
-        ],
-      ),
-    );
-  }
+                );
+              }
+            }),
+            const SizedBox(height: defaultPadding),
+          ],
+        ),
+      );
+    }
+  });}
 
   Future<String?> gettoken() async {
     print("Device token generation started");

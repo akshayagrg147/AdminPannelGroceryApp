@@ -9,4 +9,7 @@ class SelectionCubit extends Cubit<SelectionState> {
   void selectItem(String selectedItem, OrderData data) {
     emit(SelectionUpdated(selectedItem, data));
   }
+  void resetState() {
+    emit(SelectionInitial());
+  }
 }

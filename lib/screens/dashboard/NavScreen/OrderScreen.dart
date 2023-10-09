@@ -26,6 +26,7 @@ class OrderScreen extends StatefulWidget {
 
 class OrderScreenState extends State<OrderScreen> {
   late AllOrderCubit Cubit;
+  late UpdateOrderStatusCubit addUpdateOrderCubit;
   final scrollController = ScrollController();
   List<OrderData>? listProducts = [];
 
@@ -46,6 +47,8 @@ class OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
+    addUpdateOrderCubit= BlocProvider.of<UpdateOrderStatusCubit>(context);
+    addUpdateOrderCubit.resetState();
     // Cubit.resetState();
     //  setupScrollController(context);
     Cubit.loadOrders();
@@ -72,39 +75,13 @@ class OrderScreenState extends State<OrderScreen> {
                       name: "null",
                       title: "Orders",
                     ),
-                    BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
-                      listener: (context, state) {
-                        if (state is AddOrderLoadedState) {
-                          if (state.products.statusCode == 200) {
-                            SnackBar snackBar = const SnackBar(
-                              content: Text('status updated'),
-                              backgroundColor: Colors.green,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          } else {
-                            SnackBar snackBar = const SnackBar(
-                              content: Text('something went wrong'),
-                              backgroundColor: Colors.redAccent,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        } else if (state is AddOrderErrorState) {
-                          SnackBar snackBar = SnackBar(
-                            content: Text("${state.error.toString()}"),
-                            backgroundColor: Colors.green,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      },
-                      builder: (context, state) {
-                        return Container();
-                      },
-                    ),
+
                     BlocConsumer<AllOrderCubit, AllOrderState>(
                       listener: (context, state) {
+
+
                         if (state is AllOrderErrorState) {
+                          print('state_is AllOrderErrorState');
                           SnackBar snackBar = SnackBar(
                             content: Text(state.error),
                             backgroundColor: Colors.red,
@@ -137,6 +114,46 @@ class OrderScreenState extends State<OrderScreen> {
                           );
                         }
 
+                        return Container();
+                      },
+                    ),
+                    BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
+                      listener: (context, state) {
+
+                        if (state is AddOrderLoadedState) {
+                          print('state_is AddOrderLoadedState');
+
+                          addUpdateOrderCubit.resetState();
+                          if (state.products.statusCode == 200) {
+                            SnackBar snackBar = const SnackBar(
+                              content: Text('status updated'),
+                              backgroundColor: Colors.green,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+
+
+                          }
+                          else {
+                            SnackBar snackBar = const SnackBar(
+                              content: Text('something went wrong'),
+                              backgroundColor: Colors.redAccent,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        }
+                        else if (state is AddOrderErrorState) {
+                          print('state_is AddOrderErrorState');
+                          SnackBar snackBar = SnackBar(
+                            content: Text("${state.error.toString()}"),
+                            backgroundColor: Colors.redAccent,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      builder: (context, state) {
+                        print('state_is  empty');
                         return Container();
                       },
                     ),

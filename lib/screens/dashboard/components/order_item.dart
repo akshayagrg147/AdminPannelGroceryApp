@@ -33,6 +33,7 @@ class _OrderItemsState extends State<OrderItems> {
     super.initState();
     cubit = BlocProvider.of<SelectionCubit>(context);
     orderStatus = BlocProvider.of<UpdateOrderStatusCubit>(context);
+    cubit.resetState();
   }
 
   @override
@@ -50,6 +51,8 @@ class _OrderItemsState extends State<OrderItems> {
             BlocBuilder<SelectionCubit, SelectionState>(
               builder: (context, state) {
                 if (state is SelectionUpdated) {
+                  orderStatus.resetState();
+                  cubit.resetState();
                   state.data.orderStatus = state.selectedItem;
                   orderStatus.updateOrderStatus(state.data);
                   return Container();

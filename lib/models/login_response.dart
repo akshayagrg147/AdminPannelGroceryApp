@@ -33,6 +33,7 @@ class ResponseLogin {
   String? fcm_token;
   String? city;
   String? deliveryContactNumber;
+  String? generateToken;
 
 
 
@@ -44,7 +45,8 @@ class ResponseLogin {
       this.price,
        this. fcm_token,
         this.city,
-        this.deliveryContactNumber
+        this.deliveryContactNumber,
+        this.generateToken
       });
 
   ResponseLogin.fromJson(Map<String, dynamic> json) {
@@ -56,6 +58,7 @@ class ResponseLogin {
     fcm_token = json['fcm_token'];
     city = json['city'];
     deliveryContactNumber = json['deliveryContactNumber'];
+    generateToken = json['generateToken'];
 
   }
 
@@ -69,6 +72,7 @@ class ResponseLogin {
     data['fcm_token'] = this.fcm_token;
     data['city'] = this.city;
     data['deliveryContactNumber'] = this.deliveryContactNumber;
+    data['generateToken'] = this.generateToken;
 
     return data;
   }

@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? email;
   String? password;
   String? price;
+  String? generateToken;
   String? city;
   String? deliveryContactNumber;
   String? fcm_token;
@@ -135,6 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
     deliveryContactNumber = await PreferencesUtil.getString('deliveryContactNumber');
     fcm_token  = await PreferencesUtil.getString('fcm_token');
     price  = await PreferencesUtil.getString('price');
+    generateToken  = await PreferencesUtil.getString('generateToken');
+
     cubit.updatefcmtoken(name,
         pincode,
         email,

@@ -2,6 +2,8 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 
+import '../../sharedpreference/PreferencesUtil.dart';
+
 
 
 class DioUtil {
@@ -12,18 +14,28 @@ class DioUtil {
     _instance ??= createDioInstance();
     return _instance;
   }
+  void _log(Object object) {
+    log("$object");
+  }
 
   Dio createDioInstance() {
     var dio = Dio();
     dio.options.baseUrl = "http://localhost:8081";
     dio.interceptors.clear();
     return dio
+      ..interceptors.add(LogInterceptor(
+          responseBody: true, logPrint: _log, requestBody: true))
       ..interceptors
           .add(InterceptorsWrapper(onRequest: (options, handler) async {
         log(options.toString());
-        // options.headers["Authorization"] = "Bearer " + accessToken;
+        final String? accessToken = await PreferencesUtil.getString("generateToken");
+        if (!options.uri.toString().contains("Login")) {
+         // options.headers["Authorization"] = "Bearer $accessToken";
+        }
+
         //     'Content-type': 'application/json'
         options.headers["Content-type"] = "application/json";
+        options.headers["origin"] = "*";
         // options.headers["X-APP-CODE"] = "COOK";
         return handler.next(options); //modify your request
       }, onResponse: (response, handler) {

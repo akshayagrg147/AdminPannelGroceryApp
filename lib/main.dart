@@ -149,7 +149,8 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // While waiting for the data, you can show a loading indicator or placeholder
                     return CircularProgressIndicator();
-                  } else {
+                  }
+                  else {
                     false; // Use a default value if data is null
                     //if (!loginSave) {
                     return LoginScreen();
@@ -157,7 +158,7 @@ class _MyAppState extends State<MyApp> {
                     //   return HomeScreen();
                     // }
                   }
-                },
+                }, future: null,
               ),
             )));
   }

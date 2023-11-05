@@ -240,6 +240,8 @@ class ProductRepository {
 
   Future<AddProductResponse> updateSellingCheckBox(ItemData data) async {
     try {
+      String? pincode = await PreferencesUtil.getString('pincode');
+      data.pincode = pincode ?? "";
       final response = await _dio?.post("/Admin/updateProduct", data: data);
       print("sucess error");
       print(response?.statusMessage);
@@ -469,6 +471,7 @@ class ProductRepository {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
       obj.pincode = pincode ?? "";
+      print("updateProduct ${pincode}");
       final response = await _dio?.post("/Admin/updateProduct", data: obj);
       print("sucess error");
       print(response?.statusMessage);

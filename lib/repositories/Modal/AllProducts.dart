@@ -47,6 +47,7 @@ class ItemData {
   List<Rating>? rating;
   String? item_category_name;
   String? item_subcategory_name;
+  String? pincode;
 
   ItemData(
       {this.productName,
@@ -64,7 +65,7 @@ class ItemData {
       this.exclusiveSellingCheckBox,
       this.rating,
       this.item_category_name,
-      this.item_subcategory_name});
+      this.pincode});
 
   @override
   String toString() {
@@ -85,6 +86,7 @@ class ItemData {
     productDescription = json['productDescription'];
     orignal_price = json['orignal_price'];
     dashboardDisplay = json['DashboardDisplay'];
+    pincode=json['pincode'];
     category = json['category'];
     if (json['rating'] != null) {
       rating = <Rating>[];
@@ -111,6 +113,7 @@ class ItemData {
     data['selling_price'] = this.selling_price;
     data['DashboardDisplay'] = this.dashboardDisplay;
     data['category'] = this.category;
+    data['pincode']=this.pincode;
     if (this.rating != null) {
       data['rating'] = this.rating!.map((v) => v.toJson()).toList();
     }

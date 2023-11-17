@@ -48,6 +48,7 @@ class ItemData {
   String? item_category_name;
   String? item_subcategory_name;
   String? pincode;
+  String? sellerId;
 
   ItemData(
       {this.productName,
@@ -65,7 +66,8 @@ class ItemData {
       this.exclusiveSellingCheckBox,
       this.rating,
       this.item_category_name,
-      this.pincode});
+      this.pincode,
+      this.sellerId});
 
   @override
   String toString() {
@@ -96,6 +98,8 @@ class ItemData {
     }
     item_category_name = json['item_category_name'];
     item_subcategory_name = json['item_subcategory_name'];
+    sellerId = json['sellerId'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +123,8 @@ class ItemData {
     }
     data['item_category_name'] = this.item_category_name;
     data['item_subcategory_name'] = this.item_subcategory_name;
+    data['sellerId'] = this.sellerId;
+
     return data;
   }
 }

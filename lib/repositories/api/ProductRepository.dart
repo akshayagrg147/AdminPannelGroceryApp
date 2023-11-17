@@ -31,12 +31,13 @@ class ProductRepository {
       //  ' subCategoryList':list
       // };
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId1 = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.post("/Admin/AddItemCategory",
           data: AddCategoryModal(
               category: category,
               imageUrl: image,
               subCategoryList: list,
-              pincode: pincode));
+              pincode: pincode,sellerId:sellerId1));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -65,6 +66,7 @@ class ProductRepository {
       //  ' subCategoryList':list
       // };
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
 
       final response = await _dio?.post("/Admin/AddBannerCategory",
           data: AddBannerCategoryModal(
@@ -75,7 +77,8 @@ class ProductRepository {
               banner3: banner3,
               imageUrl3: imag3,
               subCategoryList: list,
-              pincode: pincode));
+              pincode: pincode,
+          sellerId:sellerId));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -104,6 +107,7 @@ class ProductRepository {
       //  ' subCategoryList':list
       // };
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
 
       final response = await _dio?.post("/Admin/UpdateBannerCategory",
           data: AddBannerCategoryModal(
@@ -114,7 +118,8 @@ class ProductRepository {
               banner3: banner3,
               imageUrl3: imag3,
               subCategoryList: list,
-              pincode: pincode));
+              pincode: pincode,
+              sellerId:sellerId));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -150,6 +155,8 @@ class ProductRepository {
   Future<AddProductResponse> addProduct(ProductScreenModal object) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
+      object.sellerId = sellerId;
       object.pincode = pincode;
       final response = await _dio?.post("/Admin/AddProduct", data: object);
       if (response?.statusCode == 200) {
@@ -241,7 +248,11 @@ class ProductRepository {
   Future<AddProductResponse> updateSellingCheckBox(ItemData data) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
+
       data.pincode = pincode ?? "";
+      data.sellerId = sellerId;
+
       final response = await _dio?.post("/Admin/updateProduct", data: data);
       print("sucess error");
       print(response?.statusMessage);
@@ -264,8 +275,9 @@ class ProductRepository {
   Future<AllProducts> fetchProducts(int page, int limit) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/allProducts",
-          queryParameters: {"skip": page, "limit": limit, "pincode": pincode});
+          queryParameters: {"skip": page, "limit": limit, "pincode": pincode,"sellerId":sellerId});
 
       print("sucess error");
       print(response?.statusMessage);
@@ -287,9 +299,9 @@ class ProductRepository {
   Future<AllProducts> fetchSearchProductWise(String query) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
-
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/SearchAllProducts",
-          queryParameters: {"pincode": pincode, "query": query});
+          queryParameters: {"pincode": pincode,"sellerId": sellerId, "query": query});
       print("sucess error");
       print(response?.statusMessage);
 
@@ -311,8 +323,9 @@ class ProductRepository {
   Future<ProductCategoryModal> fetchCategory() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/getProductCategory",
-          queryParameters: {"pincode": pincode});
+          queryParameters: {"pincode": pincode,"sellerId": sellerId});
       print("sucess error");
       print(response?.statusMessage);
 
@@ -334,8 +347,9 @@ class ProductRepository {
   Future<BannerCategoryModal> fetchBannerCategory() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/getBannerCategory",
-          queryParameters: {"pincode": pincode});
+          queryParameters: {"pincode": pincode,"sellerId": sellerId});
 
       print("sucess error");
       print(response?.statusMessage);
@@ -379,9 +393,10 @@ class ProductRepository {
   Future<allCouponsResponse> fetchAllCoupons() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
 
       final response = await _dio
-          ?.get("/Admin/allCoupons", queryParameters: {"pincode": pincode});
+          ?.get("/Admin/allCoupons", queryParameters: {"pincode": pincode,"sellerId": sellerId});
       print("sucess error");
       print(response?.statusMessage);
 
@@ -403,9 +418,10 @@ class ProductRepository {
     try {
       print("skip_order ${page}  $limit");
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
 
       final response = await _dio?.get("/Admin/AllOrdersByPages",
-          queryParameters: {"skip": page, "limit": limit, "pincode": pincode});
+          queryParameters: {"skip": page, "limit": limit, "pincode": pincode,"sellerId": sellerId});
 
       print(response?.statusMessage);
 
@@ -426,8 +442,9 @@ class ProductRepository {
   Future<RecentOrderCountResponse>  fetchRecentOrderCount() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/RecentOrderCount",
-          queryParameters: {"pincode": pincode});
+          queryParameters: {"pincode": pincode,"sellerId": sellerId});
       print("request_print $pincode");
       print(response?.statusMessage);
 
@@ -470,7 +487,9 @@ class ProductRepository {
   Future<AddProductResponse> updateProduct(ProductScreenModal obj) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       obj.pincode = pincode ?? "";
+      obj.sellerId = sellerId ?? "";
       print("updateProduct ${pincode}");
       final response = await _dio?.post("/Admin/updateProduct", data: obj);
       print("sucess error");
@@ -494,6 +513,7 @@ class ProductRepository {
   Future<AddProductResponse> updateDeliveryAmount(String amount) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+      String? sellerId = await PreferencesUtil.getString('sellerId');
       String? name = await PreferencesUtil.getString('name');
       String? email = await PreferencesUtil.getString('email');
       String? password = await PreferencesUtil.getString('password');
@@ -511,6 +531,7 @@ class ProductRepository {
           city: city,
           deliveryContactNumber: deliveryContactNumber,
           fcm_token: fcm_token,
+              sellerId:sellerId
 
           ));
       print("sucess error");
@@ -534,6 +555,7 @@ class ProductRepository {
   Future<AddProductResponse> addCoupons(CouponFormData obj) async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
+
       obj.pincode = pincode ?? "";
       final response = await _dio?.post("/Admin/AddCoupon", data: obj.toJson());
       print("sucess error");

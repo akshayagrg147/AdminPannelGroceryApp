@@ -637,6 +637,7 @@ void openAlert(
                           child: CircularProgressIndicator(),
                         );
                       } else if (state is AllCategoryLoadedState) {
+                        print("banner_stateis ${state.runtimeType}   ${state.category.itemData}");
                         if (state.category.status == false) {
                           return Container();
                         }
@@ -711,17 +712,19 @@ void openAlert(
                     builder: (context, state) {
                       print("banner_stateis ${state.runtimeType}");
                       if (state is AllCategoryLoadingState) {
-                        print("stateis loading");
+                        print("banner_stateis loading");
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       } else if (state is AllBannerLoadedState) {
-                        print("stateis loaded");
-                        if (state.category.status == true) {
+                        print("banner_stateis loaded ${state
+                            .category.itemData?.length} ${state.category.status}");
+                        if (state.category.statusCode == 200) {
                           categoryList = state
                               .category.itemData?.first.subCategoryList
                               ?.map((category) => category.name)
                               .toList();
+                          print("banner_stateis loaded11 $categoryList");
 
                           if (categoryList?.isNotEmpty == true) {
                             return Column(

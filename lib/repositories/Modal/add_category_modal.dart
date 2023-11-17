@@ -3,14 +3,16 @@ class AddCategoryModal {
   String? imageUrl;
   String? pincode;
   List<SubCategoryListData>? subCategoryList;
+  String? sellerId;
 
   AddCategoryModal(
-      {this.category, this.imageUrl, this.pincode, this.subCategoryList});
+      {this.category, this.imageUrl, this.pincode, this.subCategoryList,this.sellerId});
 
   AddCategoryModal.fromJson(Map<String, dynamic> json) {
     category = json['category'];
     imageUrl = json['imageUrl'];
     pincode = json['pincode'];
+    sellerId = json['sellerId'];
     if (json['subCategoryList'] != null) {
       subCategoryList = <SubCategoryListData>[];
       json['subCategoryList'].forEach((v) {
@@ -21,9 +23,10 @@ class AddCategoryModal {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['category'] = this.category;
-    data['imageUrl'] = this.imageUrl;
-    data['pincode'] = this.pincode;
+    data['category'] = category;
+    data['imageUrl'] = imageUrl;
+    data['pincode'] = pincode;
+    data['sellerId']=sellerId;
     if (this.subCategoryList != null) {
       data['subCategoryList'] =
           this.subCategoryList!.map((v) => v.toJson()).toList();

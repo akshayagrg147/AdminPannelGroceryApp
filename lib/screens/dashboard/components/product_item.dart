@@ -112,7 +112,7 @@ class ProductItems extends StatelessWidget {
             width: double.infinity,
             height: 600,
             child: DataTable2(
-              dividerThickness: 2.0,
+              dividerThickness: 1.0,
               columnSpacing: 25.0,
               minWidth: 900,
               columns: const [

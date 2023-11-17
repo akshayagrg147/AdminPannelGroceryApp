@@ -151,7 +151,8 @@ class _LoginFormState extends State<LoginForm> {
                   state.response.response?.deliveryContactNumber,
                   token,
                   state.response.response?.price,
-                  state.response.response?.generateToken
+                  state.response.response?.generateToken,
+                  state.response.response?.sellerId
 
                 );
               }
@@ -185,7 +186,8 @@ class _LoginFormState extends State<LoginForm> {
       String? deliveryContactNumber,
       String? fcm_token,
       String? price,
-          String? generateToken
+          String? generateToken,
+      String? sellerId
 
     ) async {
     print("generateToken_fcm ${generateToken}");
@@ -198,6 +200,8 @@ class _LoginFormState extends State<LoginForm> {
     await PreferencesUtil.saveString('fcm_token', fcm_token ?? "");
     await PreferencesUtil.saveString('price', price ?? "");
     await PreferencesUtil.saveString('generateToken', generateToken ?? "");
+    await PreferencesUtil.saveString('sellerId', sellerId ?? "");
+
 
 
 

@@ -108,6 +108,7 @@ class ProductItems extends StatelessWidget {
             }
             return Container();
           }),
+          if(itemData?.isNotEmpty==true)
           SizedBox(
             width: double.infinity,
             height: 600,
@@ -139,7 +140,13 @@ class ProductItems extends StatelessWidget {
                     exclusiveCheckBoxCubit, editClick),
               ),
             ),
-          ),
+          )
+          else
+     Center(
+    child: Image.asset('assets/images/empty_orders.png'), // Replace with your image asset
+    )
+
+  ,
           GestureDetector(
             onTap: () {
               BlocProvider.of<AllProductCubit>(context).loadProducts();

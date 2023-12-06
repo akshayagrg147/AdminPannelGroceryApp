@@ -47,7 +47,7 @@ class OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     Cubit = BlocProvider.of<AllOrderCubit>(context);
-    addUpdateOrderCubit= BlocProvider.of<UpdateOrderStatusCubit>(context);
+    addUpdateOrderCubit = BlocProvider.of<UpdateOrderStatusCubit>(context);
     addUpdateOrderCubit.resetState();
     // Cubit.resetState();
     //  setupScrollController(context);
@@ -75,11 +75,8 @@ class OrderScreenState extends State<OrderScreen> {
                       name: "null",
                       title: "Orders",
                     ),
-
                     BlocConsumer<AllOrderCubit, AllOrderState>(
                       listener: (context, state) {
-
-
                         if (state is AllOrderErrorState) {
                           print('state_is AllOrderErrorState');
                           SnackBar snackBar = SnackBar(
@@ -103,11 +100,18 @@ class OrderScreenState extends State<OrderScreen> {
                           //   return Text("${obj.message}");
                         } else if (state is AllOrderLoadedState) {
                           listProducts = state.itemData;
-                          return OrderItems(
-                            state.itemData,
-                            scrollController: scrollController,
-                          );
-                          //   return Text("${obj.message}");
+                          if (listProducts?.isEmpty == true) {
+                            // Display the image ID when no data is found
+                            return Center(
+                              child: Image.asset(
+                                  'assets/images/empty_orders.png'), // Replace with your image asset
+                            );
+                          } else {
+                            return OrderItems(
+                              state.itemData,
+                              scrollController: scrollController,
+                            );
+                          }
                         } else if (state is AllOrderErrorState) {
                           return Center(
                             child: Text(state.error),
@@ -119,7 +123,6 @@ class OrderScreenState extends State<OrderScreen> {
                     ),
                     BlocConsumer<UpdateOrderStatusCubit, AddOrderState>(
                       listener: (context, state) {
-
                         if (state is AddOrderLoadedState) {
                           print('state_is AddOrderLoadedState');
 
@@ -131,10 +134,7 @@ class OrderScreenState extends State<OrderScreen> {
                             );
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
-
-
-                          }
-                          else {
+                          } else {
                             SnackBar snackBar = const SnackBar(
                               content: Text('something went wrong'),
                               backgroundColor: Colors.redAccent,
@@ -142,8 +142,7 @@ class OrderScreenState extends State<OrderScreen> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
                           }
-                        }
-                        else if (state is AddOrderErrorState) {
+                        } else if (state is AddOrderErrorState) {
                           print('state_is AddOrderErrorState');
                           SnackBar snackBar = SnackBar(
                             content: Text("${state.error.toString()}"),

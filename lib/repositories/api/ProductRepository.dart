@@ -37,7 +37,8 @@ class ProductRepository {
               category: category,
               imageUrl: image,
               subCategoryList: list,
-              pincode: pincode,sellerId:sellerId1));
+              pincode: pincode,
+              sellerId: sellerId1));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -78,7 +79,7 @@ class ProductRepository {
               imageUrl3: imag3,
               subCategoryList: list,
               pincode: pincode,
-          sellerId:sellerId));
+              sellerId: sellerId));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -119,7 +120,7 @@ class ProductRepository {
               imageUrl3: imag3,
               subCategoryList: list,
               pincode: pincode,
-              sellerId:sellerId));
+              sellerId: sellerId));
       if (response?.statusCode == 200) {
         AddProductResponse postMaps =
             AddProductResponse.fromJson(response?.data);
@@ -149,7 +150,6 @@ class ProductRepository {
       print("Exception during login request: $ex");
       rethrow;
     }
-
   }
 
   Future<AddProductResponse> addProduct(ProductScreenModal object) async {
@@ -276,8 +276,12 @@ class ProductRepository {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
-      final response = await _dio?.get("/Admin/allProducts",
-          queryParameters: {"skip": page, "limit": limit, "pincode": pincode,"sellerId":sellerId});
+      final response = await _dio?.get("/Admin/allProducts", queryParameters: {
+        "skip": page,
+        "limit": limit,
+        "pincode": pincode,
+        "sellerId": sellerId
+      });
 
       print("sucess error");
       print(response?.statusMessage);
@@ -301,7 +305,11 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/SearchAllProducts",
-          queryParameters: {"pincode": pincode,"sellerId": sellerId, "query": query});
+          queryParameters: {
+            "pincode": pincode,
+            "sellerId": sellerId,
+            "query": query
+          });
       print("sucess error");
       print(response?.statusMessage);
 
@@ -325,7 +333,7 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/getProductCategory",
-          queryParameters: {"pincode": pincode,"sellerId": sellerId});
+          queryParameters: {"pincode": pincode, "sellerId": sellerId});
       print("sucess error");
       print(response?.statusMessage);
 
@@ -349,7 +357,7 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/getBannerCategory",
-          queryParameters: {"pincode": pincode,"sellerId": sellerId});
+          queryParameters: {"pincode": pincode, "sellerId": sellerId});
 
       print("sucess error");
       print(response?.statusMessage);
@@ -395,8 +403,8 @@ class ProductRepository {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
 
-      final response = await _dio
-          ?.get("/Admin/allCoupons", queryParameters: {"pincode": pincode,"sellerId": sellerId});
+      final response = await _dio?.get("/Admin/allCoupons",
+          queryParameters: {"pincode": pincode, "sellerId": sellerId});
       print("sucess error");
       print(response?.statusMessage);
 
@@ -421,7 +429,12 @@ class ProductRepository {
       String? sellerId = await PreferencesUtil.getString('sellerId');
 
       final response = await _dio?.get("/Admin/AllOrdersByPages",
-          queryParameters: {"skip": page, "limit": limit, "pincode": pincode,"sellerId": sellerId});
+          queryParameters: {
+            "skip": page,
+            "limit": limit,
+            "pincode": pincode,
+            "sellerId": sellerId
+          });
 
       print(response?.statusMessage);
 
@@ -439,12 +452,12 @@ class ProductRepository {
     return AllOrders();
   }
 
-  Future<RecentOrderCountResponse>  fetchRecentOrderCount() async {
+  Future<RecentOrderCountResponse> fetchRecentOrderCount() async {
     try {
       String? pincode = await PreferencesUtil.getString('pincode');
       String? sellerId = await PreferencesUtil.getString('sellerId');
       final response = await _dio?.get("/Admin/RecentOrderCount",
-          queryParameters: {"pincode": pincode,"sellerId": sellerId});
+          queryParameters: {"pincode": pincode, "sellerId": sellerId});
       print("request_print $pincode");
       print(response?.statusMessage);
 
@@ -517,9 +530,10 @@ class ProductRepository {
       String? name = await PreferencesUtil.getString('name');
       String? email = await PreferencesUtil.getString('email');
       String? password = await PreferencesUtil.getString('password');
-      String?  city  = await PreferencesUtil.getString('city');
-      String?  deliveryContactNumber = await PreferencesUtil.getString('deliveryContactNumber');
-      String?  fcm_token  = await PreferencesUtil.getString('fcm_token');
+      String? city = await PreferencesUtil.getString('city');
+      String? deliveryContactNumber =
+          await PreferencesUtil.getString('deliveryContactNumber');
+      String? fcm_token = await PreferencesUtil.getString('fcm_token');
 
       final response = await _dio?.post("/Admin/freeDelivery",
           data: ResponseLogin(
@@ -528,12 +542,10 @@ class ProductRepository {
               pincode: pincode,
               name: name,
               price: amount,
-          city: city,
-          deliveryContactNumber: deliveryContactNumber,
-          fcm_token: fcm_token,
-              sellerId:sellerId
-
-          ));
+              city: city,
+              deliveryContactNumber: deliveryContactNumber,
+              fcm_token: fcm_token,
+              sellerId: sellerId));
       print("sucess error");
       print(response?.statusMessage);
 
@@ -599,8 +611,26 @@ class ProductRepository {
     return AddProductResponse();
   }
 
-  updatefcmtokenRepo(String? name, String? pincode, String? email, String? password, String? city, String? deliveryContactNumber, String? fcm_token, String? price)  {
-    ResponseLogin obj= ResponseLogin(name: name,pincode: pincode,email: email,password: password,city: city,deliveryContactNumber: deliveryContactNumber,fcm_token: fcm_token,price: price);
-     _dio?.post("/Admin/freeDelivery", data: obj.toJson());
+  updatefcmtokenRepo(
+      String? name,
+      String? pincode,
+      String? email,
+      String? password,
+      String? city,
+      String? deliveryContactNumber,
+      String? fcm_token,
+      String? price,
+      String? sellerId) {
+    ResponseLogin obj = ResponseLogin(
+        name: name,
+        pincode: pincode,
+        email: email,
+        password: password,
+        city: city,
+        deliveryContactNumber: deliveryContactNumber,
+        fcm_token: fcm_token,
+        price: price,
+        sellerId: sellerId);
+    _dio?.post("/Admin/freeDelivery", data: obj.toJson());
   }
 }

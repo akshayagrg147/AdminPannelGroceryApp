@@ -46,6 +46,7 @@ class _RecentOrdersState extends State<RecentOrders> {
               "Recent Orders",
               style: Theme.of(context).textTheme.subtitle1,
             ),
+            if(widget.itemData?.isNotEmpty==true)
             SizedBox(
               width: double.infinity,
               height: 600,
@@ -81,7 +82,12 @@ class _RecentOrdersState extends State<RecentOrders> {
                   (index) => productItemRow(widget.itemData![index], cubit),
                 ),
               ),
-            ),
+            )
+            else
+              Center(
+                child: Image.asset('assets/images/empty_orders.png'), // Replace with your image asset
+              )
+            ,
           ],
         ),
       ),

@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? password;
   String? price;
   String? generateToken;
+  String? sellerId;
   String? city;
   String? deliveryContactNumber;
   String? fcm_token;
@@ -137,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
     fcm_token  = await PreferencesUtil.getString('fcm_token');
     price  = await PreferencesUtil.getString('price');
     generateToken  = await PreferencesUtil.getString('generateToken');
+    sellerId  = await PreferencesUtil.getString('sellerId');
 
     cubit.updatefcmtoken(name,
         pincode,
@@ -145,7 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
         city,
         deliveryContactNumber,
         fcm_token,
-        price
+        price,
+        sellerId
     );
     // After fetching the value, trigger a rebuild
     setState(() {});

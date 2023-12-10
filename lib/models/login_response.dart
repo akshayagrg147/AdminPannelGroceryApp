@@ -35,6 +35,7 @@ class ResponseLogin {
   String? deliveryContactNumber;
   String? generateToken;
   String? sellerId;
+  String? isSuperAdmin;
 
 
 
@@ -49,7 +50,8 @@ class ResponseLogin {
         this.city,
         this.deliveryContactNumber,
         this.generateToken,
-        this.sellerId
+        this.sellerId,
+        this.isSuperAdmin
       });
 
   ResponseLogin.fromJson(Map<String, dynamic> json) {
@@ -63,6 +65,7 @@ class ResponseLogin {
     deliveryContactNumber = json['deliveryContactNumber'];
     generateToken = json['generateToken'];
     sellerId= json['sellerId'];
+    isSuperAdmin=json['isSuperAdmin'];
 
   }
 
@@ -78,6 +81,8 @@ class ResponseLogin {
     data['deliveryContactNumber'] = this.deliveryContactNumber;
     data['generateToken'] = this.generateToken;
     data['sellerId'] = this.sellerId;
+    data['isSuperAdmin'] = this.isSuperAdmin;
+
 
     return data;
   }

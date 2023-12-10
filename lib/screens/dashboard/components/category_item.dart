@@ -87,7 +87,9 @@ class CategoryItems extends StatelessWidget {
                 );
               }
 
-              return ListView.builder(
+
+              if(itemData!.length>0) {
+                return ListView.builder(
                 shrinkWrap: true,
                 itemCount: itemData!.length,
                 physics: NeverScrollableScrollPhysics(),
@@ -100,6 +102,12 @@ class CategoryItems extends StatelessWidget {
                   });
                 },
               );
+              } else {
+                return Center(
+                  child: Image.asset(
+                      'assets/images/empty_orders.png'), // Replace with your image asset
+                );
+              }
             })
           ],
         ),
@@ -111,7 +119,10 @@ class CategoryItems extends StatelessWidget {
 Widget productItemRow(
     ItemDataCategory data, BuildContext context, Function(String) itemPass) {
   bool isSnackBarShown = false;
-  return Padding(
+  return
+
+
+    Padding(
     key: UniqueKey(),
     padding: const EdgeInsets.only(left: 10.0, top: 20.0),
     child: Container(

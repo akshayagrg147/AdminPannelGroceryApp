@@ -78,15 +78,10 @@ class CategoryScreenState extends State<CategoryScreen> {
                           var obj = state.category;
                           listProducts = obj.itemData ?? [];
 
-                          if (listProducts?.isNotEmpty == true)
                             return CategoryItems(Cubit, listProducts, (delete) {
                               Cubit.fetchCategory();
                             });
-                          else
-                            return Center(
-                              child: Image.asset(
-                                  'assets/images/empty_orders.png'), // Replace with your image asset
-                            );
+
 
                           //   return Text("${obj.message}");
                         } else if (state is AllCategoryErrorState) {

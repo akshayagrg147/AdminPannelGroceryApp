@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../controllers/DrawerController.dart';
 import '../../../navigationPackage/NavigationItem.dart';
+import '../../../sharedpreference/PreferencesUtil.dart';
 
 class SideMenu extends StatefulWidget {
   final isDesktop;
@@ -19,11 +20,17 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   late final DrawController provider;
+  String? isSuperAdmin ="";
 
   @override
   void initState() {
-    provider = Provider.of<DrawController>(context, listen: false);
     super.initState();
+    provider = Provider.of<DrawController>(context, listen: false);
+    PreferencesUtil.getString('isSuperAdmin').then((value) {
+      setState(() {
+        isSuperAdmin = value;
+      });
+    });
   }
 
   @override
@@ -59,6 +66,7 @@ class _SideMenuState extends State<SideMenu> {
               selectItem(context, NavigationItem.category, provider);
             },
           ),
+
           DrawerListTile(
             title: "Order",
             press: () {
@@ -66,6 +74,7 @@ class _SideMenuState extends State<SideMenu> {
               selectItem(context, NavigationItem.order, provider);
             },
           ),
+          if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
             title: "Add Banner",
             press: () {
@@ -73,6 +82,7 @@ class _SideMenuState extends State<SideMenu> {
               selectItem(context, NavigationItem.banner, provider);
             },
           ),
+          if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
             title: "Users",
             press: () {
@@ -80,6 +90,7 @@ class _SideMenuState extends State<SideMenu> {
               selectItem(context, NavigationItem.users, provider);
             },
           ),
+          if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
             title: "Coupons",
             press: () {

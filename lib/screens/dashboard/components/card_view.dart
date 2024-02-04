@@ -26,7 +26,6 @@ class CardView extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,14 +49,7 @@ class CardView extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              info.name!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white, // Change this color to the desired color
-              ),
-            ),
+
             // ProgressLine(
             //   color: info.color,
             //   percentage: info.percentage,
@@ -65,6 +57,14 @@ class CardView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Text(
+                  info.name!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white, // Change this color to the desired color
+                  ),
+                ),
                 Text(
                   "${info.count}",
                   style: Theme.of(context)

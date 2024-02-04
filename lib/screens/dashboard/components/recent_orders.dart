@@ -53,6 +53,8 @@ class _RecentOrdersState extends State<RecentOrders> {
               child: DataTable2(
                 columnSpacing: defaultPadding,
                 minWidth: 1300,
+                dataRowHeight: 120.0, // Adjust the row height as needed
+                headingRowHeight: 120.0,
                 columns: const [
                   DataColumn(label: Text("Product Image")),
                   DataColumn(

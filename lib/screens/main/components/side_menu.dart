@@ -50,7 +50,10 @@ class _SideMenuState extends State<SideMenu> {
             press: () {
               if (!widget.isDesktop) Navigator.pop(context);
               provider.setNavigationItem(NavigationItem.home);
+
+
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.home,
           ),
           DrawerListTile(
             title: "Products",
@@ -58,6 +61,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               provider.setNavigationItem(NavigationItem.product);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.product,
           ),
           DrawerListTile(
             title: "Category",
@@ -65,6 +69,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.category, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.category,
           ),
 
           DrawerListTile(
@@ -73,6 +78,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.order, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.order,
           ),
           if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
@@ -81,6 +87,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.banner, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.banner,
           ),
           if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
@@ -89,6 +96,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.users, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.users,
           ),
           if((isSuperAdmin!=null) && (isSuperAdmin=="Yes"))
           DrawerListTile(
@@ -97,6 +105,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.coupons, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.coupons,
           ),
           DrawerListTile(
             title: "Log out",
@@ -104,6 +113,7 @@ class _SideMenuState extends State<SideMenu> {
               if (!widget.isDesktop) Navigator.pop(context);
               selectItem(context, NavigationItem.logout, provider);
             },
+            isSelected: provider.currentNavigationItem == NavigationItem.logout,
           ),
         ],
       ),
@@ -119,13 +129,14 @@ void selectItem(
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,
-    // For selecting those three line once press "Command+D"
     required this.title,
     required this.press,
+    this.isSelected = false,
   }) : super(key: key);
 
   final String title;
   final VoidCallback press;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -134,8 +145,12 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       title: Text(
         title,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: isSelected ? Colors.blue : Colors.white, // Set your desired color here
+        ),
       ),
+      tileColor: isSelected ? Colors.black26 : null, // Set your desired background color here
     );
   }
 }
+

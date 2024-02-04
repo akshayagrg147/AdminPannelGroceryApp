@@ -33,7 +33,12 @@ class DashboardHeader extends StatelessWidget {
         Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         Text(
           title,
-          style: Theme.of(context).textTheme.titleLarge,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+
+          ),
+
           textAlign: TextAlign.center,
         ),
         Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),

@@ -49,7 +49,6 @@ class commonTextFieldWidget extends StatelessWidget {
           textInputAction: textInputAction,
           cursorColor: kPrimaryColor,
           onChanged: onChanged,
-          maxLines: null,
           // Unlimited lines
 
           decoration: InputDecoration(

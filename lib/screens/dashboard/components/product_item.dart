@@ -116,6 +116,8 @@ class ProductItems extends StatelessWidget {
               dividerThickness: 1.0,
               columnSpacing: 25.0,
               minWidth: 900,
+              dataRowHeight: 120.0, // Adjust the row height as needed
+              headingRowHeight: 120.0,
               columns: const [
                 DataColumn(label: Text("Product Image")),
                 DataColumn(

@@ -69,12 +69,9 @@ class _CardViewCountState extends State<CardViewCount> {
             },
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                "Summary",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+
               Row(
                 children: [
                   ElevatedButton.icon(
@@ -86,11 +83,12 @@ class _CardViewCountState extends State<CardViewCount> {
                         _textController.text = "₹ $value";
                       });
                     },
-                    icon: Icon(Icons.account_balance_wallet),
-                    label: Text(labelText),
+                    icon: Icon(Icons.account_balance_wallet,color: Colors.white),
+                    label: Text(labelText, style: TextStyle(color: Colors.white)),
+
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 15),
+                    padding: const EdgeInsets.only(left: 10, bottom: 25),
                     child: SizedBox(
                       width: 50, // Set the desired width
                       height: 50,
@@ -118,7 +116,7 @@ class _CardViewCountState extends State<CardViewCount> {
             tablet: FileInfoCardGridView(widget.responseCount),
             desktop: FileInfoCardGridView(
               widget.responseCount,
-              childAspectRatio: _size.width < 1400 ? 2 : 1.1,
+              childAspectRatio: _size.width < 1400 ?3 : 2.5,
             ),
           ),
         ],
@@ -154,13 +152,13 @@ class _CardViewCountState extends State<CardViewCount> {
                 value(enteredText);
                 Navigator.of(context).pop();
               },
-              child: Text('Submit'),
+              child: Text('Submit',style: TextStyle(color: Colors.white)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Cancel',style: TextStyle(color: Colors.black)),
             ),
           ],
         );

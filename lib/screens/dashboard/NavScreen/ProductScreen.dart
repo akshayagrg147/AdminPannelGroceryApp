@@ -420,10 +420,12 @@ void openAlert(
               children: [
                 const SizedBox(
                     width: double.infinity,
+
                     child: Text("ADD PRODUCT",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                         ))),
                 Text(
                   "Which Banner you want to add?",
@@ -433,7 +435,7 @@ void openAlert(
                 const SizedBox(height: 20),
                 Column(children: [
                   ListTile(
-                    title: const Text('Festival Banner'),
+                    title: const Text('Festival Banner',style: TextStyle(color: Colors.black)),
                     leading: Radio(
                       activeColor: Colors.red,
                       fillColor: MaterialStateProperty.all(Colors.red),
@@ -447,7 +449,7 @@ void openAlert(
                     ),
                   ),
                   ListTile(
-                    title: const Text('Non Festival Banner'),
+                    title: const Text('Non Festival Banner',style: TextStyle(color: Colors.black)),
                     leading: Radio(
                       activeColor: Colors.red,
                       fillColor: MaterialStateProperty.all(Colors.red),
@@ -516,7 +518,7 @@ void openAlert(
                   labelText: "Enter Quantity",
                   onChanged: (val) {},
                 ),
-
+                const SizedBox(height: 20),
                 commonTextFieldWidget(
                   type: TextInputType.number,
                   controller: sellingPriceController,
@@ -669,7 +671,7 @@ void openAlert(
                                     .subCategoryList!
                                     .map((value) {
                                   return RadioListTile(
-                                    title: Text(value.name!),
+                                    title: Text(value.name!,style: TextStyle(color: Colors.black)),
                                     value: value.name,
                                     activeColor: Colors.red,
                                     fillColor:
@@ -738,7 +740,7 @@ void openAlert(
                                 Column(
                                   children: categoryList!.map((value) {
                                     return RadioListTile(
-                                      title: Text(value!),
+                                      title: Text(value!,style: TextStyle(color: Colors.black)),
                                       activeColor: Colors.red,
                                       fillColor:
                                           MaterialStateProperty.all(Colors.red),
@@ -897,7 +899,7 @@ void openAlert(
                               image2: uploadImage2.imageUrl,
                               image3: uploadImage3.imageUrl));
                     },
-                    child: editButton ? Text('Update!') : Text('Save!'),
+                    child: editButton ? Text('Update!',style: TextStyle(color: Colors.white)) : Text('Save!',style: TextStyle(color: Colors.white)),
                   );
                 }),
                 const SizedBox(height: 20),
@@ -919,7 +921,7 @@ void openAlert(
 
                       Navigator.pop(context);
                     },
-                    child: const Text('Cancel!'))
+                    child: const Text('Cancel!',style: TextStyle(color: Colors.white)))
               ]);
         },
       ),

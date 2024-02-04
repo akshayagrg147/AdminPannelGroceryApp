@@ -387,7 +387,7 @@ void openAlert(BuildContext context, bool editButton, ItemBannerCategory data,
                           const SizedBox(height: 20),
                           Column(children: [
                             ListTile(
-                              title: const Text('Festival Banner'),
+                              title: const Text('Festival Banner',style: TextStyle(color: Colors.black)),
                               leading: Radio(
                                 activeColor: Colors.red,
                                 fillColor:
@@ -402,7 +402,7 @@ void openAlert(BuildContext context, bool editButton, ItemBannerCategory data,
                               ),
                             ),
                             ListTile(
-                              title: const Text('Non Festival Banner'),
+                              title: const Text('Non Festival Banner',style: TextStyle(color: Colors.black)),
                               leading: Radio(
                                 activeColor: Colors.red,
                                 fillColor:

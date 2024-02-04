@@ -107,7 +107,8 @@ class _LoginFormState extends State<LoginForm> {
                   type: TextInputType.text,
                   controller: password,
                   icon: Icons.lock,
-                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+
                   textInputAction: TextInputAction.done,
                   hintText: "Your password",
                   labelText: "Enter your password",
@@ -130,8 +131,10 @@ class _LoginFormState extends State<LoginForm> {
                       },
                       child: Text(
                         "Login".toUpperCase(),
+                  style: TextStyle(color: Colors.white)
                       ),
                     ),
+
                   );
                 }, listener: (context, state) {
               if (state is LoginResponseErrorState) {

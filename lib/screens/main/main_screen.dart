@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DrawController>(builder: (_, consumer, __) {
-      var x = consumer.navigationItem;
+      var x = consumer.currentNavigationItem;
       return Scaffold(
         drawer: SideMenu(false),
         body: buildPages(x),

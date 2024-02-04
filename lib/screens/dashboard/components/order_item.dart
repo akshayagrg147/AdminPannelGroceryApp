@@ -77,7 +77,9 @@ class _OrderItemsState extends State<OrderItems> {
                 scrollController: widget.scrollController,
                 columnSpacing: defaultPadding,
                 dataRowHeight: 60.0,
+                headingRowHeight: 120.0,
                 minWidth: 1300,
+
                 columns: const [
                   DataColumn(label: Text("Product Image")),
                   DataColumn(

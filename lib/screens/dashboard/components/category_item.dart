@@ -39,7 +39,7 @@ class CategoryItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+      scrollDirection: Axis.horizontal,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,
         child: Column(

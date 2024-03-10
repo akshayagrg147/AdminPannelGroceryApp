@@ -1,11 +1,21 @@
+
+
 import 'package:adminpannelgrocery/repositories/cubit/RecentOrderCountCubit.dart';
 import 'package:adminpannelgrocery/responsive.dart';
 import 'package:adminpannelgrocery/screens/dashboard/components/card_view_count.dart';
 import 'package:adminpannelgrocery/state/recent_order_count_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:intl/intl.dart';
 
+import '../../Utils/stat_controller.dart';
 import '../../constants.dart';
+import '../../models/daily_stat_ui_model.dart';
+import '../../repositories/cubit/BarGraphCubit.dart';
 import '../../sharedpreference/PreferencesUtil.dart';
 import '../main/components/side_menu.dart';
 import 'components/header.dart';
@@ -33,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? deliveryContactNumber;
   String? fcm_token;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,58 +58,65 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             Expanded(
               flex: 5,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SafeArea(
-                      child:
-                          BlocConsumer<RecentOrderCubit, RecentOrderCountState>(
-                        listener: (context, state) {
-                          if (state is RecentOrderCountErrorState) {
-                            SnackBar snackBar = SnackBar(
-                              content: Text(state.error),
-                              backgroundColor: Colors.red,
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          }
-                        },
-                        builder: (context, state) {
-                          if (state is RecentOrderCountLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is RecentOrderCountLoadedState) {
-                            var obj = state.response;
+              child: ConstrainedBox(
+    constraints: BoxConstraints(
+    minWidth: 0, // Set your constraints as needed
+    ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SafeArea(
+                        child:
+                            BlocConsumer<RecentOrderCubit, RecentOrderCountState>(
+                          listener: (context, state) {
+                            if (state is RecentOrderCountErrorState) {
+                              SnackBar snackBar = SnackBar(
+                                content: Text(state.error),
+                                backgroundColor: Colors.red,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is RecentOrderCountLoadingState) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (state is RecentOrderCountLoadedState) {
+                              var obj = state.response;
 
-                            return Column(
-                              children: [
-                                DashboardHeader(
-                                  imageUrl: state.response.image ?? "",
-                                  name: " $name\n $pincode" ?? "null",
-                                  title: "Dashboard",
-                                ),
-                                SizedBox(height: defaultPadding),
-                                CardViewCount(obj.countResponse,priceDelivery),
-                                const SizedBox(height: defaultPadding),
-                                RecentOrders(obj.recentOrders),
-                                if (Responsive.isMobile(context))
+                              return Column(
+                                children: [
+                                  DashboardHeader(
+                                    imageUrl: state.response.image ?? "",
+                                    name: " $name\n $pincode" ?? "null",
+                                    title: "Dashboard",
+                                  ),
+                                  SizedBox(height: defaultPadding),
+                                 CardViewCount(obj.countResponse,priceDelivery),
                                   const SizedBox(height: defaultPadding),
-                                if (Responsive.isMobile(context))
-                                  const StarageDetails()
-                              ],
-                            );
-                          } else if (state is RecentOrderCountErrorState) {
-                            return Center(
-                              child: Text(state.error),
-                            );
-                          }
+                                  RecentOrders(obj.recentOrders),
 
-                          return Container();
-                        },
+                                    const SizedBox(height: defaultPadding),
+
+                                  //  const StarageDetails(),
+
+
+                                ],
+                              );
+                            } else if (state is RecentOrderCountErrorState) {
+                              return Center(
+                                child: Text(state.error),
+                              );
+                            }
+
+                            return Container();
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -113,15 +131,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
   @override
   void initState() {
     super.initState();
     fetchData();
     cubit = BlocProvider.of<RecentOrderCubit>(context);
     cubit.fetchAllOrderCount();
+
     initializeData();
 
   }
+
+
+
+
+
+
+
   Future<void> initializeData() async {
     priceDelivery = await getPrice();
 

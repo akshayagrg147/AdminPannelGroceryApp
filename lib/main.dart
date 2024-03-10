@@ -8,6 +8,7 @@ import 'package:adminpannelgrocery/repositories/cubit/AllCouponsCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllOrderCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/AllProductCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/BannerCategoryCubit.dart';
+import 'package:adminpannelgrocery/repositories/cubit/BarGraphCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteBannerCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteCategoryCubit.dart';
 import 'package:adminpannelgrocery/repositories/cubit/DeleteCouponCubit.dart';
@@ -133,6 +134,8 @@ class _MyAppState extends State<MyApp> {
                   create: (context) => AddBannerCubit()),
               BlocProvider<UpdateDeliveryCubit>(
                   create: (context) => UpdateDeliveryCubit()),
+              BlocProvider<BarGraphCubit>(
+                  create: (context) => BarGraphCubit()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

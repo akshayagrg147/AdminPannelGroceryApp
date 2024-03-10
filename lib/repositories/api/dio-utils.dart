@@ -20,7 +20,7 @@ class DioUtil {
 
   Dio createDioInstance() {
     var dio = Dio();
-    dio.options.baseUrl = "http://localhost:8081";
+    dio.options.baseUrl = "http://localhost:8082";
     dio.interceptors.clear();
     return dio
       ..interceptors.add(LogInterceptor(

@@ -8,6 +8,7 @@ import 'package:adminpannelgrocery/repositories/api/dio-utils.dart';
 import 'package:dio/dio.dart';
 import '../../models/request_modal.dart';
 import '../../sharedpreference/PreferencesUtil.dart';
+import '../Modal/BarGraphOrderValue.dart';
 import '../Modal/CouponFormData.dart';
 import '../Modal/AllProducts.dart';
 import '../Modal/add_category_modal.dart';
@@ -474,6 +475,30 @@ class ProductRepository {
       rethrow;
     }
     return RecentOrderCountResponse();
+  }
+  Future<BarGraphOrderValue> fetchOrderGraphValue(String startDate1,String endDate1) async {
+    try {
+      String? sellerId = await PreferencesUtil.getString('sellerId');
+      String? startDate = startDate1;
+      String? endDate = endDate1;
+      final response = await _dio?.get("/Admin/AllOrdersDelivered",
+          queryParameters: { "sellerId": sellerId,"startDate": '20/02/2024',"endDate": '28/02/2024'});
+
+      print(response?.statusMessage);
+
+      if (response?.statusCode == 200) {
+        BarGraphOrderValue data =
+        BarGraphOrderValue.fromJson(response?.data);
+        return data;
+      } else {
+        print("DioError status code${response?.statusCode}");
+      }
+    } catch (ex) {
+      print("catch error");
+      print(ex.toString());
+      rethrow;
+    }
+    return BarGraphOrderValue(orderDate: '',orderQuantity: -1);
   }
 
   Future<UserResponse> userResponse() async {

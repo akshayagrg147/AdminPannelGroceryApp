@@ -42,10 +42,10 @@ class _CardViewCountState extends State<CardViewCount> {
   void initState() {
     // TODO: implement initState
   DateTime currentDate = DateTime.now();
-  DateTime endDate = currentDate.add(Duration(days: 7));
+  DateTime startDate = currentDate.subtract(Duration(days: 6));
 
-  String formattedStartDate = DateFormat('dd/MM/yyyy').format(currentDate);
-  String formattedEndDate = DateFormat('dd/MM/yyyy').format(endDate);
+  String formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate);
+  String formattedEndDate = DateFormat('dd/MM/yyyy').format(currentDate);
 
   cubitBar = BlocProvider.of<BarGraphCubit>(context);
   cubitBar.fetchAllOrderCount(formattedStartDate, formattedEndDate);
@@ -272,7 +272,7 @@ Widget _previousWeekButton() {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: RawMaterialButton(
         onPressed: () {
-
+          statController.onPreviousWeek();
         },
         elevation: 2.0,
 
@@ -344,65 +344,61 @@ Widget _buildSectionTitle(String title, String subTitle) {
 }
 Widget _buildDayIndicator(DailyStatUiModel model, int type) {
   final width = 14.0;
-  return InkWell(
-    onTap: () =>
-        statController.setSelectedDayPosition(model.dayPosition, type),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-            width: 48.0,
-            height: 24.0,
-            child: Visibility(
-              visible: model.isSelected,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SizedBox(
+          width: 48.0,
+          height: 24.0,
+          child: Visibility(
+            visible: true,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
 
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Text(
-                      '${model.stat}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Arial',
-                        fontSize: 10,
-                        color: Colors.grey,
-                        height: 1,
-                      ),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: Text(
+                    '${model.stat}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'Arial',
+                      fontSize: 10,
+                      color: Colors.grey,
+                      height: 1,
                     ),
                   ),
                 ),
               ),
-            )),
-        SizedBox(
-          height: 4.0,
-        ),
-        Expanded(
-          child: NeumorphicIndicator(
-            width: width,
-            percent: statController.getStatPercentage(model.stat, type),
-          ),
-        ),
-        SizedBox(height: 8.0),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Text(
-            model.day ?? 'Default Day', // Use a default value if model or model.day is null
-            style: const TextStyle(
-              fontFamily: 'Arial',
-              fontSize: 18,
-              color: Colors.black45,
-              height: 1,
             ),
-          )
-
-          ,
+          )),
+      SizedBox(
+        height: 4.0,
+      ),
+      Expanded(
+        child: NeumorphicIndicator(
+          width: width,
+          percent: statController.getStatPercentage(model.stat, type),
+        ),
+      ),
+      SizedBox(height: 8.0),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Text(
+          model.day ?? 'Default Day', // Use a default value if model or model.day is null
+          style: const TextStyle(
+            fontFamily: 'Arial',
+            fontSize: 18,
+            color: Colors.black45,
+            height: 1,
+          ),
         )
-      ],
-    ),
+
+        ,
+      )
+    ],
   );
 }
 
@@ -468,11 +464,12 @@ Widget _buildGraphStat() {
               child: CircularProgressIndicator(),
             );
           } else if (state is AllAdminOrderLoadedState) {
+            List<DailyStatUiModel> dailyStatList = state.orderValue.itemData.map((barGraphOrder) {
+              return DailyStatUiModel.fromBarGraphOrder(barGraphOrder);
+            }).toList();
+            print("dailystatlist ${dailyStatList.length}");
 
-
-            return Obx(
-                  () => _buildWeekIndicators(statController.dailyStatList1.call(), 1),
-            );
+            return  _buildWeekIndicators(dailyStatList, 1);
           } else if (state is AllAdminOrderErrorState) {
             return Center(
               child: Text(state.error),

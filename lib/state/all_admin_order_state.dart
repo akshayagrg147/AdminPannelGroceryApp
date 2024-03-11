@@ -11,7 +11,7 @@ class AllAdminOrderLoadingState extends AllAdminOrderState {}
 
 
 class AllAdminOrderLoadedState extends AllAdminOrderState {
-  final BarGraphOrderValue orderValue;
+  final BarGraphResponse orderValue;
 
   AllAdminOrderLoadedState(this.orderValue);
 }

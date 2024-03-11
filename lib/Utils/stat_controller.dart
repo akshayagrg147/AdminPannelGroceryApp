@@ -82,10 +82,8 @@ class StatController extends GetxController {
       var randomStat1 = randomInt(100);
       section1Stat[i] = DailyStatUiModel(
           day: date.toFormatString('EEE'),
-          stat: randomStat1,
-          isToday: today.isSameDate(date),
-          isSelected: todayPosition == i,
-          dayPosition: i);
+          stat: randomStat1
+          );
 
       if (maxSection1 < randomStat1) {
         maxSection1 = randomStat1;
@@ -94,10 +92,8 @@ class StatController extends GetxController {
       var randomStat2 = randomInt(100);
       section2Stat[i] = DailyStatUiModel(
           day: date.toFormatString('EEE'),
-          stat: randomStat2,
-          isToday: today.isSameDate(date),
-          isSelected: todayPosition == i,
-          dayPosition: i);
+          stat: randomStat2
+         );
 
       if (maxSection2 < randomStat1) {
         maxSection2 = randomStat2;
@@ -107,9 +103,7 @@ class StatController extends GetxController {
       section3Stat[i] = DailyStatUiModel(
           day: date.toFormatString('EEE'),
           stat: randomStat3,
-          isToday: today.isSameDate(date),
-          isSelected: todayPosition == i,
-          dayPosition: i);
+         );
 
       if (maxSection3 < randomStat1) {
         maxSection3 = randomStat3;
@@ -129,37 +123,23 @@ class StatController extends GetxController {
     switch (sectionNumber) {
       case 1:
         {
-          dailyStatList1.assignAll(getDailyListWithSelectedDay(
-            dailyStatList1.call(),
-            position,
-          ));
+
           break;
         }
       case 2:
         {
-          dailyStatList2.assignAll(getDailyListWithSelectedDay(
-            dailyStatList2.call(),
-            position,
-          ));
+
           break;
         }
       case 3:
         {
-          dailyStatList3.assignAll(getDailyListWithSelectedDay(
-            dailyStatList3.call(),
-            position,
-          ));
+
           break;
         }
     }
   }
 
-  List<DailyStatUiModel> getDailyListWithSelectedDay(
-      List<DailyStatUiModel> list, int position) {
-    return list
-        .map((e) => e.copyWith(isSelected: e.dayPosition == position))
-        .toList();
-  }
+
 
   double getStatPercentage(int time, int type) {
     switch (type) {

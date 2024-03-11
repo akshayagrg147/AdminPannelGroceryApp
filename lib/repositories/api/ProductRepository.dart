@@ -476,19 +476,19 @@ class ProductRepository {
     }
     return RecentOrderCountResponse();
   }
-  Future<BarGraphOrderValue> fetchOrderGraphValue(String startDate1,String endDate1) async {
+  Future<BarGraphResponse> fetchOrderGraphValue(String startDate1,String endDate1) async {
     try {
       String? sellerId = await PreferencesUtil.getString('sellerId');
       String? startDate = startDate1;
       String? endDate = endDate1;
       final response = await _dio?.get("/Admin/AllOrdersDelivered",
-          queryParameters: { "sellerId": sellerId,"startDate": '20/02/2024',"endDate": '28/02/2024'});
+          queryParameters: { "sellerId": sellerId,"startDate": startDate1,"endDate": endDate1});
 
       print(response?.statusMessage);
 
       if (response?.statusCode == 200) {
-        BarGraphOrderValue data =
-        BarGraphOrderValue.fromJson(response?.data);
+        BarGraphResponse data =
+        BarGraphResponse.fromJson(response?.data);
         return data;
       } else {
         print("DioError status code${response?.statusCode}");
@@ -498,7 +498,7 @@ class ProductRepository {
       print(ex.toString());
       rethrow;
     }
-    return BarGraphOrderValue(orderDate: '',orderQuantity: -1);
+    return BarGraphResponse(itemData: List.empty(),message: "something went wrong",statusCode: 400);
   }
 
   Future<UserResponse> userResponse() async {

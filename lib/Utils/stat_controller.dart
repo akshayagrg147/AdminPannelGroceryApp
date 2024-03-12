@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:intl/intl.dart';
 
 import '../models/daily_stat_ui_model.dart';
 import 'date_util.dart';
@@ -9,6 +10,7 @@ import 'date_util.dart';
 
 
 class StatController extends GetxController {
+  DateTime selectedDate = DateTime.now();
   RxString todayStat = "".obs;
   RxString currentWeek = "".obs;
 
@@ -23,7 +25,7 @@ class StatController extends GetxController {
   int maxSection2 = -1;
   int maxSection3 = -1;
 
-  DateTime selectedDate = DateTime.now();
+
   DateTime currentDate = DateTime.now();
 
   @override
@@ -40,31 +42,46 @@ class StatController extends GetxController {
 
   void setCurrentWeek() async {
     selectedDate = DateTime.now();
-    currentWeek.value = getWeekDisplayDate(selectedDate);
-    getDailyStatList(selectedDate);
+    currentWeek.value = getWeekDisplayDate1(selectedDate);
+
   }
 
   void setPreviousWeek() {
-    selectedDate = selectedDate.subtract(Duration(days: 7));
+    selectedDate = selectedDate.subtract(Duration(days: 6));
     setNextWeekButtonVisibility();
     currentWeek.value = getWeekDisplayDate(selectedDate);
-    getDailyStatList(selectedDate);
+
   }
 
   void setNextWeek() {
-    selectedDate = selectedDate.add(Duration(days: 7));
+    selectedDate = selectedDate.add(Duration(days: 6));
     setNextWeekButtonVisibility();
     currentWeek.value = getWeekDisplayDate(selectedDate);
-    getDailyStatList(selectedDate);
+
   }
 
   void setNextWeekButtonVisibility() {
     displayNextWeekBtn.value = !selectedDate.isSameDate(currentDate);
   }
+  String getWeekDisplayDate1(DateTime dateTime) {
 
-  String getWeekDisplayDate(DateTime dateTime) {
-    return '${AppDateUtils.firstDateOfWeek(dateTime).toFormatString('dd MMM')} - ${AppDateUtils.lastDateOfWeek(dateTime).toFormatString('dd MMM')}';
+    DateTime startDate = dateTime.subtract(Duration(days: 6));
+
+    String formattedStartDate = DateFormat('dd MMM').format(startDate);
+    String formattedEndDate = DateFormat('dd MMM').format(dateTime);
+    print("selected_getWeekDisplayDate ${formattedStartDate} ${formattedEndDate}");
+    return '${formattedStartDate} - ${formattedEndDate}';
   }
+  String getWeekDisplayDate(DateTime dateTime) {
+
+    DateTime endDate = dateTime.add(Duration(days: 6));
+
+    String formattedStartDate = DateFormat('dd MMM').format(dateTime);
+    String formattedEndDate = DateFormat('dd MMM').format(endDate);
+    print("selected_getWeekDisplayDate ${formattedStartDate} ${formattedEndDate}");
+    return '${formattedStartDate} - ${formattedEndDate}';
+  }
+
 
   Future<void> getDailyStatList(DateTime dateTime) async {
     resetMaxValue();

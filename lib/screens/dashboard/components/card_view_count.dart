@@ -37,20 +37,13 @@ class CardViewCount extends StatefulWidget {
 }
 
 class _CardViewCountState extends State<CardViewCount> {
-  late BarGraphCubit cubitBar;
+
+
+
 @override
   void initState() {
     // TODO: implement initState
-  DateTime currentDate = DateTime.now();
-  DateTime startDate = currentDate.subtract(Duration(days: 6));
-
-  String formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate);
-  String formattedEndDate = DateFormat('dd/MM/yyyy').format(currentDate);
-
-  cubitBar = BlocProvider.of<BarGraphCubit>(context);
-  cubitBar.fetchAllOrderCount(formattedStartDate, formattedEndDate);
-
-    super.initState();
+  super.initState();
 
   }
   @override
@@ -145,8 +138,8 @@ class _CardViewCountState extends State<CardViewCount> {
               childAspectRatio: _size.width < 1400 ?3 : 2.5,
             ),
           ),
-          if (Responsive.isMobile(context))
-            barChart()
+          // if (Responsive.isMobile(context))
+          //   barChart()
         ],
       ),
     );
@@ -193,15 +186,19 @@ class _CardViewCountState extends State<CardViewCount> {
       },
     );
   }
+
+
 }
+
 
 Future<String> getPrice() async {
   final price = await PreferencesUtil.getString('price');
   return price!;
 }
 
-class FileInfoCardGridView extends StatelessWidget {
+class FileInfoCardGridView extends StatefulWidget {
   final List<CountResponse>? countResponse;
+
   FileInfoCardGridView(
     this.countResponse, {
     Key? key,
@@ -213,8 +210,17 @@ class FileInfoCardGridView extends StatelessWidget {
   final double childAspectRatio;
 
   @override
+  State<FileInfoCardGridView> createState() => _FileInfoCardGridViewState();
+}
+
+class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
+  late  BarGraphCubit cubitBar;
+
+  @override
   Widget build(BuildContext context) {
     final navigationBloc = BlocProvider.of<NavigationBloc>(context);
+    DateTime currentDate = statController.selectedDate;
+    callingBarApi(currentDate);
 
     return SizedBox(
       height: 500, // specify a height here,
@@ -224,15 +230,15 @@ class FileInfoCardGridView extends StatelessWidget {
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: countResponse?.length ?? 0,
+              itemCount: widget.countResponse?.length ?? 0,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Responsive.isDesktop(context) ? crossAxisCount ~/ 2 : crossAxisCount,
+                crossAxisCount: Responsive.isDesktop(context) ? widget.crossAxisCount ~/ 2 : widget.crossAxisCount,
                 crossAxisSpacing: defaultPadding,
                 mainAxisSpacing: defaultPadding,
-                childAspectRatio: childAspectRatio,
+                childAspectRatio: widget.childAspectRatio,
               ),
               itemBuilder: (context, index) => CardView(
-                info: countResponse![index], // Ensure countResponse is not null
+                info: widget.countResponse![index], // Ensure countResponse is not null
                 performClick: () {
                   // Handle item click based on index
                   if (index == 0) {
@@ -254,254 +260,274 @@ class FileInfoCardGridView extends StatelessWidget {
     );
   }
 
+  Widget _pageIndicatorText() {
+    return Center(
+      child: Obx(() => Text(
+        statController.currentWeek.value,
+      )),
+    );
+  }
 
+  Widget _previousWeekButton() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: RawMaterialButton(
+          onPressed: () {
+            statController.selectedDate = statController.selectedDate.subtract(Duration(days: 6));
+            callingBarApi(statController.selectedDate );
+            statController.onPreviousWeek();
+          },
+          elevation: 2.0,
 
-}
-Widget _pageIndicatorText() {
-  return Center(
-    child: Obx(() => Text(
-      statController.currentWeek.value,
-    )),
-  );
-}
-
-Widget _previousWeekButton() {
-  return Align(
-    alignment: Alignment.bottomLeft,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: RawMaterialButton(
-        onPressed: () {
-          statController.onPreviousWeek();
-        },
-        elevation: 2.0,
-
-        child: Icon(
-          Icons.arrow_back_ios_rounded,
-          color: Colors.amber,
+          child: Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.amber,
+          ),
+          padding: EdgeInsets.all(8.0),
+          shape: CircleBorder(),
         ),
-        padding: EdgeInsets.all(8.0),
-        shape: CircleBorder(),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _nextWeekButton() {
-  return Obx(
-        () => Visibility(
-      visible: statController.displayNextWeekBtn.value,
-      child: Align(
-        alignment: Alignment.bottomRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: RawMaterialButton(
-            onPressed: () {
-              statController.onNextWeek();
-            },
-            elevation: 2.0,
+  void callingBarApi(DateTime currentDate) {
+    DateTime startDate = currentDate.subtract(Duration(days: 6));
 
-            child: Icon(
-              Icons.arrow_forward_ios_rounded,
-              color: Colors.amber,
+    String formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate);
+    String formattedEndDate = DateFormat('dd/MM/yyyy').format(currentDate);
+
+    cubitBar = BlocProvider.of<BarGraphCubit>(context);
+    cubitBar.fetchAllOrderCount(formattedStartDate, formattedEndDate);
+  }
+
+  Widget _nextWeekButton() {
+    return Obx(
+          () => Visibility(
+        visible: statController.displayNextWeekBtn.value,
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: RawMaterialButton(
+              onPressed: () {
+
+                statController.selectedDate = statController.selectedDate.add(Duration(days: 6));
+                callingBarApi(statController.selectedDate );
+                statController.onNextWeek();
+
+
+              },
+              elevation: 2.0,
+
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.amber,
+              ),
+              padding: EdgeInsets.all(8.0),
+              shape: CircleBorder(),
             ),
-            padding: EdgeInsets.all(8.0),
-            shape: CircleBorder(),
           ),
         ),
       ),
-    ),
-  );
-}
-Widget _buildSectionTitle(String title, String subTitle) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Row(
-      children: [
-        Expanded(
-          child: Text(
-              title,
+    );
+  }
+
+  Widget _buildSectionTitle(String title, String subTitle) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'YourFontFamily',
+                  // Replace with your desired font family
+                  fontWeight: FontWeight.bold, // Set the font weight to bold
+                )
+            ),
+          ),
+          Text(
+              subTitle,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 26,
                 fontFamily: 'YourFontFamily',
                 // Replace with your desired font family
                 fontWeight: FontWeight.bold, // Set the font weight to bold
               )
-          ),
-        ),
-        Text(
-            subTitle,
-            style: TextStyle(
-              fontSize: 26,
-              fontFamily: 'YourFontFamily',
-              // Replace with your desired font family
-              fontWeight: FontWeight.bold, // Set the font weight to bold
-            )
-        )
-      ],
-    ),
-  );
-}
-Widget _buildDayIndicator(DailyStatUiModel model, int type) {
-  final width = 14.0;
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      SizedBox(
-          width: 48.0,
-          height: 24.0,
-          child: Visibility(
-            visible: true,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          )
+        ],
+      ),
+    );
+  }
 
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                  child: Text(
-                    '${model.stat}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'Arial',
-                      fontSize: 10,
-                      color: Colors.grey,
-                      height: 1,
+  Widget _buildDayIndicator(DailyStatUiModel model, int type) {
+    final width = 14.0;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+            width: 48.0,
+            height: 24.0,
+            child: Visibility(
+              visible: true,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Text(
+                      '${model.stat}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Arial',
+                        fontSize: 10,
+                        color: Colors.grey,
+                        height: 1,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )),
-      SizedBox(
-        height: 4.0,
-      ),
-      Expanded(
-        child: NeumorphicIndicator(
-          width: width,
-          percent: statController.getStatPercentage(model.stat, type),
+            )),
+        SizedBox(
+          height: 4.0,
         ),
-      ),
-      SizedBox(height: 8.0),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Text(
-          model.day ?? 'Default Day', // Use a default value if model or model.day is null
-          style: const TextStyle(
-            fontFamily: 'Arial',
-            fontSize: 18,
-            color: Colors.black45,
-            height: 1,
+        Expanded(
+          child: NeumorphicIndicator(
+            width: width,
+            percent: statController.getStatPercentage(model.stat, type),
           ),
-        )
-
-        ,
-      )
-    ],
-  );
-}
-
-Widget _buildWeekIndicators(List<DailyStatUiModel> models, int type) {
-  if (models.length == 7) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: SizedBox(
-        height: 152,
-        width: 400,
-        child: Row(
-
-          children: <Widget>[
-        Expanded(child: _buildDayIndicator(models[0], type)),
-        Expanded(child: _buildDayIndicator(models[1], type)),
-  Expanded(child: _buildDayIndicator(models[2], type)),
-  Expanded(child:   _buildDayIndicator(models[3], type)),
-  Expanded(child:    _buildDayIndicator(models[4], type)),
-  Expanded(child:   _buildDayIndicator(models[5], type)),
-  Expanded(child:      _buildDayIndicator(models[6], type)),
-          ],
         ),
-      ),
-    );
-  } else {
-    return Container();
-  }
-}
+        SizedBox(height: 8.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Text(
+            model.day ?? 'Default Day', // Use a default value if model or model.day is null
+            style: const TextStyle(
+              fontFamily: 'Arial',
+              fontSize: 18,
+              color: Colors.black45,
+              height: 1,
+            ),
+          )
 
-_getDayDecoratedBox(bool isToday) {
-  if (isToday) {
-    return BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-      color: Theme.of(Get.context!).primaryColor,
-    );
-  } else {
-    return BoxDecoration();
-  }
-}
-Widget _buildGraphStat() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      _buildSectionTitle(
-        'Delivered',
-        '',
-      ),
-      BlocConsumer<BarGraphCubit, AllAdminOrderState>(
-        listener: (context, state) {
-          if (state is AllAdminOrderErrorState) {
-            SnackBar snackBar = SnackBar(
-              content: Text(state.error),
-              backgroundColor: Colors.red,
-            );
-            ScaffoldMessenger.of(context)
-                .showSnackBar(snackBar);
-          }
-        },
-        builder: (context, state) {
-          if (state is AllAdminOrderLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is AllAdminOrderLoadedState) {
-            List<DailyStatUiModel> dailyStatList = state.orderValue.itemData.map((barGraphOrder) {
-              return DailyStatUiModel.fromBarGraphOrder(barGraphOrder);
-            }).toList();
-            print("dailystatlist ${dailyStatList.length}");
-
-            return  _buildWeekIndicators(dailyStatList, 1);
-          } else if (state is AllAdminOrderErrorState) {
-            return Center(
-              child: Text(state.error),
-            );
-          }
-
-          return Container();
-        },
-      ),
-
-
-
-    ],
-  );
-}
-Widget barChart(){
-  return Container(
-    width: 300, // Adjust the width as needed
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
-      children: [
-        _buildGraphStat(),
-
-        //  Add other widgets here as needed
-
-        _pageIndicatorText(),
-        Row(children: [
-          _previousWeekButton(),
-          _nextWeekButton(),
-        ],)
+          ,
+        )
       ],
-    ),
-  );
+    );
+  }
 
+  Widget _buildWeekIndicators(List<DailyStatUiModel> models, int type) {
+    if (models.length == 7) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: SizedBox(
+          height: 152,
+          width: 400,
+          child: Row(
+
+            children: <Widget>[
+              Expanded(child: _buildDayIndicator(models[0], type)),
+              Expanded(child: _buildDayIndicator(models[1], type)),
+              Expanded(child: _buildDayIndicator(models[2], type)),
+              Expanded(child:   _buildDayIndicator(models[3], type)),
+              Expanded(child:    _buildDayIndicator(models[4], type)),
+              Expanded(child:   _buildDayIndicator(models[5], type)),
+              Expanded(child:      _buildDayIndicator(models[6], type)),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  _getDayDecoratedBox(bool isToday) {
+    if (isToday) {
+      return BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        color: Theme.of(Get.context!).primaryColor,
+      );
+    } else {
+      return BoxDecoration();
+    }
+  }
+
+  Widget _buildGraphStat() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        _buildSectionTitle(
+          'Delivered',
+          '',
+        ),
+        BlocConsumer<BarGraphCubit, AllAdminOrderState>(
+          listener: (context, state) {
+            if (state is AllAdminOrderErrorState) {
+              SnackBar snackBar = SnackBar(
+                content: Text(state.error),
+                backgroundColor: Colors.red,
+              );
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(snackBar);
+            }
+          },
+          builder: (context, state) {
+            if (state is AllAdminOrderLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is AllAdminOrderLoadedState) {
+              List<DailyStatUiModel> dailyStatList = state.orderValue.itemData.map((barGraphOrder) {
+                return DailyStatUiModel.fromBarGraphOrder(barGraphOrder);
+              }).toList();
+              print("dailystatlist ${dailyStatList.length}");
+
+              return  _buildWeekIndicators(dailyStatList, 1);
+            } else if (state is AllAdminOrderErrorState) {
+              return Center(
+                child: Text(state.error),
+              );
+            }
+
+            return Container();
+          },
+        ),
+
+
+
+      ],
+    );
+  }
+
+  Widget barChart(){
+    return Container(
+      width: 300, // Adjust the width as needed
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
+        children: [
+          _buildGraphStat(),
+
+          //  Add other widgets here as needed
+
+          _pageIndicatorText(),
+          Row(children: [
+            _previousWeekButton(),
+            _nextWeekButton(),
+          ],)
+        ],
+      ),
+    );
+
+  }
 }
+

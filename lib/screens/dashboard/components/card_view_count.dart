@@ -222,41 +222,45 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
     DateTime currentDate = statController.selectedDate;
     callingBarApi(currentDate);
 
-    return SizedBox(
-      height: 500, // specify a height here,
-      child: Row(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: widget.countResponse?.length ?? 0,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: Responsive.isDesktop(context) ? widget.crossAxisCount ~/ 2 : widget.crossAxisCount,
-                crossAxisSpacing: defaultPadding,
-                mainAxisSpacing: defaultPadding,
-                childAspectRatio: widget.childAspectRatio,
-              ),
-              itemBuilder: (context, index) => CardView(
-                info: widget.countResponse![index], // Ensure countResponse is not null
-                performClick: () {
-                  // Handle item click based on index
-                  if (index == 0) {
-                    // navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
-                  } else if (index == 1) {
-                    // navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
-                  } else if (index == 2) {
-                    // navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
-                  } else {
-                    // navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
-                  }
-                },
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.countResponse?.length ?? 0,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: Responsive.isDesktop(context) ? widget.crossAxisCount ~/ 2 : widget.crossAxisCount,
+                  crossAxisSpacing: defaultPadding,
+                  mainAxisSpacing: defaultPadding,
+                  childAspectRatio: widget.childAspectRatio,
+                ),
+                itemBuilder: (context, index) => CardView(
+                  info: widget.countResponse![index], // Ensure countResponse is not null
+                  performClick: () {
+                    // Handle item click based on index
+                    if (index == 0) {
+                      // navigationBloc.navigateToScreen(NavigationEvent.navigateToProducts,context);
+                    } else if (index == 1) {
+                      // navigationBloc.navigateToScreen(NavigationEvent.navigateToAllUser,context);
+                    } else if (index == 2) {
+                      // navigationBloc.navigateToScreen(NavigationEvent.navigateToOrder,context);
+                    } else {
+                      // navigationBloc.navigateToScreen(NavigationEvent.navigateToCategory,context);
+                    }
+                  },
+                ),
               ),
             ),
-          ),
-          barChart(),
-        ],
-      ),
+            if (!Responsive.isMobile(context))
+               barChart()
+          ],
+        ),
+        if (Responsive.isMobile(context))
+          barChart()
+      ],
     );
   }
 
@@ -302,6 +306,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
     cubitBar.fetchAllOrderCount(formattedStartDate, formattedEndDate);
   }
 
+
   Widget _nextWeekButton() {
     return Obx(
           () => Visibility(
@@ -314,6 +319,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
               onPressed: () {
 
                 statController.selectedDate = statController.selectedDate.add(Duration(days: 6));
+                print("selecteddate is ${statController.selectedDate}");
                 callingBarApi(statController.selectedDate );
                 statController.onNextWeek();
 
@@ -400,6 +406,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
           height: 4.0,
         ),
         Expanded(
+
           child: NeumorphicIndicator(
             width: width,
             percent: statController.getStatPercentage(model.stat, type),
@@ -443,6 +450,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
               Expanded(child:      _buildDayIndicator(models[6], type)),
             ],
           ),
+
         ),
       );
     } else {
@@ -492,7 +500,12 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
               }).toList();
               print("dailystatlist ${dailyStatList.length}");
 
-              return  _buildWeekIndicators(dailyStatList, 1);
+              return  Column(
+                children: [
+                  _buildWeekIndicators(dailyStatList, 1),
+                  _pageIndicatorText(),
+                ],
+              );
             } else if (state is AllAdminOrderErrorState) {
               return Center(
                 child: Text(state.error),
@@ -511,7 +524,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
 
   Widget barChart(){
     return Container(
-      width: 300, // Adjust the width as needed
+      width: 400, // Adjust the width as needed
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
         children: [
@@ -519,7 +532,7 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
 
           //  Add other widgets here as needed
 
-          _pageIndicatorText(),
+
           Row(children: [
             _previousWeekButton(),
             _nextWeekButton(),

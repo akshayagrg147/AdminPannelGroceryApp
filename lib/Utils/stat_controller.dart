@@ -47,14 +47,14 @@ class StatController extends GetxController {
   }
 
   void setPreviousWeek() {
-    selectedDate = selectedDate.subtract(Duration(days: 6));
+
     setNextWeekButtonVisibility();
-    currentWeek.value = getWeekDisplayDate(selectedDate);
+    currentWeek.value = getWeekDisplayDate1(selectedDate);
 
   }
 
   void setNextWeek() {
-    selectedDate = selectedDate.add(Duration(days: 6));
+
     setNextWeekButtonVisibility();
     currentWeek.value = getWeekDisplayDate(selectedDate);
 
@@ -73,11 +73,11 @@ class StatController extends GetxController {
     return '${formattedStartDate} - ${formattedEndDate}';
   }
   String getWeekDisplayDate(DateTime dateTime) {
+    DateTime startDate = dateTime.subtract(Duration(days: 6));
 
-    DateTime endDate = dateTime.add(Duration(days: 6));
 
-    String formattedStartDate = DateFormat('dd MMM').format(dateTime);
-    String formattedEndDate = DateFormat('dd MMM').format(endDate);
+    String formattedStartDate = DateFormat('dd MMM').format(startDate);
+    String formattedEndDate = DateFormat('dd MMM').format(dateTime);
     print("selected_getWeekDisplayDate ${formattedStartDate} ${formattedEndDate}");
     return '${formattedStartDate} - ${formattedEndDate}';
   }
@@ -181,7 +181,7 @@ class StatController extends GetxController {
     if (time == 0) {
       return 0;
     } else {
-      return time / maxSection3;
+      return time / 1;
     }
   }
 
@@ -189,7 +189,7 @@ class StatController extends GetxController {
     if (time == 0) {
       return 0;
     } else {
-      return time / maxSection2;
+      return time / 1;
     }
   }
 
@@ -197,7 +197,7 @@ class StatController extends GetxController {
     if (time == 0) {
       return 0;
     } else {
-      return time / maxSection1;
+      return time / 1;
     }
   }
 

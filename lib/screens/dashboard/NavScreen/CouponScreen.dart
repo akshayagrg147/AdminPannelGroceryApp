@@ -219,7 +219,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                       ElevatedButton(
                                         onPressed: () => _picstartDate(context),
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.black,
+                                          foregroundColor: Colors.black,
                                           // Remove background color
                                           elevation: 0, // Remove elevation
                                         ),
@@ -252,7 +252,7 @@ class _CouponScreenState extends State<CouponScreen> {
                                         onPressed: () =>
                                             _picExpireDate(context),
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.black,
+                                          foregroundColor: Colors.black,
                                           // Remove background color
                                           elevation: 0, // Remove elevation
                                         ),
@@ -386,7 +386,7 @@ class _CouponScreenState extends State<CouponScreen> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary:
+                      foregroundColor:
                           Colors.black38, // Change the background color here
                     ),
                     child: const Text(
@@ -479,7 +479,7 @@ class _CouponScreenState extends State<CouponScreen> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary:
+                          foregroundColor:
                               Colors.black, // Change the background color here
                         ),
                         onPressed: () => _picstartDate(context),
@@ -508,7 +508,7 @@ class _CouponScreenState extends State<CouponScreen> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors
+                            foregroundColor: Colors
                                 .black, // Change the background color here
                           ),
                           onPressed: () => _picExpireDate(context),

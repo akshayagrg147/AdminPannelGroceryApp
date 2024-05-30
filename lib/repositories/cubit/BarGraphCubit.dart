@@ -14,6 +14,7 @@ class BarGraphCubit extends Cubit<AllAdminOrderState> {
 
   void fetchAllOrderCount(String startDate1,String endDate1) async {
     try {
+      emit(AllAdminOrderLoadingState());
       BarGraphResponse orders =
           await postRepository.fetchOrderGraphValue(startDate1,endDate1);
       emit(AllAdminOrderLoadedState(orders));

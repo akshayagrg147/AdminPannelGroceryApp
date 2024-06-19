@@ -122,6 +122,14 @@ class _LoginFormState extends State<LoginForm> {
                       child: CircularProgressIndicator(),
                     );
                   }
+                 else if (state is LoginResponseErrorState) {
+                    SnackBar snackBar = SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: Colors.red,
+                    );
+                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                 return Container();
+                  }
                   return Hero(
                     tag: "login_btn",
                     child: ElevatedButton(
@@ -136,14 +144,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
 
                   );
-                }, listener: (context, state) {
-              if (state is LoginResponseErrorState) {
-                SnackBar snackBar = SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: Colors.red,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              } else if (state is LoginResponseLoadedState) {
+                },
+                listener: (context, state) {
+               if (state is LoginResponseLoadedState) {
                 callingMainScreen(
                   context,
                   state.response.response?.pincode,
@@ -160,6 +163,14 @@ class _LoginFormState extends State<LoginForm> {
 
                 );
               }
+               else if (state is LoginResponseErrorState) {
+                 SnackBar snackBar = SnackBar(
+                   content: Text(state.error),
+                   backgroundColor: Colors.red,
+                 );
+                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+               }
             }),
             const SizedBox(height: defaultPadding),
           ],

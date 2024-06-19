@@ -25,6 +25,7 @@ import 'package:adminpannelgrocery/repositories/cubit/exclusive_selling_checkbox
 import 'package:adminpannelgrocery/repositories/cubit/login_response_cubit.dart';
 import 'package:adminpannelgrocery/screens/Login/login_screen.dart';
 import 'package:adminpannelgrocery/screens/dashboard/NavScreen/NavigationBloc.dart';
+import 'package:adminpannelgrocery/services/PushNotificationService.dart';
 import 'package:adminpannelgrocery/state/delete_product_state.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,7 +35,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+Future<void>  showFlutterNotification(RemoteMessage message) async {
+ print("notofication background called");
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  playSampleSound();
+}
 
+void playSampleSound() async {
+  final player = AudioPlayer();
+  await player.play(UrlSource('https://ik.imagekit.io/00itvcwwk/shopeefood_sound.mp3?updatedAt=1696573541986'));
+  // AudioService().playSound(AssetSource('sound/beep.mp3'));
+
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -47,6 +60,7 @@ void main() async {
         storageBucket: "mandixpress-d67a9.appspot.com",
       ),
     );
+    FirebaseMessaging.onBackgroundMessage(showFlutterNotification);
     runApp(MyApp());
   } catch (e) {
     print("Error initializing Firebase: $e");
@@ -55,13 +69,14 @@ void main() async {
 
 
 class MyApp extends StatefulWidget {
+  final PushNotificationService _notificationService = PushNotificationService();
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
 
-  void showFlutterNotification(RemoteMessage message) {
+  Future<void>  showFlutterNotification(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     playSampleSound();
@@ -78,12 +93,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
     super.initState();
 
   } // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    widget._notificationService.initialize();
     return RepositoryProvider(
         create: (context) => ProductRepository(),
         child: MultiBlocProvider(
@@ -139,6 +156,7 @@ class _MyAppState extends State<MyApp> {
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
+
               title: 'Flutter Admin Panel',
               theme: ThemeData.dark().copyWith(
                 scaffoldBackgroundColor: Colors.white,
@@ -163,6 +181,7 @@ class _MyAppState extends State<MyApp> {
                   }
                 }, future: null,
               ),
+
             )));
   }
 

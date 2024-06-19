@@ -7,7 +7,7 @@ class LoginResponse {
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     response = json['response'] != null
-        ? new ResponseLogin.fromJson(json['response'])
+        ?  ResponseLogin.fromJson(json['response'])
         : null;
     statusCode = json['statusCode'];
     message = json['message'];
@@ -70,7 +70,7 @@ class ResponseLogin {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['email'] = this.email;
     data['name'] = this.name;
     data['password'] = this.password;

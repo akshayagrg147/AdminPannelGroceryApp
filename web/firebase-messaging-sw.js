@@ -19,7 +19,7 @@ console.log('Received background message ', firebaseConfig);
 
   // Optional: Handle background messages
  messaging.onBackgroundMessage(function(payload) {
-  console.log('Received background message ', payload.data.body);
+  console.log('Received background message1 ', payload.data.body);
  // Customize your notification here
    const notificationTitle =  payload.data.title;
    const notificationOptions = {
